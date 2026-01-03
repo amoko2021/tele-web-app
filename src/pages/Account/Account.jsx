@@ -1,12 +1,28 @@
+import { useState } from 'react'
 import { useUserInfo } from '../../hooks/useApi'
 import { useTelegram } from '../../hooks/useTelegram'
+import { userApi } from '../../services/api'
+import { MenuItem } from '../../components/common/MenuItem'
+import { BankAccountModal } from '../../components/common/BankAccountModal'
 
 export const Account = () => {
   const { data: userInfo, loading } = useUserInfo()
   const { validationData, user: telegramUser } = useTelegram()
+  const [isBankModalOpen, setIsBankModalOpen] = useState(false)
+  const [bankAccount, setBankAccount] = useState(null)
 
   // Ưu tiên dùng dữ liệu từ validation, fallback về mock data
   const userData = validationData?.data?.user || telegramUser || userInfo
+
+  const handleSaveBankAccount = async (data) => {
+    try {
+      const result = await userApi.updateBankAccount(data)
+      setBankAccount(data)
+      alert(result.message || 'Cập nhật thành công!')
+    } catch (error) {
+      throw error
+    }
+  }
 
   if (loading) {
     return (
@@ -116,80 +132,40 @@ export const Account = () => {
             Cài đặt chung
           </p>
 
-          {/* VIP Item */}
-          <button className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors w-full group">
-            <div className="w-10 h-10 rounded-lg bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined">diamond</span>
-            </div>
-            <div className="flex flex-1 items-center justify-between">
-              <div className="text-left">
-                <p className="text-slate-900 dark:text-white text-sm font-medium">
-                  Nâng cấp VIP
-                </p>
-                <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
-                  Nhận ưu đãi đặc biệt
-                </p>
-              </div>
-              <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 group-hover:text-primary transition-colors text-[20px]">
-                chevron_right
-              </span>
-            </div>
-          </button>
+          <MenuItem
+            icon="diamond"
+            title="Nâng cấp VIP"
+            description="Nhận ưu đãi đặc biệt"
+            iconBgColor="bg-yellow-100 dark:bg-yellow-900/30"
+            iconTextColor="text-yellow-600 dark:text-yellow-400"
+            onClick={() => alert('Tính năng đang phát triển')}
+          />
 
-          {/* Bank Account */}
-          <button className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors w-full group">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-primary flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined">account_balance</span>
-            </div>
-            <div className="flex flex-1 items-center justify-between">
-              <div className="text-left">
-                <p className="text-slate-900 dark:text-white text-sm font-medium">
-                  Tài khoản ngân hàng
-                </p>
-                <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
-                  Liên kết để rút tiền
-                </p>
-              </div>
-              <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 group-hover:text-primary transition-colors text-[20px]">
-                chevron_right
-              </span>
-            </div>
-          </button>
+          <MenuItem
+            icon="account_balance"
+            title="Tài khoản ngân hàng"
+            description="Liên kết để rút tiền"
+            iconBgColor="bg-blue-100 dark:bg-blue-900/30"
+            iconTextColor="text-primary"
+            onClick={() => setIsBankModalOpen(true)}
+          />
 
-          {/* Security */}
-          <button className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors w-full group">
-            <div className="w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined">security</span>
-            </div>
-            <div className="flex flex-1 items-center justify-between">
-              <div className="text-left">
-                <p className="text-slate-900 dark:text-white text-sm font-medium">
-                  Bảo mật
-                </p>
-                <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
-                  Đổi mật khẩu, 2FA
-                </p>
-              </div>
-              <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 group-hover:text-primary transition-colors text-[20px]">
-                chevron_right
-              </span>
-            </div>
-          </button>
+          <MenuItem
+            icon="security"
+            title="Bảo mật"
+            description="Đổi mật khẩu, 2FA"
+            iconBgColor="bg-green-100 dark:bg-green-900/30"
+            iconTextColor="text-green-600 dark:text-green-400"
+            onClick={() => alert('Tính năng đang phát triển')}
+          />
 
-          {/* Support */}
-          <button className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors w-full group">
-            <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined">headset_mic</span>
-            </div>
-            <div className="flex flex-1 items-center justify-between">
-              <p className="text-slate-900 dark:text-white text-sm font-medium">
-                Hỗ trợ khách hàng
-              </p>
-              <span className="material-symbols-outlined text-slate-300 dark:text-slate-600 group-hover:text-primary transition-colors text-[20px]">
-                chevron_right
-              </span>
-            </div>
-          </button>
+          <MenuItem
+            icon="headset_mic"
+            title="Hỗ trợ khách hàng"
+            iconBgColor="bg-slate-100 dark:bg-slate-800"
+            iconTextColor="text-slate-500 dark:text-slate-400"
+            onClick={() => alert('Liên hệ: support@example.com')}
+          />
 
           {/* Logout */}
           <button className="flex items-center gap-4 p-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors w-full group mt-2">
@@ -204,6 +180,14 @@ export const Account = () => {
           </button>
         </div>
       </div>
+
+      {/* Bank Account Modal */}
+      <BankAccountModal
+        isOpen={isBankModalOpen}
+        onClose={() => setIsBankModalOpen(false)}
+        onSave={handleSaveBankAccount}
+        initialData={bankAccount}
+      />
     </div>
   )
 }

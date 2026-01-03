@@ -43,6 +43,50 @@ export const userApi = {
       throw error
     }
   },
+
+  // Lấy thông tin tài khoản ngân hàng
+  getBankAccount: async () => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const saved = localStorage.getItem('bank_account')
+          resolve(saved ? JSON.parse(saved) : null)
+        }, 300)
+      })
+    }
+
+    try {
+      const response = await apiClient.get('/bank-account')
+      return response
+    } catch (error) {
+      console.error('Error fetching bank account:', error)
+      throw error
+    }
+  },
+
+  // Cập nhật thông tin tài khoản ngân hàng
+  updateBankAccount: async (data) => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          localStorage.setItem('bank_account', JSON.stringify(data))
+          resolve({
+            success: true,
+            message: 'Cập nhật thông tin ngân hàng thành công!',
+            data,
+          })
+        }, 500)
+      })
+    }
+
+    try {
+      const response = await apiClient.post('/bank-account', data)
+      return response
+    } catch (error) {
+      console.error('Error updating bank account:', error)
+      throw error
+    }
+  },
 }
 
 export default userApi
