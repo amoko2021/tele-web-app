@@ -1,16 +1,11 @@
 import { useState } from 'react'
 import { Modal } from '../Modal'
 
-export const BankAccountModal = ({
-  isOpen,
-  onClose,
-  onSave,
-  initialData = {},
-}) => {
+export const BankAccountModal = ({ isOpen, onClose, onSave, initialData }) => {
   const [formData, setFormData] = useState({
-    bankName: initialData.bankName || '',
-    accountName: initialData.accountName || '',
-    accountNumber: initialData.accountNumber || '',
+    bankName: initialData?.bankName || '',
+    accountName: initialData?.accountName || '',
+    accountNumber: initialData?.accountNumber || '',
   })
   const [saving, setSaving] = useState(false)
 
