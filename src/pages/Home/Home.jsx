@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useXSMB } from '../../hooks/useApi'
 import { useTelegram } from '../../hooks/useTelegram'
 import { lotteryApi } from '../../services/api'
 import { Modal } from '../../components/common/Modal'
+import { useAdsgram } from '../../hooks/useAdsgram'
 
 export const Home = () => {
   const { data: xsmbData, loading } = useXSMB()
@@ -18,6 +19,31 @@ export const Home = () => {
   // Lấy userId từ Telegram
   const userData = validationData?.data?.user || telegramUser
   const userId = userData?.id
+
+  // Adsgram callbacks
+  const onReward = useCallback(() => {
+    // Khi user xem xong quảng cáo, hiển thị modal dự đoán
+    setIsModalOpen(true)
+  }, [])
+
+  const onError = useCallback((result) => {
+    console.error('Adsgram error:', result)
+    // Nếu có lỗi, vẫn cho phép mở modal
+    setIsModalOpen(true)
+  }, [])
+
+  // Khởi tạo Adsgram - thay "your-block-id" bằng block ID thực của bạn
+  const showAd = useAdsgram({
+    blockId: '20508',
+    onReward,
+    onError,
+  })
+
+  // Xử lý khi click vào floating button
+  const handleFloatingButtonClick = useCallback(() => {
+    // Hiển thị quảng cáo trước
+    showAd()
+  }, [showAd])
 
   // Check dự đoán hôm nay khi mở modal
   useEffect(() => {
@@ -241,7 +267,7 @@ export const Home = () => {
 
       {/* Floating Prediction Button */}
       <button
-        onClick={() => setIsModalOpen(true)}
+        onClick={handleFloatingButtonClick}
         className="fixed bottom-24 right-4 z-20 flex h-12 items-center gap-2 rounded-full bg-primary pl-4 pr-6 text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 hover:shadow-xl hover:shadow-blue-500/40 active:scale-95 transition-all animate-bounce-slow group"
       >
         <span className="material-symbols-outlined group-hover:rotate-12 transition-transform">
