@@ -39,11 +39,23 @@ export const lotteryApi = {
     if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
+          // Lưu vào localStorage để track
+          const predictions = JSON.parse(
+            localStorage.getItem('predictions') || '[]'
+          )
+          const newPrediction = {
+            id: Date.now(),
+            ...predictionData,
+            timestamp: new Date().toISOString(),
+            date: new Date().toLocaleDateString('vi-VN'),
+          }
+          predictions.push(newPrediction)
+          localStorage.setItem('predictions', JSON.stringify(predictions))
+
           resolve({
             success: true,
             message: 'Dự đoán của bạn đã được ghi nhận!',
-            prediction: predictionData,
-            timestamp: new Date().toISOString(),
+            prediction: newPrediction,
           })
         }, 500)
       })
@@ -54,6 +66,59 @@ export const lotteryApi = {
       return response
     } catch (error) {
       console.error('Error submitting prediction:', error)
+      throw error
+    }
+  },
+
+  // Kiểm tra đã dự đoán hôm nay chưa
+  checkTodayPrediction: async () => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const predictions = JSON.parse(
+            localStorage.getItem('predictions') || '[]'
+          )
+          const today = new Date().toLocaleDateString('vi-VN')
+          const todayPredictions = predictions.filter((p) => p.date === today)
+
+          resolve({
+            hasPredicted: todayPredictions.length > 0,
+            predictions: todayPredictions,
+          })
+        }, 300)
+      })
+    }
+
+    try {
+      const response = await apiClient.get('/prediction/today')
+      return response
+    } catch (error) {
+      console.error('Error checking today prediction:', error)
+      throw error
+    }
+  },
+
+  // Lấy lịch sử dự đoán hôm nay
+  getTodayPredictions: async () => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const predictions = JSON.parse(
+            localStorage.getItem('predictions') || '[]'
+          )
+          const today = new Date().toLocaleDateString('vi-VN')
+          const todayPredictions = predictions.filter((p) => p.date === today)
+
+          resolve(todayPredictions)
+        }, 300)
+      })
+    }
+
+    try {
+      const response = await apiClient.get('/predictions/today')
+      return response
+    } catch (error) {
+      console.error('Error fetching today predictions:', error)
       throw error
     }
   },
