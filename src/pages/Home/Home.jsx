@@ -15,6 +15,8 @@ export const Home = () => {
   const [hasPredicted, setHasPredicted] = useState(false)
   const [todayPredictions, setTodayPredictions] = useState([])
   const [checkingPrediction, setCheckingPrediction] = useState(false)
+  const [maxPredictions, setMaxPredictions] = useState(5)
+  const [remainingPredictions, setRemainingPredictions] = useState(5)
 
   // Lấy userId từ Telegram
   const userData = validationData?.data?.user || telegramUser
@@ -40,10 +42,37 @@ export const Home = () => {
   })
 
   // Xử lý khi click vào floating button
-  const handleFloatingButtonClick = useCallback(() => {
-    // Hiển thị quảng cáo trước
-    showAd()
-  }, [showAd])
+  const handleFloatingButtonClick = useCallback(async () => {
+    // Kiểm tra dự đoán trước
+    if (!userId) {
+      alert('Không tìm thấy thông tin user!')
+      return
+    }
+
+    // Lấy thông tin dự đoán hôm nay
+    setCheckingPrediction(true)
+    try {
+      const result = await lotteryApi.checkTodayPrediction(userId)
+      setHasPredicted(result.hasPredicted)
+      setTodayPredictions(result.predictions || [])
+      setMaxPredictions(result.maxPredictions || 5)
+      setRemainingPredictions(result.remainingPredictions || 0)
+
+      // Nếu đã hết lượt, mở modal trực tiếp (chỉ xem lịch sử)
+      if (result.remainingPredictions <= 0) {
+        setIsModalOpen(true)
+      } else {
+        // Còn lượt dự đoán, hiển thị quảng cáo trước
+        showAd()
+      }
+    } catch (error) {
+      console.error('Error checking prediction:', error)
+      // Nếu lỗi, vẫn cho mở modal
+      setIsModalOpen(true)
+    } finally {
+      setCheckingPrediction(false)
+    }
+  }, [userId, showAd])
 
   // Check dự đoán hôm nay khi mở modal
   useEffect(() => {
@@ -60,6 +89,8 @@ export const Home = () => {
       const result = await lotteryApi.checkTodayPrediction(userId)
       setHasPredicted(result.hasPredicted)
       setTodayPredictions(result.predictions || [])
+      setMaxPredictions(result.maxPredictions || 5)
+      setRemainingPredictions(result.remainingPredictions || 0)
     } catch (error) {
       console.error('Error checking prediction:', error)
     } finally {
@@ -75,6 +106,12 @@ export const Home = () => {
 
     if (!userId) {
       alert('Không tìm thấy thông tin user!')
+      return
+    }
+
+    // Kiểm tra giới hạn từ backend
+    if (remainingPredictions <= 0) {
+      alert(`Bạn đã sử dụng hết ${maxPredictions} lượt dự đoán hôm nay!`)
       return
     }
 
@@ -295,27 +332,90 @@ export const Home = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={hasPredicted ? 'Lịch sử dự đoán hôm nay' : 'Dự đoán kết quả'}
+        title={
+          remainingPredictions <= 0
+            ? 'Lịch sử dự đoán hôm nay'
+            : hasPredicted
+            ? `Dự đoán (${remainingPredictions}/${maxPredictions} lượt)`
+            : 'Dự đoán kết quả'
+        }
       >
         {checkingPrediction ? (
           <div className="flex items-center justify-center py-8">
             <div className="text-slate-500">Đang kiểm tra...</div>
           </div>
-        ) : hasPredicted ? (
-          // Hiển thị lịch sử dự đoán
+        ) : remainingPredictions <= 0 ? (
+          // Đã hết lượt - chỉ hiển thị lịch sử
           <div>
-            <div className="mb-4 rounded-lg bg-green-50 border border-green-200 p-4">
-              <div className="flex items-center gap-2 text-green-700">
-                <span className="material-symbols-outlined text-xl">
-                  check_circle
-                </span>
+            <div className="mb-4 rounded-lg bg-orange-50 border border-orange-200 p-4">
+              <div className="flex items-center gap-2 text-orange-700">
+                <span className="material-symbols-outlined text-xl">info</span>
                 <span className="font-semibold text-sm">
-                  Bạn đã tham gia dự đoán hôm nay
+                  Bạn đã sử dụng hết {maxPredictions} lượt dự đoán hôm nay
                 </span>
               </div>
             </div>
 
             <div className="space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                Danh sách dự đoán của bạn
+              </h4>
+              {todayPredictions.map((pred, index) => (
+                <div
+                  key={pred.id || index}
+                  className="rounded-xl border border-slate-200 bg-slate-50 p-4"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                      Lượt {index + 1} -{' '}
+                      {pred.prizeType === 'db'
+                        ? 'Giải Đặc Biệt'
+                        : pred.prizeType === 'loto'
+                        ? 'Lô Tô'
+                        : 'Lô Xiên'}
+                    </span>
+                    <span className="text-xs text-slate-400">
+                      {new Date(pred.timestamp).toLocaleTimeString('vi-VN', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </span>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold tracking-widest text-primary">
+                      {pred.number}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 text-center">
+              <p className="text-xs text-slate-500">
+                Kết quả sẽ được công bố vào 18:15 hàng ngày
+              </p>
+            </div>
+          </div>
+        ) : hasPredicted ? (
+          // Còn lượt - hiển thị lịch sử và form dự đoán
+          <div>
+            <div className="mb-4 rounded-lg bg-blue-50 border border-blue-200 p-4">
+              <div className="flex items-center justify-between text-blue-700">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-xl">
+                    check_circle
+                  </span>
+                  <span className="font-semibold text-sm">
+                    Bạn đã dự đoán {todayPredictions.length} lần
+                  </span>
+                </div>
+                <span className="text-sm font-bold">
+                  Còn {remainingPredictions} lượt
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-3 mb-6">
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 Danh sách dự đoán của bạn
               </h4>
@@ -348,14 +448,93 @@ export const Home = () => {
               ))}
             </div>
 
-            <div className="mt-6 text-center">
-              <p className="text-xs text-slate-500">
-                Kết quả sẽ được công bố vào 18:15 hàng ngày
-              </p>
+            {/* Divider */}
+            <div className="my-6 border-t border-slate-200"></div>
+
+            {/* Form dự đoán tiếp */}
+            <div>
+              <h4 className="mb-4 text-xs font-bold uppercase tracking-wider text-slate-500">
+                Thêm dự đoán mới
+              </h4>
+
+              <div className="mb-5">
+                <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Chọn loại giải
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  <label className="cursor-pointer">
+                    <input
+                      type="radio"
+                      name="prize_type"
+                      value="db"
+                      checked={prizeType === 'db'}
+                      onChange={(e) => setPrizeType(e.target.value)}
+                      className="peer hidden"
+                    />
+                    <div className="flex items-center justify-center rounded-lg border border-slate-200 bg-white py-2 text-sm font-bold text-slate-500 hover:bg-slate-50 peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary transition-all">
+                      Giải ĐB
+                    </div>
+                  </label>
+                  <label className="cursor-pointer">
+                    <input
+                      type="radio"
+                      name="prize_type"
+                      value="loto"
+                      checked={prizeType === 'loto'}
+                      onChange={(e) => setPrizeType(e.target.value)}
+                      className="peer hidden"
+                    />
+                    <div className="flex items-center justify-center rounded-lg border border-slate-200 bg-white py-2 text-sm font-bold text-slate-500 hover:bg-slate-50 peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary transition-all">
+                      Lô tô
+                    </div>
+                  </label>
+                  <label className="cursor-pointer">
+                    <input
+                      type="radio"
+                      name="prize_type"
+                      value="loxien"
+                      checked={prizeType === 'loxien'}
+                      onChange={(e) => setPrizeType(e.target.value)}
+                      className="peer hidden"
+                    />
+                    <div className="flex items-center justify-center rounded-lg border border-slate-200 bg-white py-2 text-sm font-bold text-slate-500 hover:bg-slate-50 peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary transition-all">
+                      Lô xiên
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Nhập số dự đoán
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={prediction}
+                    onChange={(e) => setPrediction(e.target.value)}
+                    placeholder="00"
+                    className="block w-full rounded-xl border-slate-200 bg-slate-50 p-4 text-center text-3xl font-bold tracking-widest text-slate-800 placeholder:text-slate-300 focus:border-primary focus:bg-white focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={handleSubmitPrediction}
+                disabled={submitting}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/25 hover:bg-blue-600 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span>{submitting ? 'Đang gửi...' : 'Gửi dự đoán ngay'}</span>
+                {!submitting && (
+                  <span className="material-symbols-outlined text-lg">
+                    send
+                  </span>
+                )}
+              </button>
             </div>
           </div>
         ) : (
-          // Form dự đoán
+          // Form dự đoán lần đầu
           <>
             <div className="mb-5">
               <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">

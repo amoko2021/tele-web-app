@@ -151,7 +151,12 @@ export const lotteryApi = {
       return new Promise((resolve) => {
         setTimeout(() => {
           if (!userId) {
-            resolve({ hasPredicted: false, predictions: [] })
+            resolve({
+              hasPredicted: false,
+              predictions: [],
+              maxPredictions: 5,
+              remainingPredictions: 5,
+            })
             return
           }
 
@@ -160,9 +165,14 @@ export const lotteryApi = {
           const today = new Date().toLocaleDateString('vi-VN')
           const todayPredictions = predictions.filter((p) => p.date === today)
 
+          const maxPredictions = 5
+          const remainingPredictions = maxPredictions - todayPredictions.length
+
           resolve({
             hasPredicted: todayPredictions.length > 0,
             predictions: todayPredictions,
+            maxPredictions: maxPredictions,
+            remainingPredictions: Math.max(0, remainingPredictions),
           })
         }, 300)
       })
