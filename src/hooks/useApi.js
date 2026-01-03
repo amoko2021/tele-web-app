@@ -3,6 +3,7 @@ import { lotteryApi, userApi } from '../services/api'
 
 /**
  * Custom hook để lấy kết quả xổ số miền bắc
+ * Tự động refresh mỗi 30s trong giờ quay thưởng (18h-18h30)
  */
 export const useXSMB = () => {
   const [data, setData] = useState(null)
@@ -24,6 +25,26 @@ export const useXSMB = () => {
 
   useEffect(() => {
     fetchXSMB()
+
+    // Kiểm tra xem có đang trong giờ quay thưởng không
+    const isDrawingTime = () => {
+      const now = new Date()
+      const hours = now.getHours()
+      const minutes = now.getMinutes()
+      return hours === 18 && minutes >= 0 && minutes < 30
+    }
+
+    // Nếu đang trong giờ quay thưởng, refresh mỗi 30s
+    let interval
+    if (isDrawingTime()) {
+      interval = setInterval(() => {
+        fetchXSMB()
+      }, 30000) // 30 giây
+    }
+
+    return () => {
+      if (interval) clearInterval(interval)
+    }
   }, [])
 
   return { data, loading, error, refetch: fetchXSMB }

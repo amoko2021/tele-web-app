@@ -8,6 +8,39 @@ const XSMB_API_URL = 'https://api-xsmb-today.onrender.com/api/v1'
 // Flag để bật/tắt mock mode
 const USE_MOCK = true
 
+// Cache cho kết quả XSMB
+let xsmbCache = {
+  data: null,
+  timestamp: null,
+}
+
+// Kiểm tra xem có đang trong thời gian quay thưởng không (18h-18h30)
+const isDrawingTime = () => {
+  const now = new Date()
+  const hours = now.getHours()
+  const minutes = now.getMinutes()
+
+  // Từ 18h đến 18h30
+  return hours === 18 && minutes >= 0 && minutes < 30
+}
+
+// Kiểm tra cache còn hợp lệ không (cùng ngày)
+const isCacheValid = () => {
+  if (!xsmbCache.data || !xsmbCache.timestamp) {
+    return false
+  }
+
+  const cacheDate = new Date(xsmbCache.timestamp)
+  const now = new Date()
+
+  // So sánh ngày
+  return (
+    cacheDate.getDate() === now.getDate() &&
+    cacheDate.getMonth() === now.getMonth() &&
+    cacheDate.getFullYear() === now.getFullYear()
+  )
+}
+
 export const lotteryApi = {
   // Lấy kết quả xổ số miền bắc từ API bên thứ 3
   getXSMB: async () => {
@@ -20,11 +53,41 @@ export const lotteryApi = {
     //   })
     // }
 
+    // Nếu đang trong giờ quay thưởng (18h-18h30), không dùng cache
+    const isDrawing = isDrawingTime()
+
+    // Nếu có cache hợp lệ và không trong giờ quay thưởng, trả về cache
+    if (!isDrawing && isCacheValid()) {
+      console.log('Sử dụng dữ liệu XSMB từ cache')
+      return xsmbCache.data
+    }
+
     try {
+      console.log(
+        isDrawing
+          ? 'Đang trong giờ quay thưởng - Lấy dữ liệu mới'
+          : 'Lấy dữ liệu XSMB mới từ API'
+      )
       const response = await axios.get(XSMB_API_URL)
+
+      // Lưu vào cache nếu không trong giờ quay thưởng
+      if (!isDrawing) {
+        xsmbCache = {
+          data: response.data,
+          timestamp: new Date().toISOString(),
+        }
+      }
+
       return response.data
     } catch (error) {
       console.error('Error fetching XSMB:', error)
+
+      // Nếu lỗi và có cache cũ, trả về cache
+      if (xsmbCache.data) {
+        console.log('Lỗi API - Sử dụng dữ liệu cache')
+        return xsmbCache.data
+      }
+
       throw error
     }
   },
