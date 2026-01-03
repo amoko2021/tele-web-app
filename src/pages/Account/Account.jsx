@@ -154,14 +154,14 @@ export const Account = () => {
             Cài đặt chung
           </p>
 
-          <MenuItem
+          {/* <MenuItem
             icon="diamond"
             title="Nâng cấp VIP"
             description="Nhận ưu đãi đặc biệt"
             iconBgColor="bg-yellow-100 dark:bg-yellow-900/30"
             iconTextColor="text-yellow-600 dark:text-yellow-400"
             onClick={() => alert('Tính năng đang phát triển')}
-          />
+          /> */}
 
           <MenuItem
             icon="account_balance"
@@ -172,25 +172,25 @@ export const Account = () => {
             onClick={() => setIsBankModalOpen(true)}
           />
 
-          <MenuItem
+          {/* <MenuItem
             icon="security"
             title="Bảo mật"
             description="Đổi mật khẩu, 2FA"
             iconBgColor="bg-green-100 dark:bg-green-900/30"
             iconTextColor="text-green-600 dark:text-green-400"
             onClick={() => alert('Tính năng đang phát triển')}
-          />
+          /> */}
 
           <MenuItem
             icon="headset_mic"
             title="Hỗ trợ khách hàng"
             iconBgColor="bg-slate-100 dark:bg-slate-800"
             iconTextColor="text-slate-500 dark:text-slate-400"
-            onClick={() => alert('Liên hệ: support@example.com')}
+            onClick={() => alert('Liên hệ: @crush_xx')}
           />
 
           {/* Logout */}
-          <button className="flex items-center gap-4 p-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors w-full group mt-2">
+          {/* <button className="flex items-center gap-4 p-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors w-full group mt-2">
             <div className="w-10 h-10 rounded-lg bg-red-100 dark:bg-red-900/20 text-red-500 flex items-center justify-center shrink-0">
               <span className="material-symbols-outlined">logout</span>
             </div>
@@ -199,7 +199,7 @@ export const Account = () => {
                 Đăng xuất
               </p>
             </div>
-          </button>
+          </button> */}
         </div>
       </div>
 
