@@ -35,22 +35,27 @@ export const lotteryApi = {
   },
 
   // Gửi dự đoán kết quả
-  submitPrediction: async (predictionData) => {
+  submitPrediction: async (userId, predictionData) => {
     if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
-          // Lưu vào localStorage để track
-          const predictions = JSON.parse(
-            localStorage.getItem('predictions') || '[]'
-          )
+          if (!userId) {
+            resolve({ success: false, message: 'User ID không hợp lệ' })
+            return
+          }
+
+          // Lưu vào localStorage theo userId
+          const key = `predictions_${userId}`
+          const predictions = JSON.parse(localStorage.getItem(key) || '[]')
           const newPrediction = {
             id: Date.now(),
+            userId,
             ...predictionData,
             timestamp: new Date().toISOString(),
             date: new Date().toLocaleDateString('vi-VN'),
           }
           predictions.push(newPrediction)
-          localStorage.setItem('predictions', JSON.stringify(predictions))
+          localStorage.setItem(key, JSON.stringify(predictions))
 
           resolve({
             success: true,
@@ -62,7 +67,10 @@ export const lotteryApi = {
     }
 
     try {
-      const response = await apiClient.post('/prediction', predictionData)
+      const response = await apiClient.post(
+        `/prediction/${userId}`,
+        predictionData
+      )
       return response
     } catch (error) {
       console.error('Error submitting prediction:', error)
@@ -71,13 +79,17 @@ export const lotteryApi = {
   },
 
   // Kiểm tra đã dự đoán hôm nay chưa
-  checkTodayPrediction: async () => {
+  checkTodayPrediction: async (userId) => {
     if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
-          const predictions = JSON.parse(
-            localStorage.getItem('predictions') || '[]'
-          )
+          if (!userId) {
+            resolve({ hasPredicted: false, predictions: [] })
+            return
+          }
+
+          const key = `predictions_${userId}`
+          const predictions = JSON.parse(localStorage.getItem(key) || '[]')
           const today = new Date().toLocaleDateString('vi-VN')
           const todayPredictions = predictions.filter((p) => p.date === today)
 
@@ -90,7 +102,7 @@ export const lotteryApi = {
     }
 
     try {
-      const response = await apiClient.get('/prediction/today')
+      const response = await apiClient.get(`/prediction/today/${userId}`)
       return response
     } catch (error) {
       console.error('Error checking today prediction:', error)
@@ -99,13 +111,17 @@ export const lotteryApi = {
   },
 
   // Lấy lịch sử dự đoán hôm nay
-  getTodayPredictions: async () => {
+  getTodayPredictions: async (userId) => {
     if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
-          const predictions = JSON.parse(
-            localStorage.getItem('predictions') || '[]'
-          )
+          if (!userId) {
+            resolve([])
+            return
+          }
+
+          const key = `predictions_${userId}`
+          const predictions = JSON.parse(localStorage.getItem(key) || '[]')
           const today = new Date().toLocaleDateString('vi-VN')
           const todayPredictions = predictions.filter((p) => p.date === today)
 
@@ -115,7 +131,7 @@ export const lotteryApi = {
     }
 
     try {
-      const response = await apiClient.get('/predictions/today')
+      const response = await apiClient.get(`/predictions/today/${userId}`)
       return response
     } catch (error) {
       console.error('Error fetching today predictions:', error)

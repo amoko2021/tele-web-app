@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useXSMB } from '../../hooks/useApi'
+import { useTelegram } from '../../hooks/useTelegram'
 import { lotteryApi } from '../../services/api'
 import { Modal } from '../../components/common/Modal'
 
 export const Home = () => {
   const { data: xsmbData, loading } = useXSMB()
+  const { validationData, user: telegramUser } = useTelegram()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [prizeType, setPrizeType] = useState('db')
   const [prediction, setPrediction] = useState('')
@@ -13,17 +15,23 @@ export const Home = () => {
   const [todayPredictions, setTodayPredictions] = useState([])
   const [checkingPrediction, setCheckingPrediction] = useState(false)
 
+  // Lấy userId từ Telegram
+  const userData = validationData?.data?.user || telegramUser
+  const userId = userData?.id
+
   // Check dự đoán hôm nay khi mở modal
   useEffect(() => {
-    if (isModalOpen) {
+    if (isModalOpen && userId) {
       checkTodayPrediction()
     }
-  }, [isModalOpen])
+  }, [isModalOpen, userId])
 
   const checkTodayPrediction = async () => {
+    if (!userId) return
+
     setCheckingPrediction(true)
     try {
-      const result = await lotteryApi.checkTodayPrediction()
+      const result = await lotteryApi.checkTodayPrediction(userId)
       setHasPredicted(result.hasPredicted)
       setTodayPredictions(result.predictions || [])
     } catch (error) {
@@ -39,9 +47,14 @@ export const Home = () => {
       return
     }
 
+    if (!userId) {
+      alert('Không tìm thấy thông tin user!')
+      return
+    }
+
     setSubmitting(true)
     try {
-      const result = await lotteryApi.submitPrediction({
+      const result = await lotteryApi.submitPrediction(userId, {
         prizeType,
         number: prediction,
         date: new Date().toISOString(),

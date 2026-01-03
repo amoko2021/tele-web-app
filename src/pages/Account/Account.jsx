@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useUserInfo } from '../../hooks/useApi'
 import { useTelegram } from '../../hooks/useTelegram'
 import { userApi } from '../../services/api'
@@ -13,11 +13,33 @@ export const Account = () => {
 
   // Ưu tiên dùng dữ liệu từ validation, fallback về mock data
   const userData = validationData?.data?.user || telegramUser || userInfo
+  const userId = userData?.id
+
+  // Load bank account khi có userId
+  useEffect(() => {
+    if (userId) {
+      loadBankAccount()
+    }
+  }, [userId])
+
+  const loadBankAccount = async () => {
+    try {
+      const data = await userApi.getBankAccount(userId)
+      setBankAccount(data)
+    } catch (error) {
+      console.error('Error loading bank account:', error)
+    }
+  }
 
   const handleSaveBankAccount = async (data) => {
+    if (!userId) {
+      alert('Không tìm thấy thông tin user!')
+      return
+    }
+
     try {
-      const result = await userApi.updateBankAccount(data)
-      setBankAccount(data)
+      const result = await userApi.updateBankAccount(userId, data)
+      setBankAccount(result.data)
       alert(result.message || 'Cập nhật thành công!')
     } catch (error) {
       throw error

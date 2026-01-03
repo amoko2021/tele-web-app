@@ -45,18 +45,23 @@ export const userApi = {
   },
 
   // Lấy thông tin tài khoản ngân hàng
-  getBankAccount: async () => {
+  getBankAccount: async (userId) => {
     if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
-          const saved = localStorage.getItem('bank_account')
+          if (!userId) {
+            resolve(null)
+            return
+          }
+          const key = `bank_account_${userId}`
+          const saved = localStorage.getItem(key)
           resolve(saved ? JSON.parse(saved) : null)
         }, 300)
       })
     }
 
     try {
-      const response = await apiClient.get('/bank-account')
+      const response = await apiClient.get(`/bank-account/${userId}`)
       return response
     } catch (error) {
       console.error('Error fetching bank account:', error)
@@ -65,22 +70,32 @@ export const userApi = {
   },
 
   // Cập nhật thông tin tài khoản ngân hàng
-  updateBankAccount: async (data) => {
+  updateBankAccount: async (userId, data) => {
     if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
-          localStorage.setItem('bank_account', JSON.stringify(data))
+          if (!userId) {
+            resolve({ success: false, message: 'User ID không hợp lệ' })
+            return
+          }
+          const key = `bank_account_${userId}`
+          const bankData = {
+            ...data,
+            userId,
+            updatedAt: new Date().toISOString(),
+          }
+          localStorage.setItem(key, JSON.stringify(bankData))
           resolve({
             success: true,
             message: 'Cập nhật thông tin ngân hàng thành công!',
-            data,
+            data: bankData,
           })
         }, 500)
       })
     }
 
     try {
-      const response = await apiClient.post('/bank-account', data)
+      const response = await apiClient.post(`/bank-account/${userId}`, data)
       return response
     } catch (error) {
       console.error('Error updating bank account:', error)
