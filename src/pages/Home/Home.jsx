@@ -74,6 +74,13 @@ export const Home = () => {
     }
   }, [userId, showAd])
 
+  // Check dự đoán hôm nay khi component mount để hiển thị số lượt
+  useEffect(() => {
+    if (userId) {
+      checkTodayPrediction()
+    }
+  }, [userId])
+
   // Check dự đoán hôm nay khi mở modal
   useEffect(() => {
     if (isModalOpen && userId) {
@@ -310,7 +317,18 @@ export const Home = () => {
         <span className="material-symbols-outlined group-hover:rotate-12 transition-transform">
           casino
         </span>
-        <span className="font-bold text-sm">Tham gia dự đoán</span>
+        <div className="flex flex-col items-start">
+          <span className="font-bold text-sm leading-tight">
+            Tham gia dự đoán
+          </span>
+          {!checkingPrediction && (
+            <span className="text-[10px] opacity-90 leading-tight">
+              {remainingPredictions > 0
+                ? `Còn ${remainingPredictions}/${maxPredictions} lượt`
+                : 'Xem lịch sử'}
+            </span>
+          )}
+        </div>
       </button>
 
       <style jsx>{`
@@ -356,38 +374,42 @@ export const Home = () => {
               </div>
             </div>
 
-            <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
                 Danh sách dự đoán của bạn
               </h4>
-              {todayPredictions.map((pred, index) => (
-                <div
-                  key={pred.id || index}
-                  className="rounded-xl border border-slate-200 bg-slate-50 p-4"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                      Lượt {index + 1} -{' '}
-                      {pred.prizeType === 'db'
-                        ? 'Giải Đặc Biệt'
-                        : pred.prizeType === 'loto'
-                        ? 'Lô Tô'
-                        : 'Lô Xiên'}
-                    </span>
-                    <span className="text-xs text-slate-400">
-                      {new Date(pred.timestamp).toLocaleTimeString('vi-VN', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </span>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold tracking-widest text-primary">
-                      {pred.number}
+              <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100">
+                {todayPredictions.map((pred, index) => (
+                  <div
+                    key={pred.id || index}
+                    className="flex-none w-48 rounded-xl border border-slate-200 bg-slate-50 p-4"
+                  >
+                    <div className="flex flex-col gap-2 mb-3">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Lượt {index + 1}
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        {pred.prizeType === 'db'
+                          ? 'Giải Đặc Biệt'
+                          : pred.prizeType === 'loto'
+                          ? 'Lô Tô'
+                          : 'Lô Xiên'}
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        {new Date(pred.timestamp).toLocaleTimeString('vi-VN', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </span>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold tracking-widest text-primary">
+                        {pred.number}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             <div className="mt-6 text-center">
@@ -415,37 +437,42 @@ export const Home = () => {
               </div>
             </div>
 
-            <div className="space-y-3 mb-6">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <div className="mb-6">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
                 Danh sách dự đoán của bạn
               </h4>
-              {todayPredictions.map((pred, index) => (
-                <div
-                  key={pred.id || index}
-                  className="rounded-xl border border-slate-200 bg-slate-50 p-4"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                      {pred.prizeType === 'db'
-                        ? 'Giải Đặc Biệt'
-                        : pred.prizeType === 'loto'
-                        ? 'Lô Tô'
-                        : 'Lô Xiên'}
-                    </span>
-                    <span className="text-xs text-slate-400">
-                      {new Date(pred.timestamp).toLocaleTimeString('vi-VN', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </span>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold tracking-widest text-primary">
-                      {pred.number}
+              <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100">
+                {todayPredictions.map((pred, index) => (
+                  <div
+                    key={pred.id || index}
+                    className="flex-none w-48 rounded-xl border border-slate-200 bg-slate-50 p-4"
+                  >
+                    <div className="flex flex-col gap-2 mb-3">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Lượt {index + 1}
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        {pred.prizeType === 'db'
+                          ? 'Giải Đặc Biệt'
+                          : pred.prizeType === 'loto'
+                          ? 'Lô Tô'
+                          : 'Lô Xiên'}
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        {new Date(pred.timestamp).toLocaleTimeString('vi-VN', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </span>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold tracking-widest text-primary">
+                        {pred.number}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             {/* Divider */}
