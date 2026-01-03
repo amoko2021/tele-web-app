@@ -1,7 +1,12 @@
 import { useUserInfo } from '../../hooks/useApi'
+import { useTelegram } from '../../hooks/useTelegram'
 
 export const Account = () => {
   const { data: userInfo, loading } = useUserInfo()
+  const { validationData, user: telegramUser } = useTelegram()
+
+  // Ưu tiên dùng dữ liệu từ validation, fallback về mock data
+  const userData = validationData?.data?.user || telegramUser || userInfo
 
   if (loading) {
     return (
@@ -28,24 +33,29 @@ export const Account = () => {
             <div
               className="w-24 h-24 rounded-full bg-cover bg-center border-4 border-slate-50 dark:border-slate-800 shadow-sm bg-gradient-to-br from-primary to-blue-600"
               style={{
-                backgroundImage: userInfo?.photoUrl
-                  ? `url('${userInfo.photoUrl}')`
-                  : undefined,
+                backgroundImage:
+                  userData?.photo_url || userData?.photoUrl
+                    ? `url('${userData.photo_url || userData.photoUrl}')`
+                    : undefined,
               }}
             >
-              {!userInfo?.photoUrl && (
+              {!(userData?.photo_url || userData?.photoUrl) && (
                 <div className="w-full h-full flex items-center justify-center text-white text-3xl font-bold">
-                  {userInfo?.firstName?.[0] || 'U'}
+                  {(userData?.first_name || userData?.firstName)?.[0] || 'U'}
                 </div>
               )}
             </div>
             <div className="absolute bottom-0 right-0 bg-green-500 w-5 h-5 rounded-full border-2 border-white dark:border-slate-900"></div>
           </div>
           <h2 className="text-slate-900 dark:text-white text-xl font-bold leading-tight">
-            {userInfo?.firstName} {userInfo?.lastName}
+            {userData?.first_name || userData?.firstName}{' '}
+            {userData?.last_name || userData?.lastName}
           </h2>
           <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-            ID: {userInfo?.id}
+            {userData?.username && `@${userData.username}`}
+          </p>
+          <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
+            ID: {userData?.id}
           </p>
         </div>
 
