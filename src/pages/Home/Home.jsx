@@ -229,11 +229,28 @@ export const Home = () => {
       {/* Floating Prediction Button */}
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-24 right-4 z-20 flex h-12 items-center gap-2 rounded-full bg-primary pl-4 pr-6 text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 active:scale-95 transition-all"
+        className="fixed bottom-24 right-4 z-20 flex h-12 items-center gap-2 rounded-full bg-primary pl-4 pr-6 text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 hover:shadow-xl hover:shadow-blue-500/40 active:scale-95 transition-all animate-bounce-slow group"
       >
-        <span className="material-symbols-outlined">casino</span>
+        <span className="material-symbols-outlined group-hover:rotate-12 transition-transform">
+          casino
+        </span>
         <span className="font-bold text-sm">Tham gia dự đoán</span>
       </button>
+
+      <style jsx>{`
+        @keyframes bounce-slow {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-8px);
+          }
+        }
+        .animate-bounce-slow {
+          animation: bounce-slow 2s ease-in-out infinite;
+        }
+      `}</style>
 
       {/* Prediction Modal */}
       <Modal

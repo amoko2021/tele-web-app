@@ -4,14 +4,14 @@ import styles from './BottomNavBar.module.css'
 
 const navItems = [
   { path: '/', icon: Home, label: 'Trang chủ' },
-  { path: '/account', icon: User, label: 'Tài khoản', hasNotification: true },
+  { path: '/account', icon: User, label: 'Tài khoản' },
   { path: '/settings', icon: Settings, label: 'Cài đặt' },
 ]
 
 export const BottomNavBar = () => {
   return (
     <nav className={styles.navbar}>
-      {navItems.map(({ path, icon: Icon, label, hasNotification }) => (
+      {navItems.map(({ path, icon: Icon, label }) => (
         <NavLink
           key={path}
           to={path}
@@ -21,9 +21,6 @@ export const BottomNavBar = () => {
         >
           <div className={styles.iconWrapper}>
             <Icon size={26} className={styles.icon} strokeWidth={1.5} />
-            {hasNotification && (
-              <span className={styles.notificationDot}></span>
-            )}
           </div>
           <span className={styles.label}>{label}</span>
         </NavLink>
