@@ -1,24 +1,28 @@
+import axios from 'axios'
 import apiClient from './axios.config'
 import { mockXSMBData, generateRandomXSMB } from './mockData'
+
+// API URL cho bên thứ 3 cung cấp kết quả XSMB
+const XSMB_API_URL = 'https://api-xsmb-today.onrender.com/api/v1'
 
 // Flag để bật/tắt mock mode
 const USE_MOCK = true
 
 export const lotteryApi = {
-  // Lấy kết quả xổ số miền bắc
+  // Lấy kết quả xổ số miền bắc từ API bên thứ 3
   getXSMB: async () => {
-    if (USE_MOCK) {
-      // Fake API call với delay
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(mockXSMBData)
-        }, 500)
-      })
-    }
+    // if (USE_MOCK) {
+    //   // Fake API call với delay
+    //   return new Promise((resolve) => {
+    //     setTimeout(() => {
+    //       resolve(mockXSMBData)
+    //     }, 500)
+    //   })
+    // }
 
     try {
-      const response = await apiClient.get('/get_xsmb')
-      return response
+      const response = await axios.get(XSMB_API_URL)
+      return response.data
     } catch (error) {
       console.error('Error fetching XSMB:', error)
       throw error

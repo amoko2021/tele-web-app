@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // Base URL cho production API
-const BASE_URL = 'https://server-capcha-production.up.railway.app'
+const BASE_URL = 'https://betestminiapp-production.up.railway.app'
 
 // Tạo axios instance
 const apiClient = axios.create({
