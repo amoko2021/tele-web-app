@@ -34,7 +34,7 @@ export const Home = () => {
 
   // Khởi tạo Adsgram - thay "your-block-id" bằng block ID thực của bạn
   const showAd = useAdsgram({
-    blockId: '20508',
+    blockId: 'int-20509',
     onReward,
     onError,
   })
