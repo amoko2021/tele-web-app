@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { lotteryApi, userApi } from '../services/api'
 
+// Flag để test với mock data
+const USE_MOCK_XSMB = false
+
 /**
  * Custom hook để lấy kết quả xổ số miền bắc
  * Tự động refresh mỗi 30s trong giờ quay thưởng (18h-18h30)
@@ -25,6 +28,29 @@ export const useXSMB = () => {
     setError(null)
 
     try {
+      // Mock data để test UI
+      if (USE_MOCK_XSMB) {
+        await new Promise((resolve) => setTimeout(resolve, 800))
+        const mockData = {
+          date: new Date().toISOString().split('T')[0],
+          drawTime: '18:15',
+          results: {
+            ĐB: ['12345'],
+            G1: ['67890'],
+            G2: ['12345', '67890'],
+            G3: ['12345', '67890', '11111', '22222', '33333', '44444'],
+            G4: ['1234', '5678', '9012', '3456'],
+            G5: ['123', '456', '789', '012', '345', '678'],
+            G6: ['12', '34', '56'],
+            G7: [],
+          },
+        }
+        if (isMounted.current) {
+          setData(mockData)
+        }
+        return
+      }
+
       const result = await lotteryApi.getXSMB()
       if (isMounted.current) {
         setData(result)
