@@ -13,8 +13,8 @@ export const Settings = () => {
 
   // Tạo referral link dựa trên user ID
   const userId = user?.id || 'demo'
-  const botUsername = 'your_bot_username' // Thay bằng username bot của bạn
-  const referralLink = `https://t.me/${botUsername}?start=ref_${userId}`
+  const botUsername = 'ket_qua_xsmb_bot' // Thay bằng username bot của bạn
+  const referralLink = `https://t.me/${botUsername}?start=${userId}`
 
   // Lấy danh sách bạn bè từ API
   useEffect(() => {
