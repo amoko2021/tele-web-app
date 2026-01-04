@@ -141,14 +141,14 @@ export const lotteryApi = {
           userId: userId,
           guessNumbers: [predictionData.number], // Array format
         })
-        return response
+        return response.data
       } else {
         // Endpoint giải ĐB yêu cầu guessNumber (string)
         const response = await apiClient.post('/prediction', {
           userId: userId,
           guessNumber: predictionData.number,
         })
-        return response
+        return response.data
       }
     } catch (error) {
       console.error('Error submitting prediction:', error)
