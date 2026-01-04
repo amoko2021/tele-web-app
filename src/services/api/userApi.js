@@ -222,6 +222,53 @@ export const userApi = {
       throw error
     }
   },
+
+  // Tạo yêu cầu rút tiền
+  requestWithdrawal: async (userId, data) => {
+    if (USE_MOCK) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // Kiểm tra số tiền
+          if (!data.amount || data.amount < 50000) {
+            reject({
+              message: 'Số tiền rút tối thiểu là 50.000 đ',
+            })
+            return
+          }
+
+          // Fake validation
+          if (!data.bankAccount) {
+            reject({
+              message: 'Vui lòng thêm tài khoản ngân hàng trước!',
+            })
+            return
+          }
+
+          // Fake success
+          resolve({
+            success: true,
+            message:
+              'Yêu cầu rút tiền đã được gửi! Giao dịch sẽ được xử lý trong 5-15 phút.',
+            data: {
+              id: Date.now(),
+              amount: data.amount,
+              bankAccount: data.bankAccount,
+              status: 'pending',
+              createdAt: new Date().toISOString(),
+            },
+          })
+        }, 800)
+      })
+    }
+
+    try {
+      const response = await apiClient.post(`/withdrawals/${userId}`, data)
+      return response
+    } catch (error) {
+      console.error('Error requesting withdrawal:', error)
+      throw error
+    }
+  },
 }
 
 export default userApi

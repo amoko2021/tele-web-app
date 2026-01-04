@@ -1,8 +1,17 @@
-export const ActionButtons = ({ onDeposit, onHistory }) => {
+export const ActionButtons = ({ onDeposit, onWithdraw, onHistory }) => {
   return (
     <div className="flex gap-3 mt-4">
-      <button
+      {/* <button
         onClick={onDeposit}
+        className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white h-11 rounded-lg font-medium transition-colors text-sm"
+      >
+        <span className="material-symbols-outlined text-[20px]">
+          add_circle
+        </span>
+        Nạp xu
+      </button> */}
+      <button
+        onClick={onWithdraw}
         className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-blue-600 text-white h-11 rounded-lg font-medium transition-colors text-sm"
       >
         <span className="material-symbols-outlined text-[20px]">local_atm</span>

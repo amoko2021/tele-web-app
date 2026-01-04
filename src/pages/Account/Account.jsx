@@ -4,6 +4,8 @@ import { useUserInfo } from '../../hooks/useApi'
 import { useTelegram } from '../../hooks/useTelegram'
 import { userApi } from '../../services/api'
 import { BankAccountModal } from '../../components/common/BankAccountModal'
+import { BankWarningModal } from '../../components/common/BankWarningModal'
+import { WithdrawalModal } from '../../components/common/WithdrawalModal'
 import { ProfileCard } from './components/ProfileCard'
 import { BalanceStats } from './components/BalanceStats'
 import { ActionButtons } from './components/ActionButtons'
@@ -14,6 +16,8 @@ export const Account = () => {
   const { data: userInfo, loading } = useUserInfo()
   const { validationData, user: telegramUser } = useTelegram()
   const [isBankModalOpen, setIsBankModalOpen] = useState(false)
+  const [isBankWarningOpen, setIsBankWarningOpen] = useState(false)
+  const [isWithdrawalModalOpen, setIsWithdrawalModalOpen] = useState(false)
   const [bankAccount, setBankAccount] = useState(null)
 
   // Ưu tiên dùng dữ liệu từ validation, fallback về mock data
@@ -55,6 +59,31 @@ export const Account = () => {
     alert('Tính năng nạp xu đang phát triển')
   }
 
+  const handleWithdraw = () => {
+    if (!bankAccount) {
+      setIsBankWarningOpen(true)
+      return
+    }
+    setIsWithdrawalModalOpen(true)
+  }
+
+  const handleSetupBank = () => {
+    setIsBankWarningOpen(false)
+    setIsBankModalOpen(true)
+  }
+
+  const handleWithdrawalSubmit = async (amount) => {
+    try {
+      const result = await userApi.requestWithdrawal(userId, {
+        amount,
+        bankAccount,
+      })
+      alert(result.message || 'Yêu cầu rút tiền đã được gửi!')
+    } catch (error) {
+      alert(error.message || 'Có lỗi xảy ra, vui lòng thử lại!')
+    }
+  }
+
   const handleHistory = () => {
     navigate('/withdrawal-history')
   }
@@ -90,7 +119,11 @@ export const Account = () => {
           <BalanceStats balance={userInfo?.balance || 0} points={340} />
 
           {/* Primary Actions */}
-          <ActionButtons onDeposit={handleDeposit} onHistory={handleHistory} />
+          <ActionButtons
+            onDeposit={handleDeposit}
+            onWithdraw={handleWithdraw}
+            onHistory={handleHistory}
+          />
         </div>
 
         {/* Menu List */}
@@ -102,12 +135,27 @@ export const Account = () => {
         </div>
       </div>
 
+      {/* Bank Warning Modal */}
+      <BankWarningModal
+        isOpen={isBankWarningOpen}
+        onClose={() => setIsBankWarningOpen(false)}
+        onSetup={handleSetupBank}
+      />
+
       {/* Bank Account Modal */}
       <BankAccountModal
         isOpen={isBankModalOpen}
         onClose={() => setIsBankModalOpen(false)}
         onSave={handleSaveBankAccount}
         initialData={bankAccount}
+      />
+
+      {/* Withdrawal Modal */}
+      <WithdrawalModal
+        isOpen={isWithdrawalModalOpen}
+        onClose={() => setIsWithdrawalModalOpen(false)}
+        onSubmit={handleWithdrawalSubmit}
+        bankInfo={bankAccount}
       />
     </div>
   )
