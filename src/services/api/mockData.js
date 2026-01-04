@@ -104,47 +104,63 @@ export const mockReferralFriends = [
 ]
 
 // Mock data cho lịch sử rút tiền
-export const mockWithdrawalHistory = [
-  {
-    id: 1,
-    bankName: 'MB Bank',
-    amount: 500000,
-    date: '10:30, 24/05/2024',
-    status: 'pending',
-  },
-  {
-    id: 2,
-    bankName: 'Vietcombank',
-    amount: 2000000,
-    date: '14:15, 20/05/2024',
-    status: 'success',
-  },
-  {
-    id: 3,
-    bankName: 'Vietcombank',
-    amount: 1500000,
-    date: '09:00, 18/05/2024',
-    status: 'success',
-  },
-  {
-    id: 4,
-    bankName: 'Techcombank',
-    amount: 1000000,
-    date: '18:45, 15/05/2024',
-    status: 'cancelled',
-  },
-  {
-    id: 5,
-    bankName: 'MB Bank',
-    amount: 300000,
-    date: '11:20, 10/05/2024',
-    status: 'success',
-  },
-  {
-    id: 6,
-    bankName: 'MB Bank',
-    amount: 100000,
-    date: '08:15, 05/05/2024',
-    status: 'success',
-  },
-]
+export const mockWithdrawalHistory = {
+  ok: true,
+  data: [
+    {
+      id: 1,
+      user_id: 123456,
+      amount: 500000,
+      status: 'pending',
+      bank_name: 'MB Bank',
+      created_at: '2024-05-24 10:30:00',
+      updated_at: null,
+    },
+    {
+      id: 2,
+      user_id: 123456,
+      amount: 2000000,
+      status: 'paid',
+      bank_name: 'Vietcombank',
+      created_at: '2024-05-20 14:15:00',
+      updated_at: '2024-05-20 14:45:00',
+    },
+    {
+      id: 3,
+      user_id: 123456,
+      amount: 1500000,
+      status: 'paid',
+      bank_name: 'Vietcombank',
+      created_at: '2024-05-18 09:00:00',
+      updated_at: '2024-05-18 09:30:00',
+    },
+    {
+      id: 4,
+      user_id: 123456,
+      amount: 1000000,
+      status: 'cancelled',
+      bank_name: 'Techcombank',
+      created_at: '2024-05-15 18:45:00',
+      updated_at: '2024-05-15 19:00:00',
+    },
+    {
+      id: 5,
+      user_id: 123456,
+      amount: 300000,
+      status: 'paid',
+      bank_name: 'MB Bank',
+      created_at: '2024-05-10 11:20:00',
+      updated_at: '2024-05-10 11:50:00',
+    },
+    {
+      id: 6,
+      user_id: 123456,
+      amount: 100000,
+      status: 'paid',
+      bank_name: 'MB Bank',
+      created_at: '2024-05-05 08:15:00',
+      updated_at: '2024-05-05 08:45:00',
+    },
+  ],
+  total: 6,
+}

@@ -163,7 +163,7 @@ export const userApi = {
     }
 
     try {
-      const response = await apiClient.get(`/withdrawals/${userId}`)
+      const response = await apiClient.get(`/withdraw-history/${userId}`)
       return response
     } catch (error) {
       console.error('Error fetching withdrawal history:', error)

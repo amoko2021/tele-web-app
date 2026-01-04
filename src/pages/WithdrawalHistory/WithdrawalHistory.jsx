@@ -2,22 +2,33 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { WithdrawalHistoryItem } from '../Account/components/WithdrawalHistoryItem'
 import { userApi } from '../../services/api'
+import { useTelegram } from '../../hooks/useTelegram'
 
 export const WithdrawalHistory = () => {
   const navigate = useNavigate()
+  const { validationData, user: telegramUser } = useTelegram()
   const [transactions, setTransactions] = useState([])
   const [loading, setLoading] = useState(true)
+  const [total, setTotal] = useState(0)
+
+  const userData = validationData?.data?.user || telegramUser
+  const userId = userData?.id
 
   useEffect(() => {
-    fetchTransactions()
-  }, [])
+    if (userId) {
+      fetchTransactions()
+    }
+  }, [userId])
 
   const fetchTransactions = async () => {
     setLoading(true)
     try {
-      // Gọi API để lấy lịch sử - hiện tại dùng fake data
-      const data = await userApi.getWithdrawalHistory()
-      setTransactions(data)
+      const response = await userApi.getWithdrawalHistory(userId)
+      // Response format: { ok: true, data: [...], total: 6 }
+      if (response.ok) {
+        setTransactions(response.data || [])
+        setTotal(response.total || 0)
+      }
     } catch (error) {
       console.error('Error fetching withdrawal history:', error)
     } finally {
@@ -66,7 +77,7 @@ export const WithdrawalHistory = () => {
             ))}
             <div className="py-4 text-center">
               <p className="text-xs text-slate-400 dark:text-slate-600">
-                Hiển thị {transactions.length} giao dịch gần nhất
+                Hiển thị {transactions.length}/{total} giao dịch
               </p>
             </div>
           </>
