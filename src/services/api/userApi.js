@@ -8,6 +8,31 @@ import {
 // Flag để bật/tắt mock mode
 const USE_MOCK = false
 
+// Cache cho danh sách bạn bè referral
+let friendsCache = {
+  data: null,
+  timestamp: null,
+  userId: null,
+}
+
+// Kiểm tra cache còn hợp lệ không (5 phút)
+const isFriendsCacheValid = (userId) => {
+  if (
+    !friendsCache.data ||
+    !friendsCache.timestamp ||
+    friendsCache.userId !== userId
+  ) {
+    return false
+  }
+
+  const cacheTime = new Date(friendsCache.timestamp)
+  const now = new Date()
+  const diffMinutes = (now - cacheTime) / 1000 / 60
+
+  // Cache hết hạn sau 5 phút
+  return diffMinutes < 5
+}
+
 export const userApi = {
   // Lấy thông tin user
   getUserInfo: async (userId) => {
@@ -145,11 +170,33 @@ export const userApi = {
       })
     }
 
+    // Kiểm tra cache còn hợp lệ không
+    if (isFriendsCacheValid(userId)) {
+      console.log('Sử dụng dữ liệu friends từ cache')
+      return friendsCache.data
+    }
+
     try {
+      console.log('Lấy dữ liệu friends mới từ API')
       const response = await apiClient.get(`/invites/${userId}`)
-      return response
+
+      // Lưu vào cache
+      friendsCache = {
+        data: response.data,
+        timestamp: new Date().toISOString(),
+        userId: userId,
+      }
+
+      return response.data
     } catch (error) {
       console.error('Error fetching referral friends:', error)
+
+      // Nếu lỗi và có cache cũ, trả về cache
+      if (friendsCache.data && friendsCache.userId === userId) {
+        console.log('Lỗi API - Sử dụng dữ liệu cache')
+        return friendsCache.data
+      }
+
       throw error
     }
   },
