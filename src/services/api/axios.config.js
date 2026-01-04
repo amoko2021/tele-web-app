@@ -6,7 +6,7 @@ const BASE_URL = 'https://betestminiapp-production-9a0b.up.railway.app'
 // Tạo axios instance
 const apiClient = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000,
+  timeout: 5000, // Giảm timeout xuống 5 giây
   headers: {
     'Content-Type': 'application/json',
   },

@@ -25,7 +25,9 @@ export const userApi = {
       return response
     } catch (error) {
       console.error('Error fetching user info:', error)
-      throw error
+      // Fallback về mock data nếu API lỗi
+      console.warn('Falling back to mock data')
+      return mockUserInfo
     }
   },
 
