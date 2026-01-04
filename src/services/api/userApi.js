@@ -11,7 +11,7 @@ const USE_MOCK = true
 export const userApi = {
   // Lấy thông tin user
   getUserInfo: async (userId) => {
-    if (USE_MOCK) {
+    if (false) {
       // Fake API call với delay
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -50,7 +50,7 @@ export const userApi = {
 
   // Lấy thông tin tài khoản ngân hàng
   getBankAccount: async (userId) => {
-    if (USE_MOCK) {
+    if (false) {
       return new Promise((resolve) => {
         setTimeout(() => {
           if (!userId) {
@@ -75,7 +75,7 @@ export const userApi = {
 
   // Cập nhật thông tin tài khoản ngân hàng
   updateBankAccount: async (userId, data) => {
-    if (USE_MOCK) {
+    if (false) {
       return new Promise((resolve) => {
         setTimeout(() => {
           if (!userId) {
