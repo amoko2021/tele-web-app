@@ -26,6 +26,7 @@ export const Home = () => {
   const [maxPredictions, setMaxPredictions] = useState(5)
   const [remainingPredictions, setRemainingPredictions] = useState(5)
   const [currentBlockId, setCurrentBlockId] = useState('20539')
+  const [adErrorShown, setAdErrorShown] = useState(false)
 
   // Lấy userId từ Telegram
   const userData = validationData?.data?.user || telegramUser
@@ -34,6 +35,7 @@ export const Home = () => {
   // Adsgram callbacks
   const onReward = useCallback(() => {
     // Khi user xem xong quảng cáo, hiển thị modal dự đoán
+    setAdErrorShown(false) // Reset error state on success
     setIsModalOpen(true)
   }, [])
 
@@ -55,13 +57,17 @@ export const Home = () => {
         return
       }
 
-      // Nếu cả 2 blockId đều lỗi, thông báo
-      if (result.description?.includes('not loaded') || result.error) {
+      // Nếu cả 2 blockId đều lỗi, thông báo (chỉ hiển thị 1 lần)
+      if (
+        !adErrorShown &&
+        (result.description?.includes('not loaded') || result.error)
+      ) {
         alert('Không có quảng cáo khả dụng. Vui lòng thử lại sau!')
+        setAdErrorShown(true)
       }
       // KHÔNG mở modal khi có lỗi
     },
-    [currentBlockId]
+    [currentBlockId, adErrorShown]
   )
 
   // Khởi tạo 2 Adsgram instances
@@ -79,6 +85,9 @@ export const Home = () => {
 
   // Xử lý khi click vào floating button
   const handleFloatingButtonClick = useCallback(async () => {
+    // Reset error state when user clicks again
+    setAdErrorShown(false)
+
     // Kiểm tra giờ VN (không cho dự đoán từ 18h)
     const nowVN = new Date().toLocaleString('en-US', {
       timeZone: 'Asia/Ho_Chi_Minh',
