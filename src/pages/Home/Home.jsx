@@ -25,6 +25,7 @@ export const Home = () => {
   const [checkingPrediction, setCheckingPrediction] = useState(false)
   const [maxPredictions, setMaxPredictions] = useState(5)
   const [remainingPredictions, setRemainingPredictions] = useState(5)
+  const [currentBlockId, setCurrentBlockId] = useState('20539')
 
   // Lấy userId từ Telegram
   const userData = validationData?.data?.user || telegramUser
@@ -36,18 +37,42 @@ export const Home = () => {
     setIsModalOpen(true)
   }, [])
 
-  const onError = useCallback((result) => {
-    console.error('Adsgram error:', result)
-    // Nếu không có ads hoặc có lỗi, thông báo cho user
-    if (result.description?.includes('not loaded') || result.error) {
-      alert('Không có quảng cáo khả dụng. Vui lòng thử lại sau!')
-    }
-    // KHÔNG mở modal khi có lỗi
-  }, [])
+  const onError = useCallback(
+    (result) => {
+      console.error('Adsgram error:', result)
 
-  // Khởi tạo Adsgram - thay "your-block-id" bằng block ID thực của bạn
+      // Nếu đang dùng blockId đầu tiên và gặp lỗi, chuyển sang blockId thứ 2
+      if (
+        currentBlockId === '20539' &&
+        (result.description?.includes('not loaded') || result.error)
+      ) {
+        console.log('Switching to backup blockId: 20540')
+        setCurrentBlockId('20540')
+        // Thử lại với blockId mới
+        setTimeout(() => {
+          if (showAd2) showAd2()
+        }, 500)
+        return
+      }
+
+      // Nếu cả 2 blockId đều lỗi, thông báo
+      if (result.description?.includes('not loaded') || result.error) {
+        alert('Không có quảng cáo khả dụng. Vui lòng thử lại sau!')
+      }
+      // KHÔNG mở modal khi có lỗi
+    },
+    [currentBlockId]
+  )
+
+  // Khởi tạo 2 Adsgram instances
   const showAd = useAdsgram({
-    blockId: 'int-20509',
+    blockId: '20539',
+    onReward,
+    onError,
+  })
+
+  const showAd2 = useAdsgram({
+    blockId: '20540',
     onReward,
     onError,
   })
@@ -101,7 +126,12 @@ export const Home = () => {
         setIsModalOpen(true)
       } else {
         // Còn lượt dự đoán, hiển thị quảng cáo trước
-        showAd()
+        // Dùng blockId tùy theo state hiện tại
+        if (currentBlockId === '20539') {
+          showAd()
+        } else {
+          showAd2()
+        }
       }
     } catch (error) {
       console.error('Error checking prediction:', error)
@@ -110,7 +140,7 @@ export const Home = () => {
     } finally {
       setCheckingPrediction(false)
     }
-  }, [userId, showAd])
+  }, [userId, showAd, showAd2, currentBlockId])
 
   // Check dự đoán hôm nay khi component mount để hiển thị số lượt
   useEffect(() => {
