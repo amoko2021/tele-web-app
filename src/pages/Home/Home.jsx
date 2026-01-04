@@ -106,7 +106,7 @@ export const Home = () => {
     } catch (error) {
       console.error('Error checking prediction:', error)
       // Nếu lỗi, vẫn cho mở modal
-      setIsModalOpen(false)
+      setIsModalOpen(true)
     } finally {
       setCheckingPrediction(false)
     }
