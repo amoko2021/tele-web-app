@@ -52,6 +52,36 @@ export const Home = () => {
 
   // Xử lý khi click vào floating button
   const handleFloatingButtonClick = useCallback(async () => {
+    // Kiểm tra giờ VN (không cho dự đoán từ 18h)
+    const nowVN = new Date().toLocaleString('en-US', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+    })
+    const vnDate = new Date(nowVN)
+    const currentHour = vnDate.getHours()
+
+    if (currentHour >= 18) {
+      alert(
+        'Đã hết thời gian dự đoán hôm nay!\nThời gian dự đoán: từ 00:00 - 18:00 hàng ngày.'
+      )
+      // Vẫn cho xem lịch sử dự đoán
+      if (userId) {
+        setCheckingPrediction(true)
+        try {
+          const result = await lotteryApi.checkTodayPrediction(userId)
+          setHasPredicted(result.hasPredicted)
+          setTodayPredictions(result.predictions || [])
+          setMaxPredictions(result.maxPredictions || 5)
+          setRemainingPredictions(0) // Set về 0 để chỉ hiển thị lịch sử
+          setIsModalOpen(true)
+        } catch (error) {
+          console.error('Error checking prediction:', error)
+        } finally {
+          setCheckingPrediction(false)
+        }
+      }
+      return
+    }
+
     // Kiểm tra dự đoán trước
     if (!userId) {
       alert('Không tìm thấy thông tin user!')
