@@ -6,7 +6,7 @@ import {
 } from './mockData'
 
 // Flag để bật/tắt mock mode
-const USE_MOCK = true
+const USE_MOCK = false
 
 export const userApi = {
   // Lấy thông tin user
