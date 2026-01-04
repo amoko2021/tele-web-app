@@ -210,7 +210,11 @@ export const userApi = {
     }
 
     try {
-      const response = await apiClient.post(`/withdrawals/${userId}`, data)
+      const response = await apiClient.post('/withdraw-request', {
+        userId: userId,
+        amount: data.amount,
+        bank_account: data.bankAccount,
+      })
       return response
     } catch (error) {
       console.error('Error requesting withdrawal:', error)
