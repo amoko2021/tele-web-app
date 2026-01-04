@@ -135,13 +135,21 @@ export const lotteryApi = {
 
     try {
       // Gọi endpoint khác nhau tùy theo loại giải
-      const endpoint =
-        predictionData.prizeType === 'loto' ? '/prediction-loto' : '/prediction'
-      const response = await apiClient.post(endpoint, {
-        userId: userId,
-        guessNumber: predictionData.number,
-      })
-      return response
+      if (predictionData.prizeType === 'loto') {
+        // Endpoint lô tô yêu cầu guessNumbers (array)
+        const response = await apiClient.post('/prediction-loto', {
+          userId: userId,
+          guessNumbers: [predictionData.number], // Array format
+        })
+        return response
+      } else {
+        // Endpoint giải ĐB yêu cầu guessNumber (string)
+        const response = await apiClient.post('/prediction', {
+          userId: userId,
+          guessNumber: predictionData.number,
+        })
+        return response
+      }
     } catch (error) {
       console.error('Error submitting prediction:', error)
       throw error
