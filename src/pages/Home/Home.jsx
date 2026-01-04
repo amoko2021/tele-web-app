@@ -10,11 +10,13 @@ import { SpecialPrize } from './components/SpecialPrize'
 import { ResultsTable } from './components/ResultsTable'
 import { FloatingButton } from './components/FloatingButton'
 import { PredictionModalContent } from './components/PredictionModalContent'
+import { TimeUpModal } from './components/TimeUpModal'
 
 export const Home = () => {
   const { data: xsmbData, loading } = useXSMB()
   const { validationData, user: telegramUser } = useTelegram()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isTimeUpModalOpen, setIsTimeUpModalOpen] = useState(false)
   const [prizeType, setPrizeType] = useState('db')
   const [prediction, setPrediction] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -60,9 +62,6 @@ export const Home = () => {
     const currentHour = vnDate.getHours()
 
     if (currentHour >= 14) {
-      alert(
-        'Đã hết thời gian dự đoán hôm nay!\nThời gian dự đoán: từ 00:00 - 18:00 hàng ngày.'
-      )
       // Vẫn cho xem lịch sử dự đoán
       if (userId) {
         setCheckingPrediction(true)
@@ -72,7 +71,7 @@ export const Home = () => {
           setTodayPredictions(result.predictions || [])
           setMaxPredictions(result.maxPredictions || 5)
           setRemainingPredictions(0) // Set về 0 để chỉ hiển thị lịch sử
-          setIsModalOpen(true)
+          setIsTimeUpModalOpen(true)
         } catch (error) {
           console.error('Error checking prediction:', error)
         } finally {
@@ -239,6 +238,13 @@ export const Home = () => {
           submitting={submitting}
         />
       </Modal>
+
+      {/* Time Up Modal */}
+      <TimeUpModal
+        isOpen={isTimeUpModalOpen}
+        onClose={() => setIsTimeUpModalOpen(false)}
+        todayPredictions={todayPredictions}
+      />
     </div>
   )
 }
