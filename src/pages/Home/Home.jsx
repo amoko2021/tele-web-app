@@ -164,13 +164,14 @@ export const Home = () => {
         number: prediction,
         date: new Date().toISOString(),
       })
-      alert(result.message)
+      alert(result.message || 'Dự đoán của bạn đã được ghi nhận!')
       setIsModalOpen(false)
       setPrediction('')
       // Refresh prediction status
       checkTodayPrediction()
     } catch (error) {
-      alert('Có lỗi xảy ra, vui lòng thử lại!, ' + error.message)
+      console.error('Submit prediction error:', error)
+      alert('Có lỗi xảy ra, vui lòng thử lại!')
     } finally {
       setSubmitting(false)
     }

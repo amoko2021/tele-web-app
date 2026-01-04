@@ -184,7 +184,41 @@ export const lotteryApi = {
 
     try {
       const response = await apiClient.get(`/prediction/today/${userId}`)
-      return response
+      
+      // Transform backend response thành format frontend cần
+      const { data } = response
+      const predictions = []
+      
+      // Thêm dự đoán giải ĐB nếu có
+      if (data.guess_number) {
+        predictions.push({
+          id: 1,
+          prizeType: 'db',
+          number: data.guess_number,
+        })
+      }
+      
+      // Thêm dự đoán lô tô nếu có
+      if (data.guess_number_loto && data.guess_number_loto.length > 0) {
+        data.guess_number_loto.forEach((loto, idx) => {
+          predictions.push({
+            id: idx + 2,
+            prizeType: 'loto',
+            number: loto,
+          })
+        })
+      }
+      
+      const maxPredictions = 5
+      const totalPredictions = (data.guess_number ? 1 : 0) + data.loto_count
+      const remainingPredictions = Math.max(0, maxPredictions - totalPredictions)
+      
+      return {
+        hasPredicted: predictions.length > 0,
+        predictions: predictions,
+        maxPredictions: maxPredictions,
+        remainingPredictions: remainingPredictions,
+      }
     } catch (error) {
       console.error('Error checking today prediction:', error)
       throw error
