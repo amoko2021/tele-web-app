@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useUserInfo } from '../../hooks/useApi'
 import { useTelegram } from '../../hooks/useTelegram'
 import { userApi } from '../../services/api'
@@ -9,6 +10,7 @@ import { ActionButtons } from './components/ActionButtons'
 import { SettingsMenu } from './components/SettingsMenu'
 
 export const Account = () => {
+  const navigate = useNavigate()
   const { data: userInfo, loading } = useUserInfo()
   const { validationData, user: telegramUser } = useTelegram()
   const [isBankModalOpen, setIsBankModalOpen] = useState(false)
@@ -54,7 +56,7 @@ export const Account = () => {
   }
 
   const handleHistory = () => {
-    alert('Tính năng lịch sử đang phát triển')
+    navigate('/withdrawal-history')
   }
 
   const handleSupport = () => {

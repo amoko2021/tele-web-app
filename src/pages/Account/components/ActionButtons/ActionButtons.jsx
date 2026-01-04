@@ -5,10 +5,8 @@ export const ActionButtons = ({ onDeposit, onHistory }) => {
         onClick={onDeposit}
         className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-blue-600 text-white h-11 rounded-lg font-medium transition-colors text-sm"
       >
-        <span className="material-symbols-outlined text-[20px]">
-          add_circle
-        </span>
-        Nạp Xu
+        <span className="material-symbols-outlined text-[20px]">local_atm</span>
+        Rút tiền
       </button>
       <button
         onClick={onHistory}
