@@ -1,3 +1,7 @@
+const SkeletonNumber = ({ width = 'w-12' }) => (
+  <div className={`${width} h-5 animate-pulse rounded bg-slate-200`}></div>
+)
+
 export const ResultsTable = ({ results }) => {
   if (!results) return null
 
@@ -18,8 +22,8 @@ export const ResultsTable = ({ results }) => {
           <div className="w-12 flex-none text-xs font-bold text-slate-500">
             G1
           </div>
-          <div className="flex-1 text-center text-lg font-bold tracking-wider text-slate-800">
-            {results.G1?.[0] || '-----'}
+          <div className="flex flex-1 justify-center text-center text-lg font-bold tracking-wider text-slate-800">
+            {results.G1?.[0] || <SkeletonNumber width="w-16" />}
           </div>
         </div>
 
@@ -30,7 +34,10 @@ export const ResultsTable = ({ results }) => {
           </div>
           <div className="flex flex-1 flex-wrap justify-center gap-x-6 gap-y-1 text-center text-base font-bold tracking-wider text-slate-800">
             {results.G2?.map((num, idx) => <span key={idx}>{num}</span>) || (
-              <span>-----</span>
+              <>
+                <SkeletonNumber width="w-14" />
+                <SkeletonNumber width="w-14" />
+              </>
             )}
           </div>
         </div>
@@ -42,7 +49,14 @@ export const ResultsTable = ({ results }) => {
           </div>
           <div className="grid flex-1 grid-cols-3 gap-x-3 gap-y-1.5 text-center text-base font-medium tracking-wider text-slate-800">
             {results.G3?.map((num, idx) => <span key={idx}>{num}</span>) || (
-              <span>-----</span>
+              <>
+                <SkeletonNumber width="w-14" />
+                <SkeletonNumber width="w-14" />
+                <SkeletonNumber width="w-14" />
+                <SkeletonNumber width="w-14" />
+                <SkeletonNumber width="w-14" />
+                <SkeletonNumber width="w-14" />
+              </>
             )}
           </div>
         </div>
@@ -54,7 +68,12 @@ export const ResultsTable = ({ results }) => {
           </div>
           <div className="grid flex-1 grid-cols-2 gap-x-4 gap-y-1.5 text-center text-base font-medium tracking-wider text-slate-800">
             {results.G4?.map((num, idx) => <span key={idx}>{num}</span>) || (
-              <span>-----</span>
+              <>
+                <SkeletonNumber width="w-12" />
+                <SkeletonNumber width="w-12" />
+                <SkeletonNumber width="w-12" />
+                <SkeletonNumber width="w-12" />
+              </>
             )}
           </div>
         </div>
@@ -66,7 +85,14 @@ export const ResultsTable = ({ results }) => {
           </div>
           <div className="grid flex-1 grid-cols-3 gap-x-2 gap-y-1.5 text-center text-base font-medium tracking-wider text-slate-800">
             {results.G5?.map((num, idx) => <span key={idx}>{num}</span>) || (
-              <span>-----</span>
+              <>
+                <SkeletonNumber width="w-10" />
+                <SkeletonNumber width="w-10" />
+                <SkeletonNumber width="w-10" />
+                <SkeletonNumber width="w-10" />
+                <SkeletonNumber width="w-10" />
+                <SkeletonNumber width="w-10" />
+              </>
             )}
           </div>
         </div>
@@ -78,7 +104,11 @@ export const ResultsTable = ({ results }) => {
           </div>
           <div className="flex flex-1 flex-wrap justify-center gap-x-5 gap-y-1 text-center text-base font-medium tracking-wider text-slate-800">
             {results.G6?.map((num, idx) => <span key={idx}>{num}</span>) || (
-              <span>-----</span>
+              <>
+                <SkeletonNumber width="w-10" />
+                <SkeletonNumber width="w-10" />
+                <SkeletonNumber width="w-10" />
+              </>
             )}
           </div>
         </div>
@@ -93,7 +123,14 @@ export const ResultsTable = ({ results }) => {
               <span key={idx} className="text-primary">
                 {num}
               </span>
-            )) || <span>--</span>}
+            )) || (
+              <>
+                <SkeletonNumber width="w-8" />
+                <SkeletonNumber width="w-8" />
+                <SkeletonNumber width="w-8" />
+                <SkeletonNumber width="w-8" />
+              </>
+            )}
           </div>
         </div>
       </div>
