@@ -15,11 +15,11 @@ const apiClient = axios.create({
 // Request interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    // Có thể thêm token vào header ở đây
-    // const token = localStorage.getItem('token')
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`
-    // }
+    // Thêm Telegram initData vào header để authentication
+    const tg = window.Telegram?.WebApp
+    if (tg?.initData) {
+      config.headers['X-Telegram-Init-Data'] = tg.initData
+    }
     return config
   },
   (error) => {
