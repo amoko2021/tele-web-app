@@ -182,12 +182,12 @@ export const userApi = {
 
       // Lưu vào cache
       friendsCache = {
-        data: response.data,
+        data: response,
         timestamp: new Date().toISOString(),
         userId: userId,
       }
 
-      return response.data
+      return response
     } catch (error) {
       console.error('Error fetching referral friends:', error)
 
