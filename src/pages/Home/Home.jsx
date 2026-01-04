@@ -170,7 +170,7 @@ export const Home = () => {
       // Refresh prediction status
       checkTodayPrediction()
     } catch (error) {
-      alert('Có lỗi xảy ra, vui lòng thử lại!')
+      alert('Có lỗi xảy ra, vui lòng thử lại!, ' + error.message)
     } finally {
       setSubmitting(false)
     }
