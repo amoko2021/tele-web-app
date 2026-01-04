@@ -35,7 +35,7 @@ export const Account = () => {
   const loadBankAccount = async () => {
     try {
       const data = await userApi.getBankAccount(userId)
-      setBankAccount(data)
+      setBankAccount(data?.data)
     } catch (error) {
       console.error('Error loading bank account:', error)
     }

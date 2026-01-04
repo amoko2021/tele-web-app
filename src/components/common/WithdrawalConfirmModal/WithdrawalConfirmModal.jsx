@@ -52,10 +52,10 @@ export const WithdrawalConfirmModal = ({
               <span className="text-slate-500 dark:text-slate-400">
                 Ngân hàng
               </span>
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-green-600 flex items-center justify-center text-[8px] text-white font-bold tracking-tighter">
+              <div className="flex items-center">
+                {/* <div className="w-5 h-5 rounded-full bg-green-600 flex items-center justify-center text-[8px] text-white font-bold tracking-tighter">
                   {bankInfo?.bankCode || 'VCB'}
-                </div>
+                </div> */}
                 <span className="text-slate-900 dark:text-white font-semibold">
                   {bankInfo?.bankName || 'Vietcombank'}
                 </span>
