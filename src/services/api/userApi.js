@@ -48,6 +48,32 @@ export const userApi = {
     }
   },
 
+  // Cập nhật số dư (sau khi rút tiền, nạp tiền)
+  updateBalance: async (userId, amount) => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            message: 'Balance updated successfully',
+            data: {
+              user_id: userId,
+              balance: amount,
+            },
+          })
+        }, 500)
+      })
+    }
+
+    try {
+      const response = await apiClient.put(`/balance/${userId}`, { amount })
+      return response
+    } catch (error) {
+      console.error('Error updating balance:', error)
+      throw error
+    }
+  },
+
   // Lấy thông tin tài khoản ngân hàng
   getBankAccount: async (userId) => {
     if (false) {

@@ -18,10 +18,16 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
 
   const handleConfirm = async () => {
     const amountNum = parseInt(amount.replace(/\D/g, ''))
-    await onSubmit(amountNum)
-    setShowConfirm(false)
-    setAmount('')
-    onClose()
+    try {
+      await onSubmit(amountNum)
+      // Chỉ close modal khi thành công
+      setShowConfirm(false)
+      setAmount('')
+      onClose()
+    } catch (error) {
+      // Nếu lỗi, giữ modal mở để user có thể thử lại
+      setShowConfirm(false)
+    }
   }
 
   const handleClose = () => {

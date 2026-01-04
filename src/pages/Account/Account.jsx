@@ -23,7 +23,7 @@ export const Account = () => {
   const userData = validationData?.data?.user || telegramUser
   const userId = userData?.id
 
-  const { data: userInfo, loading } = useUserInfo(userId)
+  const { data: userInfo, loading, refetch } = useUserInfo(userId)
 
   // Load bank account khi có userId
   useEffect(() => {
@@ -79,6 +79,18 @@ export const Account = () => {
         amount,
         bankAccount,
       })
+
+      // Cập nhật balance sau khi rút tiền thành công
+      if (result.success) {
+        const newBalance = (userInfo?.balance || 0) - amount
+        await userApi.updateBalance(userId, newBalance)
+
+        // Refresh user info để hiển thị số dư mới
+        if (refetch) {
+          await refetch()
+        }
+      }
+
       alert(result.message || 'Yêu cầu rút tiền đã được gửi!')
     } catch (error) {
       alert(error.message || 'Có lỗi xảy ra, vui lòng thử lại!')
