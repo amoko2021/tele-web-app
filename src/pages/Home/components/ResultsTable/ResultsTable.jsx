@@ -23,7 +23,8 @@ export const ResultsTable = ({ results }) => {
             G1
           </div>
           <div className="flex flex-1 justify-center text-center text-lg font-bold tracking-wider text-slate-800">
-            {results.G1?.[0] || <SkeletonNumber width="w-16" />}
+            {/* {results.G1?.[0] || <SkeletonNumber width="w-16" />} */}
+            {<SkeletonNumber width="w-16" />}
           </div>
         </div>
 
