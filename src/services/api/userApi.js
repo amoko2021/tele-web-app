@@ -50,7 +50,7 @@ export const userApi = {
 
   // Cập nhật số dư (sau khi rút tiền, nạp tiền)
   updateBalance: async (userId, amount) => {
-    if (USE_MOCK) {
+    if (false) {
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve({
