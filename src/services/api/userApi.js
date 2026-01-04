@@ -127,7 +127,7 @@ export const userApi = {
     }
 
     try {
-      const response = await apiClient.post(`/bank-account/${userId}`, data)
+      const response = await apiClient.put(`/bank-account/${userId}`, data)
       return response
     } catch (error) {
       console.error('Error updating bank account:', error)
