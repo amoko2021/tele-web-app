@@ -15,16 +15,14 @@ export const mockXSMBData = {
 }
 
 export const mockUserInfo = {
-  id: '123456789',
-  firstName: 'Nguyễn',
-  lastName: 'Văn A',
-  username: 'nguyenvana',
-  photoUrl: 'https://via.placeholder.com/150',
-  languageCode: 'vi',
-  isPremium: false,
-  balance: 1000000,
-  createdAt: '2025-01-01T00:00:00Z',
-  lastLogin: '2026-01-03T10:30:00Z',
+  ok: true,
+  data: {
+    user_id: 123456,
+    balance: 1000.5,
+    wallet: 'DUONG VAN DOAN - 0385901122 - VPBANK',
+    join_date: '2026-01-04',
+    language: 'vi',
+  },
 }
 
 // Hàm tạo dữ liệu XSMB ngẫu nhiên
