@@ -138,9 +138,8 @@ export const lotteryApi = {
       const endpoint =
         predictionData.prizeType === 'loto' ? '/prediction-loto' : '/prediction'
       const response = await apiClient.post(endpoint, {
-        userId,
-        number: predictionData.number,
-        date: predictionData.date,
+        userId: userId,
+        guessNumber: predictionData.number,
       })
       return response
     } catch (error) {
@@ -184,11 +183,11 @@ export const lotteryApi = {
 
     try {
       const response = await apiClient.get(`/prediction/today/${userId}`)
-      
+
       // Transform backend response thành format frontend cần
       const { data } = response
       const predictions = []
-      
+
       // Thêm dự đoán giải ĐB nếu có
       if (data.guess_number) {
         predictions.push({
@@ -197,7 +196,7 @@ export const lotteryApi = {
           number: data.guess_number,
         })
       }
-      
+
       // Thêm dự đoán lô tô nếu có
       if (data.guess_number_loto && data.guess_number_loto.length > 0) {
         data.guess_number_loto.forEach((loto, idx) => {
@@ -208,11 +207,14 @@ export const lotteryApi = {
           })
         })
       }
-      
+
       const maxPredictions = 5
       const totalPredictions = (data.guess_number ? 1 : 0) + data.loto_count
-      const remainingPredictions = Math.max(0, maxPredictions - totalPredictions)
-      
+      const remainingPredictions = Math.max(
+        0,
+        maxPredictions - totalPredictions
+      )
+
       return {
         hasPredicted: predictions.length > 0,
         predictions: predictions,
