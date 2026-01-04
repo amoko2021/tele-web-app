@@ -6,12 +6,12 @@ import {
 } from './mockData'
 
 // Flag để bật/tắt mock mode
-const USE_MOCK = false
+const USE_MOCK = true
 
 export const userApi = {
   // Lấy thông tin user
   getUserInfo: async (userId) => {
-    if (false) {
+    if (USE_MOCK) {
       // Fake API call với delay
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -52,7 +52,7 @@ export const userApi = {
 
   // Cập nhật số dư (sau khi rút tiền, nạp tiền)
   updateBalance: async (userId, amount) => {
-    if (false) {
+    if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve({
@@ -78,7 +78,7 @@ export const userApi = {
 
   // Lấy thông tin tài khoản ngân hàng
   getBankAccount: async (userId) => {
-    if (false) {
+    if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
           if (!userId) {
@@ -103,7 +103,7 @@ export const userApi = {
 
   // Cập nhật thông tin tài khoản ngân hàng
   updateBankAccount: async (userId, data) => {
-    if (false) {
+    if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
           if (!userId) {
