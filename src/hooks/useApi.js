@@ -35,7 +35,7 @@ export const useXSMB = () => {
           date: new Date().toISOString().split('T')[0],
           drawTime: '18:15',
           results: {
-            ĐB: ['12345'],
+            ĐB: ['Đang cập nhật'],
             G1: ['67890'],
             G2: ['12345', '67890'],
             G3: ['12345', '67890', '11111', '22222', '33333', '44444'],
