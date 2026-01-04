@@ -6,7 +6,7 @@ import { mockXSMBData, generateRandomXSMB } from './mockData'
 const XSMB_API_URL = 'https://api-xsmb-today.onrender.com/api/v1'
 
 // Flag để bật/tắt mock mode
-const USE_MOCK = true
+const USE_MOCK = false
 
 // Cache cho kết quả XSMB
 let xsmbCache = {
@@ -134,10 +134,14 @@ export const lotteryApi = {
     }
 
     try {
-      const response = await apiClient.post(
-        `/prediction/${userId}`,
-        predictionData
-      )
+      // Gọi endpoint khác nhau tùy theo loại giải
+      const endpoint =
+        predictionData.prizeType === 'loto' ? '/prediction-loto' : '/prediction'
+      const response = await apiClient.post(endpoint, {
+        userId,
+        number: predictionData.number,
+        date: predictionData.date,
+      })
       return response
     } catch (error) {
       console.error('Error submitting prediction:', error)
