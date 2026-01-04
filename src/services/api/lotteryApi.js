@@ -136,17 +136,17 @@ export const lotteryApi = {
     try {
       // Gọi endpoint khác nhau tùy theo loại giải
       if (predictionData.prizeType === 'loto') {
-        // Endpoint lô tô yêu cầu guess_numbers (array) - snake_case để match backend
+        // Endpoint lô tô yêu cầu guessNumber (1 số duy nhất)
         const response = await apiClient.post('/prediction-loto', {
           userId: userId,
-          guessNumbers: [predictionData.number], // Array format, snake_case
+          guessNumber: predictionData.number, // String, 1 số duy nhất
         })
         return response.data
       } else {
-        // Endpoint giải ĐB yêu cầu guess_number (string) - snake_case để match backend
+        // Endpoint giải ĐB yêu cầu guessNumber (string)
         const response = await apiClient.post('/prediction', {
           userId: userId,
-          guessNumber: predictionData.number, // snake_case
+          guessNumber: predictionData.number,
         })
         return response.data
       }
@@ -165,8 +165,8 @@ export const lotteryApi = {
             resolve({
               hasPredicted: false,
               predictions: [],
-              maxPredictions: 5,
-              remainingPredictions: 5,
+              maxPredictions: 2,
+              remainingPredictions: 2,
             })
             return
           }
@@ -176,7 +176,7 @@ export const lotteryApi = {
           const today = new Date().toLocaleDateString('vi-VN')
           const todayPredictions = predictions.filter((p) => p.date === today)
 
-          const maxPredictions = 5
+          const maxPredictions = 2
           const remainingPredictions = maxPredictions - todayPredictions.length
 
           resolve({
@@ -206,18 +206,17 @@ export const lotteryApi = {
       }
 
       // Thêm dự đoán lô tô nếu có
-      if (data.guess_number_loto && data.guess_number_loto.length > 0) {
-        data.guess_number_loto.forEach((loto, idx) => {
-          predictions.push({
-            id: idx + 2,
-            prizeType: 'loto',
-            number: loto,
-          })
+      if (data.guess_number_loto) {
+        predictions.push({
+          id: 2,
+          prizeType: 'loto',
+          number: data.guess_number_loto,
         })
       }
 
-      const maxPredictions = 5
-      const totalPredictions = (data.guess_number ? 1 : 0) + data.loto_count
+      const maxPredictions = 2
+      const totalPredictions =
+        (data.guess_number ? 1 : 0) + (data.guess_number_loto ? 1 : 0)
       const remainingPredictions = Math.max(
         0,
         maxPredictions - totalPredictions

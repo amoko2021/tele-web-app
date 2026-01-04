@@ -25,6 +25,13 @@ export const FloatingButton = ({
             </span>
           )}
         </div>
+
+        {/* Watch Ads Badge */}
+        {remainingPredictions > 0 && (
+          <div className="absolute -top-1 -right-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-md animate-pulse">
+            Watch Ads
+          </div>
+        )}
       </button>
 
       <style jsx>{`

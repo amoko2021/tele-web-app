@@ -23,8 +23,8 @@ export const Home = () => {
   const [hasPredicted, setHasPredicted] = useState(false)
   const [todayPredictions, setTodayPredictions] = useState([])
   const [checkingPrediction, setCheckingPrediction] = useState(false)
-  const [maxPredictions, setMaxPredictions] = useState(5)
-  const [remainingPredictions, setRemainingPredictions] = useState(5)
+  const [maxPredictions, setMaxPredictions] = useState(2)
+  const [remainingPredictions, setRemainingPredictions] = useState(2)
   const [errorMessage, setErrorMessage] = useState('')
 
   // Lấy userId từ Telegram
