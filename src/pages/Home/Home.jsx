@@ -61,7 +61,7 @@ export const Home = () => {
     const vnDate = new Date(nowVN)
     const currentHour = vnDate.getHours()
 
-    if (currentHour >= 14) {
+    if (currentHour >= 18) {
       // Vẫn cho xem lịch sử dự đoán
       if (userId) {
         setCheckingPrediction(true)
