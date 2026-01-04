@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { lotteryApi, userApi } from '../services/api'
 
 // Flag để test với mock data
-const USE_MOCK_XSMB = true
+const USE_MOCK_XSMB = false
 
 /**
  * Custom hook để lấy kết quả xổ số miền bắc
