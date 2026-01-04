@@ -25,6 +25,7 @@ export const Home = () => {
   const [checkingPrediction, setCheckingPrediction] = useState(false)
   const [maxPredictions, setMaxPredictions] = useState(5)
   const [remainingPredictions, setRemainingPredictions] = useState(5)
+  const [errorMessage, setErrorMessage] = useState('')
 
   // Lấy userId từ Telegram
   const userData = validationData?.data?.user || telegramUser
@@ -141,19 +142,23 @@ export const Home = () => {
   }
 
   const handleSubmitPrediction = async () => {
+    setErrorMessage('')
+
     if (!prediction) {
-      alert('Vui lòng nhập số dự đoán')
+      setErrorMessage('Vui lòng nhập số dự đoán')
       return
     }
 
     if (!userId) {
-      alert('Không tìm thấy thông tin user!')
+      setErrorMessage('Không tìm thấy thông tin user!')
       return
     }
 
     // Kiểm tra giới hạn từ backend
     if (remainingPredictions <= 0) {
-      alert(`Bạn đã sử dụng hết ${maxPredictions} lượt dự đoán hôm nay!`)
+      setErrorMessage(
+        `Bạn đã sử dụng hết ${maxPredictions} lượt dự đoán hôm nay!`
+      )
       return
     }
 
@@ -164,14 +169,30 @@ export const Home = () => {
         number: prediction,
         date: new Date().toISOString(),
       })
+
+      // Kiểm tra response từ backend
+      if (result.ok === false) {
+        // Backend trả về lỗi
+        setErrorMessage(result.error || 'Có lỗi xảy ra, vui lòng thử lại!')
+        setSubmitting(false)
+        return
+      }
+
+      // Thành công
       alert(result.message || 'Dự đoán của bạn đã được ghi nhận!')
       setIsModalOpen(false)
       setPrediction('')
+      setErrorMessage('')
       // Refresh prediction status
       checkTodayPrediction()
     } catch (error) {
       console.error('Submit prediction error:', error)
-      alert('Có lỗi xảy ra, vui lòng thử lại!')
+      // Hiển thị message lỗi từ server nếu có
+      const errMsg =
+        error.response?.data?.error ||
+        error.message ||
+        'Có lỗi xảy ra, vui lòng thử lại!'
+      setErrorMessage(errMsg)
     } finally {
       setSubmitting(false)
     }
@@ -234,6 +255,7 @@ export const Home = () => {
           setPrediction={setPrediction}
           handleSubmitPrediction={handleSubmitPrediction}
           submitting={submitting}
+          errorMessage={errorMessage}
         />
       </Modal>
 

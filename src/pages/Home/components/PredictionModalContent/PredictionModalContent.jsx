@@ -14,6 +14,7 @@ export const PredictionModalContent = ({
   setPrediction,
   handleSubmitPrediction,
   submitting,
+  errorMessage,
 }) => {
   if (checkingPrediction) {
     return (
@@ -106,6 +107,11 @@ export const PredictionModalContent = ({
 
           <PrizeTypeSelector value={prizeType} onChange={setPrizeType} />
           <NumberInput value={prediction} onChange={setPrediction} />
+          {errorMessage && (
+            <div className="mt-2 text-xs text-red-500 font-medium">
+              {errorMessage}
+            </div>
+          )}
 
           <button
             onClick={handleSubmitPrediction}
@@ -127,6 +133,11 @@ export const PredictionModalContent = ({
     <>
       <PrizeTypeSelector value={prizeType} onChange={setPrizeType} />
       <NumberInput value={prediction} onChange={setPrediction} />
+      {errorMessage && (
+        <div className="mt-2 text-xs text-red-500 font-medium">
+          {errorMessage}
+        </div>
+      )}
 
       <button
         onClick={handleSubmitPrediction}
