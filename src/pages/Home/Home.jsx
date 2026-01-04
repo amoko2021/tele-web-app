@@ -25,8 +25,6 @@ export const Home = () => {
   const [checkingPrediction, setCheckingPrediction] = useState(false)
   const [maxPredictions, setMaxPredictions] = useState(5)
   const [remainingPredictions, setRemainingPredictions] = useState(5)
-  const [currentBlockId, setCurrentBlockId] = useState('20539')
-  const [hasTriedBackup, setHasTriedBackup] = useState(false)
 
   // Lấy userId từ Telegram
   const userData = validationData?.data?.user || telegramUser
@@ -34,57 +32,28 @@ export const Home = () => {
 
   // Adsgram callbacks
   const onReward = useCallback(() => {
-    // Reset các flags khi ads thành công
-    setHasTriedBackup(false)
-    setCurrentBlockId('20539')
+    // Khi user xem xong quảng cáo, hiển thị modal dự đoán
     setIsModalOpen(true)
   }, [])
 
-  const onError = useCallback(
-    (result) => {
-      console.error('Adsgram error:', result)
+  const onError = useCallback((result) => {
+    console.error('Adsgram error:', result)
+    // Nếu không có ads hoặc có lỗi, thông báo cho user
+    if (result.description?.includes('not loaded') || result.error) {
+      alert('Không có quảng cáo khả dụng. Vui lòng thử lại sau!')
+    }
+    // KHÔNG mở modal khi có lỗi
+  }, [])
 
-      // Nếu đang dùng blockId đầu tiên và chưa thử backup
-      if (currentBlockId === '20539' && !hasTriedBackup) {
-        console.log('Switching to backup blockId: 20540')
-        setCurrentBlockId('20540')
-        setHasTriedBackup(true)
-        // Thử lại với blockId mới
-        setTimeout(() => {
-          if (showAd2) showAd2()
-        }, 500)
-        return
-      }
-
-      // Chỉ hiển thị alert khi đã thử cả 2 blockId
-      if (hasTriedBackup && currentBlockId === '20540') {
-        alert('Không có quảng cáo khả dụng. Vui lòng thử lại sau!')
-        // Reset về trạng thái ban đầu cho lần sau
-        setCurrentBlockId('20539')
-        setHasTriedBackup(false)
-      }
-    },
-    [currentBlockId, hasTriedBackup]
-  )
-
-  // Khởi tạo 2 Adsgram instances
+  // Khởi tạo Adsgram - thay "your-block-id" bằng block ID thực của bạn
   const showAd = useAdsgram({
-    blockId: '20539',
-    onReward,
-    onError,
-  })
-
-  const showAd2 = useAdsgram({
-    blockId: '20540',
+    blockId: 'int-20509',
     onReward,
     onError,
   })
 
   // Xử lý khi click vào floating button
   const handleFloatingButtonClick = useCallback(async () => {
-    // Reset error state when user clicks again
-    setAdErrorShown(false)
-
     // Kiểm tra giờ VN (không cho dự đoán từ 18h)
     const nowVN = new Date().toLocaleString('en-US', {
       timeZone: 'Asia/Ho_Chi_Minh',
@@ -132,22 +101,16 @@ export const Home = () => {
         setIsModalOpen(true)
       } else {
         // Còn lượt dự đoán, hiển thị quảng cáo trước
-        // Dùng blockId tùy theo state hiện tại
-        if (currentBlockId === '20539') {
-          showAd()
-        } else {
-          showAd2()
-        }
+        showAd()
       }
     } catch (error) {
       console.error('Error checking prediction:', error)
       // Nếu lỗi, vẫn cho mở modal
       setIsModalOpen(false)
-      return
     } finally {
       setCheckingPrediction(false)
     }
-  }, [userId, showAd, showAd2, currentBlockId])
+  }, [userId, showAd])
 
   // Check dự đoán hôm nay khi component mount để hiển thị số lượt
   useEffect(() => {
