@@ -1,0 +1,1 @@
+export { SpecialPrize } from './SpecialPrize'
