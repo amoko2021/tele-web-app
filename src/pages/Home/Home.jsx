@@ -59,7 +59,7 @@ export const Home = () => {
     const vnDate = new Date(nowVN)
     const currentHour = vnDate.getHours()
 
-    if (currentHour >= 18) {
+    if (currentHour >= 14) {
       alert(
         'Đã hết thời gian dự đoán hôm nay!\nThời gian dự đoán: từ 00:00 - 18:00 hàng ngày.'
       )
