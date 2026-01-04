@@ -38,11 +38,7 @@ export const Home = () => {
 
   const onError = useCallback((result) => {
     console.error('Adsgram error:', result)
-    // Nếu không có ads hoặc có lỗi, thông báo cho user
-    if (result.description?.includes('not loaded') || result.error) {
-      alert('Không có quảng cáo khả dụng. Vui lòng thử lại sau!')
-    }
-    // KHÔNG mở modal khi có lỗi
+    // Mở modal ngay cả khi ads lỗi để user vẫn dự đoán được
     setIsModalOpen(true)
   }, [])
 
