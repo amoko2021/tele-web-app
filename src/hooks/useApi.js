@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { lotteryApi, userApi } from '../services/api'
 
 /**
@@ -7,47 +7,66 @@ import { lotteryApi, userApi } from '../services/api'
  */
 export const useXSMB = () => {
   const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const fetchXSMB = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const result = await lotteryApi.getXSMB()
-      setData(result)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
+  const isMounted = useRef(true)
+  const intervalRef = useRef(null)
+
+  const isDrawingTime = () => {
+    const now = new Date()
+    const h = now.getHours()
+    const m = now.getMinutes()
+    return h === 18 && m < 30
   }
 
-  useEffect(() => {
-    fetchXSMB()
+  const fetchXSMB = useCallback(async (showLoading = false) => {
+    if (showLoading) setLoading(true)
+    setError(null)
 
-    // Kiểm tra xem có đang trong giờ quay thưởng không
-    const isDrawingTime = () => {
-      const now = new Date()
-      const hours = now.getHours()
-      const minutes = now.getMinutes()
-      return hours === 18 && minutes >= 0 && minutes < 30
-    }
-
-    // Nếu đang trong giờ quay thưởng, refresh mỗi 30s
-    let interval
-    if (isDrawingTime()) {
-      interval = setInterval(() => {
-        fetchXSMB()
-      }, 30000) // 30 giây
-    }
-
-    return () => {
-      if (interval) clearInterval(interval)
+    try {
+      const result = await lotteryApi.getXSMB()
+      if (isMounted.current) {
+        setData(result)
+      }
+    } catch (err) {
+      if (isMounted.current) {
+        setError(err.message || 'Fetch error')
+      }
+    } finally {
+      if (showLoading && isMounted.current) {
+        setLoading(false)
+      }
     }
   }, [])
 
-  return { data, loading, error, refetch: fetchXSMB }
+  useEffect(() => {
+    // fetch lần đầu
+    fetchXSMB(true)
+
+    // check mỗi 1 phút xem có vào giờ quay chưa
+    const checker = setInterval(() => {
+      if (isDrawingTime() && !intervalRef.current) {
+        intervalRef.current = setInterval(() => {
+          fetchXSMB(false) // refresh nền
+        }, 30000)
+      }
+
+      // hết giờ quay thì clear
+      if (!isDrawingTime() && intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }, 60000)
+
+    return () => {
+      isMounted.current = false
+      clearInterval(checker)
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
+  }, [fetchXSMB])
+
+  return { data, loading, error, refetch: () => fetchXSMB(true) }
 }
 
 /**
