@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom'
-import { Home, User, Settings } from 'lucide-react'
+import { Home, User, Settings, Navigation } from 'lucide-react'
 import styles from './BottomNavBar.module.css'
 
 const navItems = [
-  { path: '/', icon: Home, label: 'Trang chủ' },
   { path: '/account', icon: User, label: 'Tài khoản' },
-  { path: '/settings', icon: Settings, label: 'Cài đặt' },
+  { path: '/', icon: Home, label: 'Trang chủ' },
+  { path: '/settings', icon: Navigation, label: 'Mời bạn bè' },
 ]
 
 export const BottomNavBar = () => {
