@@ -43,6 +43,7 @@ export const Home = () => {
       alert('Không có quảng cáo khả dụng. Vui lòng thử lại sau!')
     }
     // KHÔNG mở modal khi có lỗi
+    setIsModalOpen(true)
   }, [])
 
   // Khởi tạo Adsgram - thay "your-block-id" bằng block ID thực của bạn
