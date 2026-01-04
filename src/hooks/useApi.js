@@ -53,16 +53,18 @@ export const useXSMB = () => {
 /**
  * Custom hook để lấy thông tin user
  */
-export const useUserInfo = () => {
+export const useUserInfo = (userId) => {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
   const fetchUserInfo = async () => {
+    if (!userId) return
+
     setLoading(true)
     setError(null)
     try {
-      const result = await userApi.getUserInfo()
+      const result = await userApi.getUserInfo(userId)
       setData(result)
     } catch (err) {
       setError(err.message)
@@ -73,7 +75,7 @@ export const useUserInfo = () => {
 
   useEffect(() => {
     fetchUserInfo()
-  }, [])
+  }, [userId])
 
   return { data, loading, error, refetch: fetchUserInfo }
 }

@@ -10,7 +10,7 @@ const USE_MOCK = true
 
 export const userApi = {
   // Lấy thông tin user
-  getUserInfo: async () => {
+  getUserInfo: async (userId) => {
     if (USE_MOCK) {
       // Fake API call với delay
       return new Promise((resolve) => {
@@ -21,7 +21,7 @@ export const userApi = {
     }
 
     try {
-      const response = await apiClient.get('/userInfo')
+      const response = await apiClient.get(`/userInfo/${userId}`)
       return response
     } catch (error) {
       console.error('Error fetching user info:', error)
@@ -30,7 +30,7 @@ export const userApi = {
   },
 
   // Cập nhật thông tin user
-  updateUserInfo: async (data) => {
+  updateUserInfo: async (userId, data) => {
     if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -40,7 +40,7 @@ export const userApi = {
     }
 
     try {
-      const response = await apiClient.put('/userInfo', data)
+      const response = await apiClient.put(`/userInfo/${userId}`, data)
       return response
     } catch (error) {
       console.error('Error updating user info:', error)

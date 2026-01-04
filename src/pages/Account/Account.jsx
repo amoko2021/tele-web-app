@@ -13,7 +13,6 @@ import { SettingsMenu } from './components/SettingsMenu'
 
 export const Account = () => {
   const navigate = useNavigate()
-  const { data: userInfo, loading } = useUserInfo()
   const { validationData, user: telegramUser } = useTelegram()
   const [isBankModalOpen, setIsBankModalOpen] = useState(false)
   const [isBankWarningOpen, setIsBankWarningOpen] = useState(false)
@@ -21,8 +20,10 @@ export const Account = () => {
   const [bankAccount, setBankAccount] = useState(null)
 
   // Ưu tiên dùng dữ liệu từ validation, fallback về mock data
-  const userData = validationData?.data?.user || telegramUser || userInfo
+  const userData = validationData?.data?.user || telegramUser
   const userId = userData?.id
+
+  const { data: userInfo, loading } = useUserInfo(userId)
 
   // Load bank account khi có userId
   useEffect(() => {
