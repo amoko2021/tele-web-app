@@ -26,7 +26,7 @@ export const Home = () => {
   const [maxPredictions, setMaxPredictions] = useState(5)
   const [remainingPredictions, setRemainingPredictions] = useState(5)
   const [currentBlockId, setCurrentBlockId] = useState('20539')
-  const [adErrorShown, setAdErrorShown] = useState(false)
+  const [hasTriedBackup, setHasTriedBackup] = useState(false)
 
   // Lấy userId từ Telegram
   const userData = validationData?.data?.user || telegramUser
@@ -34,8 +34,9 @@ export const Home = () => {
 
   // Adsgram callbacks
   const onReward = useCallback(() => {
-    // Khi user xem xong quảng cáo, hiển thị modal dự đoán
-    setAdErrorShown(false) // Reset error state on success
+    // Reset các flags khi ads thành công
+    setHasTriedBackup(false)
+    setCurrentBlockId('20539')
     setIsModalOpen(true)
   }, [])
 
@@ -43,13 +44,11 @@ export const Home = () => {
     (result) => {
       console.error('Adsgram error:', result)
 
-      // Nếu đang dùng blockId đầu tiên và gặp lỗi, chuyển sang blockId thứ 2
-      if (
-        currentBlockId === '20539' &&
-        (result.description?.includes('not loaded') || result.error)
-      ) {
+      // Nếu đang dùng blockId đầu tiên và chưa thử backup
+      if (currentBlockId === '20539' && !hasTriedBackup) {
         console.log('Switching to backup blockId: 20540')
         setCurrentBlockId('20540')
+        setHasTriedBackup(true)
         // Thử lại với blockId mới
         setTimeout(() => {
           if (showAd2) showAd2()
@@ -57,17 +56,15 @@ export const Home = () => {
         return
       }
 
-      // Nếu cả 2 blockId đều lỗi, thông báo (chỉ hiển thị 1 lần)
-      if (
-        !adErrorShown &&
-        (result.description?.includes('not loaded') || result.error)
-      ) {
+      // Chỉ hiển thị alert khi đã thử cả 2 blockId
+      if (hasTriedBackup && currentBlockId === '20540') {
         alert('Không có quảng cáo khả dụng. Vui lòng thử lại sau!')
-        setAdErrorShown(true)
+        // Reset về trạng thái ban đầu cho lần sau
+        setCurrentBlockId('20539')
+        setHasTriedBackup(false)
       }
-      // KHÔNG mở modal khi có lỗi
     },
-    [currentBlockId, adErrorShown]
+    [currentBlockId, hasTriedBackup]
   )
 
   // Khởi tạo 2 Adsgram instances
@@ -146,6 +143,7 @@ export const Home = () => {
       console.error('Error checking prediction:', error)
       // Nếu lỗi, vẫn cho mở modal
       setIsModalOpen(false)
+      return
     } finally {
       setCheckingPrediction(false)
     }
