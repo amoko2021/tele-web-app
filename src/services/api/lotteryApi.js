@@ -139,14 +139,14 @@ export const lotteryApi = {
         // Endpoint lô tô yêu cầu guess_numbers (array) - snake_case để match backend
         const response = await apiClient.post('/prediction-loto', {
           userId: userId,
-          guess_numbers: [predictionData.number], // Array format, snake_case
+          guessNumbers: [predictionData.number], // Array format, snake_case
         })
         return response.data
       } else {
         // Endpoint giải ĐB yêu cầu guess_number (string) - snake_case để match backend
         const response = await apiClient.post('/prediction', {
           userId: userId,
-          guess_number: predictionData.number, // snake_case
+          guessNumber: predictionData.number, // snake_case
         })
         return response.data
       }
