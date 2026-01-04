@@ -9,6 +9,7 @@ export const Settings = () => {
   const [copied, setCopied] = useState(false)
   const [friends, setFriends] = useState([])
   const [loading, setLoading] = useState(true)
+  const [totalFriends, setTotalFriends] = useState(0)
 
   // Tạo referral link dựa trên user ID
   const userId = user?.id || 'demo'
@@ -22,11 +23,18 @@ export const Settings = () => {
 
       setLoading(true)
       try {
-        const data = await userApi.getReferralFriends(userId)
-        setFriends(data)
+        const response = await userApi.getReferralFriends(userId)
+        if (response.ok) {
+          setFriends(response.data || [])
+          setTotalFriends(response.total || 0)
+        } else {
+          setFriends([])
+          setTotalFriends(0)
+        }
       } catch (error) {
         console.error('Error fetching friends:', error)
         setFriends([])
+        setTotalFriends(0)
       } finally {
         setLoading(false)
       }
@@ -108,7 +116,7 @@ export const Settings = () => {
               Friends
             </h2>
             <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-              {friends.length} total
+              {totalFriends} total
             </span>
           </div>
 

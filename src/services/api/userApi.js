@@ -146,8 +146,8 @@ export const userApi = {
     }
 
     try {
-      const response = await apiClient.get(`/referrals/${userId}`)
-      return response
+      const response = await apiClient.get(`/invites/${userId}`)
+      return response.data
     } catch (error) {
       console.error('Error fetching referral friends:', error)
       throw error
