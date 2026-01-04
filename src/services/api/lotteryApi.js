@@ -136,17 +136,17 @@ export const lotteryApi = {
     try {
       // Gọi endpoint khác nhau tùy theo loại giải
       if (predictionData.prizeType === 'loto') {
-        // Endpoint lô tô yêu cầu guessNumbers (array)
+        // Endpoint lô tô yêu cầu guess_numbers (array) - snake_case để match backend
         const response = await apiClient.post('/prediction-loto', {
           userId: userId,
-          guessNumbers: [predictionData.number], // Array format
+          guess_numbers: [predictionData.number], // Array format, snake_case
         })
         return response.data
       } else {
-        // Endpoint giải ĐB yêu cầu guessNumber (string)
+        // Endpoint giải ĐB yêu cầu guess_number (string) - snake_case để match backend
         const response = await apiClient.post('/prediction', {
           userId: userId,
-          guessNumber: predictionData.number,
+          guess_number: predictionData.number, // snake_case
         })
         return response.data
       }
