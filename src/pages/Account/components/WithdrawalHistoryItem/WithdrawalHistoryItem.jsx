@@ -23,7 +23,7 @@ const statusConfig = {
     badgeText: 'text-green-700 dark:text-green-500',
     label: 'Thành công',
   },
-  cancelled: {
+  canceled: {
     icon: 'cancel',
     iconBg: 'bg-red-100 dark:bg-red-900/30',
     iconColor: 'text-red-600 dark:text-red-500',
