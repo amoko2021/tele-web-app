@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-export function useAdsgram({ blockId, onReward, onError }) {
+export function useAdsgram({ blockId, fallbackBlockId, onReward, onError }) {
   const AdControllerRef = useRef(undefined)
+  const [currentBlockId, setCurrentBlockId] = useState(blockId)
 
   useEffect(() => {
-    AdControllerRef.current = window.Adsgram?.init({ blockId })
-  }, [blockId])
+    AdControllerRef.current = window.Adsgram?.init({ blockId: currentBlockId })
+  }, [currentBlockId])
 
   return useCallback(async () => {
     if (AdControllerRef.current) {
@@ -17,7 +18,28 @@ export function useAdsgram({ blockId, onReward, onError }) {
         })
         .catch((result) => {
           // user get error during playing ad
-          onError?.(result)
+          // Nếu có fallback blockId và đang dùng blockId chính, thử fallback
+          if (fallbackBlockId && currentBlockId === blockId) {
+            console.log('Primary blockId failed, trying fallback:', fallbackBlockId)
+            setCurrentBlockId(fallbackBlockId)
+            // Khởi tạo lại AdController với fallback blockId
+            setTimeout(() => {
+              const fallbackController = window.Adsgram?.init({ blockId: fallbackBlockId })
+              if (fallbackController) {
+                fallbackController
+                  .show()
+                  .then(() => onReward())
+                  .catch((fallbackResult) => {
+                    console.error('Fallback blockId also failed:', fallbackResult)
+                    onError?.(fallbackResult)
+                  })
+              } else {
+                onError?.(result)
+              }
+            }, 100)
+          } else {
+            onError?.(result)
+          }
         })
     } else {
       onError?.({
@@ -27,5 +49,5 @@ export function useAdsgram({ blockId, onReward, onError }) {
         description: 'Adsgram script not loaded',
       })
     }
-  }, [onError, onReward])
+  }, [onError, onReward, blockId, fallbackBlockId, currentBlockId])
 }

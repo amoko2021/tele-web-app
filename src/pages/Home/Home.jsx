@@ -43,9 +43,10 @@ export const Home = () => {
     setIsModalOpen(true)
   }, [])
 
-  // Khởi tạo Adsgram - thay "your-block-id" bằng block ID thực của bạn
+  // Khởi tạo Adsgram - blockId chính 20539, fallback 20540
   const showAd = useAdsgram({
     blockId: '20539',
+    fallbackBlockId: '20540',
     onReward,
     onError,
   })
