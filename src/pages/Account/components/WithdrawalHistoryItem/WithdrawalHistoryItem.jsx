@@ -35,7 +35,7 @@ const statusConfig = {
 
 export const WithdrawalHistoryItem = ({ transaction }) => {
   const config = statusConfig[transaction.status] || statusConfig.pending
-  const isOpaque = transaction.status === 'cancelled'
+  const isOpaque = transaction.status === 'canceled'
 
   // Format datetime from "2026-01-04 10:30:00" to "10:30, 04/01/2026"
   const formatDate = (dateStr) => {
