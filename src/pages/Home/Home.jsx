@@ -257,6 +257,7 @@ export const Home = () => {
         isOpen={isTimeUpModalOpen}
         onClose={() => setIsTimeUpModalOpen(false)}
         todayPredictions={todayPredictions}
+        results={xsmbData?.results}
       />
     </div>
   )
