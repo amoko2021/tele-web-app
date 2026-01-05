@@ -62,10 +62,10 @@ export const Settings = () => {
       {/* Header */}
       <header className="text-center space-y-2 pt-8 px-4">
         <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-          Build your team!
+          Xây dựng team của bạn!
         </h1>
         <p className="text-slate-500 dark:text-slate-300 text-sm font-medium">
-          Share the fun and get rewards.
+          Giới thiệu bạn bè và nhận thưởng.
         </p>
       </header>
 
@@ -107,7 +107,7 @@ export const Settings = () => {
         {/* Reward Info */}
         <div className="text-center py-4">
           <p className="text-lg font-medium flex items-center justify-center gap-2 text-slate-700 dark:text-slate-200">
-            Each friend gets 10
+            Mỗi người bạn mời nhận 1,000
             <span className="text-2xl drop-shadow-md">🪙</span>
           </p>
         </div>
@@ -133,7 +133,7 @@ export const Settings = () => {
           ) : friends.length === 0 ? (
             <div className="text-center p-8 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600">
               <span className="text-slate-500 dark:text-slate-400 text-sm">
-                Your friends list will appear here
+                Những người bạn mời
               </span>
             </div>
           ) : (
