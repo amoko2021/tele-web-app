@@ -74,7 +74,7 @@ export const Settings = () => {
         {/* Referral Link Card */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-lg border border-slate-200 dark:border-slate-700">
           <label className="text-xs text-slate-500 dark:text-slate-400 font-medium ml-1 block mb-2">
-            Your referral link
+            Link mời của bạn
           </label>
           <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-900 rounded-xl p-3 relative">
             <p className="text-sm text-blue-600 dark:text-blue-400 truncate font-mono select-all pr-12 flex-1">
