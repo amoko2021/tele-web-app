@@ -10,7 +10,7 @@ export const useTelegram = () => {
   useEffect(() => {
     tg?.ready()
 
-    tg?.requestFullscreen()
+    //tg?.requestFullscreen()
 
     // Validate init data khi component mount
     validateInitData()
