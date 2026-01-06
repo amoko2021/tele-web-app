@@ -33,8 +33,20 @@ export const Home = () => {
 
   // Adsgram callbacks
   const onReward = useCallback(() => {
-    // Khi user xem xong quảng cáo, hiển thị modal dự đoán
-    setIsModalOpen(true)
+    // Khi user xem xong quảng cáo, kiểm tra giờ để mở modal phù hợp
+    const nowVN = new Date().toLocaleString('en-US', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+    })
+    const vnDate = new Date(nowVN)
+    const currentHour = vnDate.getHours()
+
+    if (currentHour >= 18) {
+      // Sau 18h, mở modal time up
+      setIsTimeUpModalOpen(true)
+    } else {
+      // Trước 18h, mở modal dự đoán bình thường
+      setIsModalOpen(true)
+    }
   }, [])
 
   const onError = useCallback((result) => {
@@ -53,34 +65,7 @@ export const Home = () => {
 
   // Xử lý khi click vào floating button
   const handleFloatingButtonClick = useCallback(async () => {
-    // Kiểm tra giờ VN (không cho dự đoán từ 18h)
-    const nowVN = new Date().toLocaleString('en-US', {
-      timeZone: 'Asia/Ho_Chi_Minh',
-    })
-    const vnDate = new Date(nowVN)
-    const currentHour = vnDate.getHours()
-
-    if (currentHour >= 18) {
-      // Vẫn cho xem lịch sử dự đoán
-      if (userId) {
-        setCheckingPrediction(true)
-        try {
-          const result = await lotteryApi.checkTodayPrediction(userId)
-          setHasPredicted(result.hasPredicted)
-          setTodayPredictions(result.predictions || [])
-          setMaxPredictions(result.maxPredictions || 5)
-          setRemainingPredictions(0) // Set về 0 để chỉ hiển thị lịch sử
-          setIsTimeUpModalOpen(true)
-        } catch (error) {
-          console.error('Error checking prediction:', error)
-        } finally {
-          setCheckingPrediction(false)
-        }
-      }
-      return
-    }
-
-    // Kiểm tra dự đoán trước
+    // Kiểm tra user
     if (!userId) {
       alert('Không tìm thấy thông tin user!')
       return
@@ -93,19 +78,26 @@ export const Home = () => {
       setHasPredicted(result.hasPredicted)
       setTodayPredictions(result.predictions || [])
       setMaxPredictions(result.maxPredictions || 5)
-      setRemainingPredictions(result.remainingPredictions || 0)
 
-      // Nếu đã hết lượt, mở modal trực tiếp (chỉ xem lịch sử)
-      if (result.remainingPredictions <= 0) {
-        setIsModalOpen(true)
+      // Kiểm tra giờ VN (không cho dự đoán từ 18h)
+      const nowVN = new Date().toLocaleString('en-US', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+      })
+      const vnDate = new Date(nowVN)
+      const currentHour = vnDate.getHours()
+
+      if (currentHour >= 18) {
+        setRemainingPredictions(0) // Set về 0 để chỉ hiển thị lịch sử
       } else {
-        // Còn lượt dự đoán, hiển thị quảng cáo trước
-        showAd()
+        setRemainingPredictions(result.remainingPredictions || 0)
       }
+
+      // Luôn hiển thị quảng cáo
+      showAd()
     } catch (error) {
       console.error('Error checking prediction:', error)
-      // Nếu lỗi, vẫn cho mở modal
-      setIsModalOpen(true)
+      // Nếu lỗi, vẫn hiển thị quảng cáo
+      showAd()
     } finally {
       setCheckingPrediction(false)
     }
@@ -265,6 +257,7 @@ export const Home = () => {
         isOpen={isTimeUpModalOpen}
         onClose={() => setIsTimeUpModalOpen(false)}
         todayPredictions={todayPredictions}
+        results={xsmbData?.results}
       />
     </div>
   )
