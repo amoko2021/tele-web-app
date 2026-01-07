@@ -101,11 +101,7 @@ export const AdsgramTask = ({
   }, [onReward, onError, onBannerNotFound, onTooLongSession, blockId])
 
   if (!isLoaded) {
-    return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-slate-500">Đang tải task...</div>
-      </div>
-    )
+    return null
   }
 
   return (
@@ -116,7 +112,12 @@ export const AdsgramTask = ({
       ref={taskRef}
     >
       <span slot="reward" className={styles.reward}>
-        <span className="material-symbols-outlined">stars</span>
+        <span
+          className="material-symbols-outlined"
+          style={{ fontSize: '16px' }}
+        >
+          stars
+        </span>
         1000 coins
       </span>
       <div slot="button" className={styles.button}>
