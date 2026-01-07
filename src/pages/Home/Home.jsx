@@ -247,9 +247,6 @@ export const Home = () => {
       {/* Header */}
       {/* <LotteryHeader /> */}
 
-      {/* Task Button */}
-      {/* <TaskButton onClick={() => setIsTaskModalOpen(true)} /> */}
-
       {/* Date Navigation */}
       <DateNavigation date={xsmbData?.time} />
 
@@ -260,6 +257,9 @@ export const Home = () => {
         maxPredictions={maxPredictions}
         checkingPrediction={checkingPrediction}
       />
+
+      {/* Task Button */}
+      <TaskButton onClick={() => setIsTaskModalOpen(true)} />
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-slate-50 pb-6">

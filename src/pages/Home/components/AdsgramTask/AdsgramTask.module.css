@@ -1,42 +1,54 @@
 .task {
-  width: 100%;
-  max-width: 400px;
+  --adsgram-task-font-size: 16px; /* min 14px */
+  --adsgram-task-icon-size: 50px; /* min 30px */
+  --adsgram-task-icon-title-gap: 15px; /* min 5px max 40px */
+  --adsgram-task-button-width: 60px; /* min 40px */
+  --adsgram-task-icon-border-radius: 8px;
+
+  display: block;
+  width: 328px;
+  padding: 8px 16px 8px 8px;
+  border-radius: 16px;
+  background-color: #1d2733;
+  font-family: Roboto, sans-serif;
+  color: white;
   margin: 0 auto;
 }
 
 .reward {
+  margin: 5px 0 0 0;
+  font-size: 14px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 20px;
+  padding: 8px 16px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  border-radius: 12px;
+  border-radius: 8px;
   font-weight: 600;
-  font-size: 16px;
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .button {
+  margin-left: 10px;
+  background-color: #50a8eb;
+  border-radius: 5px;
+  padding: 6px 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 32px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  border-radius: 12px;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-  width: 100%;
+  min-width: 60px;
 }
 
 .button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  background-color: #3b9adf;
+  transform: translateY(-1px);
 }
 
 .button:active {
@@ -44,42 +56,43 @@
 }
 
 .button_claim {
+  margin-left: 0;
+  background-color: #ee941c;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 32px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  padding: 6px 12px;
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 5px;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-  width: 100%;
+  min-width: 60px;
   animation: pulse 1.5s ease-in-out infinite;
 }
 
 .button_claim:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+  background-color: #d6831a;
+  transform: translateY(-1px);
 }
 
 .button_done {
+  margin-left: 0;
+  background-color: #007539;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 32px;
-  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  padding: 6px 12px;
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 5px;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 14px;
   cursor: not-allowed;
   opacity: 0.7;
-  width: 100%;
+  min-width: 60px;
 }
 
 @keyframes pulse {
