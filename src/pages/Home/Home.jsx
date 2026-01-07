@@ -12,6 +12,7 @@ import { FloatingButton } from './components/FloatingButton'
 import { PredictionModalContent } from './components/PredictionModalContent'
 import { TimeUpModal } from './components/TimeUpModal'
 import { TaskModal } from './components/TaskModal'
+import { TaskButton } from './components/TaskButton'
 
 export const Home = () => {
   const { data: xsmbData, loading } = useXSMB()
@@ -245,19 +246,11 @@ export const Home = () => {
       {/* Header */}
       <LotteryHeader />
 
+      {/* Task Button */}
+      <TaskButton onClick={() => setIsTaskModalOpen(true)} />
+
       {/* Date Navigation */}
       {/* <DateNavigation date={xsmbData?.time} /> */}
-
-      {/* Task Button - Fixed position at top right */}
-      <div className="fixed top-4 right-4 z-40">
-        <button
-          onClick={() => setIsTaskModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
-        >
-          <span className="material-symbols-outlined text-xl">task_alt</span>
-          <span className="font-semibold text-sm">Nhiệm vụ</span>
-        </button>
-      </div>
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-slate-50 pb-6">
@@ -316,7 +309,7 @@ export const Home = () => {
       <TaskModal
         isOpen={isTaskModalOpen}
         onClose={() => setIsTaskModalOpen(false)}
-        blockId="task-20539"
+        blockId="task-20664"
         debug={false}
         onTaskReward={handleTaskReward}
         onTaskError={handleTaskError}
