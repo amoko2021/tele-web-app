@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { logger } from '../logger'
 
-const VALIDATE_URL = 'https://betestminiapp-production.up.railway.app/validate'
+const VALIDATE_URL = 'https://betestminiapp-production-9a0b.up.railway.app/validate'
 const CACHE_KEY = 'telegram_validation_data'
 const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
 
