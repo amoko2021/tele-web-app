@@ -120,13 +120,13 @@ export const AdsgramTask = ({
         1000 coins
       </span>
       <div slot="button" className={styles.button}>
-        Bắt đầu nhiệm vụ
+        start
       </div>
       <div slot="claim" className={styles.button_claim}>
-        Nhận thưởng
+        claim
       </div>
       <div slot="done" className={styles.button_done}>
-        Hoàn thành
+        done
       </div>
     </adsgram-task>
   )
