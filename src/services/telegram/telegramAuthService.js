@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { logger } from '../logger'
 
 const VALIDATE_URL = 'https://betestminiapp-production.up.railway.app/validate'
 const CACHE_KEY = 'telegram_validation_data'
@@ -21,7 +22,7 @@ export const telegramAuthService = {
 
       return data
     } catch (error) {
-      console.error('Error reading cache:', error)
+      logger.error('Error reading cache', error, { cacheKey: CACHE_KEY })
       return null
     }
   },
@@ -35,7 +36,7 @@ export const telegramAuthService = {
       }
       localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData))
     } catch (error) {
-      console.error('Error saving cache:', error)
+      logger.error('Error saving cache', error, { cacheKey: CACHE_KEY })
     }
   },
 
@@ -62,7 +63,10 @@ export const telegramAuthService = {
 
       return response.data
     } catch (error) {
-      console.error('Error validating init data:', error)
+      logger.error('Error validating init data', error, { 
+        url: VALIDATE_URL,
+        hasInitData: !!initData 
+      })
       throw error
     }
   },

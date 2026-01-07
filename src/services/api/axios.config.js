@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { logger } from '../logger'
 
 // Base URL cho production API
 const BASE_URL = 'https://betestminiapp-production-9a0b.up.railway.app'
@@ -33,10 +34,8 @@ apiClient.interceptors.response.use(
     return response.data
   },
   (error) => {
-    // Xử lý lỗi ở đây
-    if (error.response) {
-      console.error('API Error:', error.response.data)
-    }
+    // Log lỗi API
+    logger.apiError(error.config, error)
     return Promise.reject(error)
   }
 )
