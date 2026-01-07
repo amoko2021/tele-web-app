@@ -13,6 +13,7 @@ import { PredictionModalContent } from './components/PredictionModalContent'
 import { TimeUpModal } from './components/TimeUpModal'
 import { TaskModal } from './components/TaskModal'
 import { TaskButton } from './components/TaskButton'
+import { PredictionButton } from './components/PredictionButton'
 
 export const Home = () => {
   const { data: xsmbData, loading } = useXSMB()
@@ -252,6 +253,14 @@ export const Home = () => {
       {/* Date Navigation */}
       <DateNavigation date={xsmbData?.time} />
 
+      {/* Prediction Button */}
+      <PredictionButton
+        onClick={handleFloatingButtonClick}
+        remainingPredictions={remainingPredictions}
+        maxPredictions={maxPredictions}
+        checkingPrediction={checkingPrediction}
+      />
+
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-slate-50 pb-6">
         {/* Special Prize */}
@@ -260,14 +269,6 @@ export const Home = () => {
         {/* Results Table */}
         <ResultsTable results={xsmbData?.results} />
       </main>
-
-      {/* Floating Prediction Button */}
-      <FloatingButton
-        onClick={handleFloatingButtonClick}
-        remainingPredictions={remainingPredictions}
-        maxPredictions={maxPredictions}
-        checkingPrediction={checkingPrediction}
-      />
 
       {/* Prediction Modal */}
       <Modal
