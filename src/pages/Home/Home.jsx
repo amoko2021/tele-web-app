@@ -259,7 +259,7 @@ export const Home = () => {
       />
 
       {/* Task Button */}
-      <TaskButton onClick={() => setIsTaskModalOpen(true)} />
+      {/* <TaskButton onClick={() => setIsTaskModalOpen(true)} /> */}
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-slate-50 pb-6">
