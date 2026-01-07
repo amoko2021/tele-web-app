@@ -11,12 +11,14 @@ import { ResultsTable } from './components/ResultsTable'
 import { FloatingButton } from './components/FloatingButton'
 import { PredictionModalContent } from './components/PredictionModalContent'
 import { TimeUpModal } from './components/TimeUpModal'
+import { TaskModal } from './components/TaskModal'
 
 export const Home = () => {
   const { data: xsmbData, loading } = useXSMB()
   const { validationData, user: telegramUser } = useTelegram()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isTimeUpModalOpen, setIsTimeUpModalOpen] = useState(false)
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
   const [prizeType, setPrizeType] = useState('db')
   const [prediction, setPrediction] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -53,6 +55,45 @@ export const Home = () => {
     console.error('Adsgram error:', result)
     // Mở modal ngay cả khi ads lỗi để user vẫn dự đoán được
     setIsModalOpen(true)
+  }, [])
+
+  // Task modal handlers
+  const handleTaskReward = useCallback(
+    (detail) => {
+      console.log('Task reward received:', detail)
+      // Có thể gọi API để cộng coins cho user ở đây
+      alert('Bạn đã nhận được phần thưởng!')
+      // Refresh prediction count sau khi nhận thưởng
+      if (userId) {
+        lotteryApi
+          .checkTodayPrediction(userId)
+          .then((result) => {
+            setHasPredicted(result.hasPredicted)
+            setTodayPredictions(result.predictions || [])
+            setMaxPredictions(result.maxPredictions || 5)
+            setRemainingPredictions(result.remainingPredictions || 0)
+          })
+          .catch((error) => {
+            console.error('Error refreshing prediction:', error)
+          })
+      }
+    },
+    [userId]
+  )
+
+  const handleTaskError = useCallback((detail) => {
+    console.error('Task error:', detail)
+    alert('Có lỗi xảy ra khi thực hiện nhiệm vụ. Vui lòng thử lại!')
+  }, [])
+
+  const handleBannerNotFound = useCallback((detail) => {
+    console.warn('Banner not found:', detail)
+    alert('Hiện không có nhiệm vụ nào. Vui lòng thử lại sau!')
+  }, [])
+
+  const handleTooLongSession = useCallback((detail) => {
+    console.warn('Session too long:', detail)
+    alert('Phiên làm việc quá lâu. Vui lòng khởi động lại ứng dụng!')
   }, [])
 
   // Khởi tạo Adsgram - blockId chính 20539, fallback 20540
@@ -205,7 +246,18 @@ export const Home = () => {
       <LotteryHeader />
 
       {/* Date Navigation */}
-      <DateNavigation date={xsmbData?.time} />
+      {/* <DateNavigation date={xsmbData?.time} /> */}
+
+      {/* Task Button - Fixed position at top right */}
+      <div className="fixed top-4 right-4 z-40">
+        <button
+          onClick={() => setIsTaskModalOpen(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
+        >
+          <span className="material-symbols-outlined text-xl">task_alt</span>
+          <span className="font-semibold text-sm">Nhiệm vụ</span>
+        </button>
+      </div>
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-slate-50 pb-6">
@@ -258,6 +310,18 @@ export const Home = () => {
         onClose={() => setIsTimeUpModalOpen(false)}
         todayPredictions={todayPredictions}
         results={xsmbData?.results}
+      />
+
+      {/* Task Modal */}
+      <TaskModal
+        isOpen={isTaskModalOpen}
+        onClose={() => setIsTaskModalOpen(false)}
+        blockId="task-20539"
+        debug={false}
+        onTaskReward={handleTaskReward}
+        onTaskError={handleTaskError}
+        onBannerNotFound={handleBannerNotFound}
+        onTooLongSession={handleTooLongSession}
       />
     </div>
   )

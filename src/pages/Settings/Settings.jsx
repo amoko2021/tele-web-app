@@ -84,10 +84,7 @@ export const Settings = () => {
             </span>
           </div>
 
-          <FriendsListSection
-            friends={friends}
-            loading={loading}
-          />
+          <FriendsListSection friends={friends} loading={loading} />
         </div>
       </main>
 
