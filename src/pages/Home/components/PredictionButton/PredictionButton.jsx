@@ -17,7 +17,7 @@ export const PredictionButton = ({
           </div>
           <div className="flex flex-col items-start min-w-0">
             <span className="font-bold text-xs whitespace-nowrap text-slate-800">
-              Tham gia dự đoán
+              Dự đoán nhận thưởng
             </span>
             <span className="text-[10px] text-slate-500 whitespace-nowrap">
               {checkingPrediction
