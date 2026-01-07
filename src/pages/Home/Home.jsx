@@ -244,13 +244,13 @@ export const Home = () => {
   return (
     <div className="flex flex-col h-full bg-white pb-20">
       {/* Header */}
-      <LotteryHeader />
+      {/* <LotteryHeader /> */}
 
       {/* Task Button */}
-      <TaskButton onClick={() => setIsTaskModalOpen(true)} />
+      {/* <TaskButton onClick={() => setIsTaskModalOpen(true)} /> */}
 
       {/* Date Navigation */}
-      {/* <DateNavigation date={xsmbData?.time} /> */}
+      <DateNavigation date={xsmbData?.time} />
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-slate-50 pb-6">
