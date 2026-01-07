@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import styles from './AdsgramTask.module.css'
+import { logger } from '../../../../services/logger'
 
 export const AdsgramTask = ({
   debug,
@@ -29,7 +30,10 @@ export const AdsgramTask = ({
       setTimeout(() => {
         clearInterval(checkInterval)
         if (!customElements.get('adsgram-task')) {
-          console.warn('adsgram-task custom element not loaded after 5s')
+          logger.warn('adsgram-task custom element not loaded after 5s', {
+            component: 'AdsgramTask',
+            blockId,
+          })
         }
       }, 5000)
 
@@ -43,25 +47,41 @@ export const AdsgramTask = ({
 
     // Handler cho sự kiện reward
     const handleReward = (event) => {
-      console.log('Task reward event:', event.detail)
+      logger.info('Task reward received', {
+        component: 'AdsgramTask',
+        blockId,
+        detail: event.detail,
+      })
       onReward?.(event.detail)
     }
 
     // Handler cho sự kiện error
     const handleError = (event) => {
-      console.error('Task error event:', event.detail)
+      logger.error('Task error occurred', null, {
+        component: 'AdsgramTask',
+        blockId,
+        detail: event.detail,
+      })
       onError?.(event.detail)
     }
 
     // Handler cho sự kiện banner not found
     const handleBannerNotFound = (event) => {
-      console.warn('Task banner not found:', event.detail)
+      logger.warn('Task banner not found', {
+        component: 'AdsgramTask',
+        blockId,
+        detail: event.detail,
+      })
       onBannerNotFound?.(event.detail)
     }
 
     // Handler cho sự kiện session quá dài
     const handleTooLongSession = (event) => {
-      console.warn('Task session too long:', event.detail)
+      logger.warn('Task session too long', {
+        component: 'AdsgramTask',
+        blockId,
+        detail: event.detail,
+      })
       onTooLongSession?.(event.detail)
     }
 
@@ -78,7 +98,7 @@ export const AdsgramTask = ({
       task.removeEventListener('onBannerNotFound', handleBannerNotFound)
       task.removeEventListener('onTooLongSession', handleTooLongSession)
     }
-  }, [onReward, onError, onBannerNotFound, onTooLongSession])
+  }, [onReward, onError, onBannerNotFound, onTooLongSession, blockId])
 
   if (!isLoaded) {
     return (
