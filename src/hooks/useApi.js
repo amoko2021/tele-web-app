@@ -103,8 +103,11 @@ export const useUserInfo = (userId) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const fetchUserInfo = async () => {
-    if (!userId) return
+  const fetchUserInfo = useCallback(async () => {
+    if (!userId) {
+      setData(null)
+      return
+    }
 
     setLoading(true)
     setError(null)
@@ -116,11 +119,11 @@ export const useUserInfo = (userId) => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userId]) // Add userId as dependency
 
   useEffect(() => {
     fetchUserInfo()
-  }, [userId])
+  }, [fetchUserInfo]) // Use fetchUserInfo which depends on userId
 
   return { data, loading, error, refetch: fetchUserInfo }
 }

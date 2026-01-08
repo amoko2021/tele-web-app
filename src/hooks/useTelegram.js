@@ -42,21 +42,35 @@ export const useTelegram = () => {
       return
     }
 
+    const currentUserId = tg?.initDataUnsafe?.user?.id
+
     // Kiểm tra cache trước
     const cachedData = telegramAuthService.getCachedValidation()
     if (cachedData) {
-      setValidationData(cachedData)
-      logger.info('Using cached validation data', cachedData)
-      logger.validation('success', { cached: true })
-      return
+      // Double check: Verify cached user ID matches current user
+      const cachedUserId = cachedData?.data?.user?.id || cachedData?.user?.id
+      
+      if (cachedUserId && cachedUserId !== currentUserId) {
+        logger.warn('Cached user ID mismatch, forcing revalidation', {
+          cached: cachedUserId,
+          current: currentUserId,
+        })
+        // Clear cache và force revalidate
+        telegramAuthService.clearCache()
+      } else {
+        setValidationData(cachedData)
+        logger.info('Using cached validation data', { userId: currentUserId })
+        logger.validation('success', { cached: true })
+        return
+      }
     }
 
-    // Nếu không có cache, gọi API
+    // Nếu không có cache hoặc user khác, gọi API
     setIsValidating(true)
     try {
       const result = await telegramAuthService.validateInitData(tg.initData)
       setValidationData(result)
-      logger.info('Validation successful', result)
+      logger.info('Validation successful', { userId: currentUserId })
       logger.validation('success', { cached: false })
     } catch (error) {
       setValidationError(error)
