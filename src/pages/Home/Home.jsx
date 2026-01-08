@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useXSMB } from '../../hooks/useApi'
 import { useTelegram } from '../../hooks/useTelegram'
 import { lotteryApi } from '../../services/api'
@@ -16,6 +17,7 @@ import { TaskButton } from './components/TaskButton'
 import { PredictionButton } from './components/PredictionButton'
 
 export const Home = () => {
+  const navigate = useNavigate()
   const { data: xsmbData, loading } = useXSMB()
   const { validationData, user: telegramUser } = useTelegram()
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -259,7 +261,7 @@ export const Home = () => {
       />
 
       {/* Task Button */}
-      {/* <TaskButton onClick={() => setIsTaskModalOpen(true)} /> */}
+      <TaskButton onClick={() => navigate('/test')} />
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-slate-50 pb-6">

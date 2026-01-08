@@ -3,6 +3,7 @@ import { Home } from '../pages/Home'
 import { Account } from '../pages/Account'
 import { Settings } from '../pages/Settings'
 import { WithdrawalHistory } from '../pages/WithdrawalHistory'
+import { Test } from '../pages/Test'
 
 export const AppRoutes = () => {
   return (
@@ -11,6 +12,7 @@ export const AppRoutes = () => {
       <Route path="/account" element={<Account />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/withdrawal-history" element={<WithdrawalHistory />} />
+      <Route path="/test" element={<Test />} />
     </Routes>
   )
 }
