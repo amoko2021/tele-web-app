@@ -21,6 +21,7 @@ apiClient.interceptors.request.use(
     if (tg?.initData) {
       config.headers['Authorization'] = 'tma ' + tg.initData
     }
+    config.metadata = { startTime: Date.now() }
     return config
   },
   (error) => {
@@ -31,6 +32,7 @@ apiClient.interceptors.request.use(
 // Response interceptor
 apiClient.interceptors.response.use(
   (response) => {
+    logger.apiResponse(response)
     return response.data
   },
   (error) => {

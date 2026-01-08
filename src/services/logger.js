@@ -91,6 +91,44 @@ export const logger = {
     sendLogToServer(logData)
   },
 
+  apiResponse: (response) => {
+    const duration = response.config?.metadata?.startTime
+      ? Date.now() - response.config.metadata.startTime
+      : null
+
+    let dataPreview = null
+    try {
+      const serialized = JSON.stringify(response.data)
+      dataPreview = serialized.length > 500 ? `${serialized.slice(0, 500)}...` : response.data
+    } catch (err) {
+      dataPreview = '[unserializable]'
+    }
+
+    const logData = {
+      level: 'info',
+      message: 'API Response',
+      context: {
+        type: 'api_response',
+        request: {
+          url: response.config?.url,
+          method: response.config?.method,
+          headers: response.config?.headers,
+        },
+        response: {
+          status: response.status,
+          statusText: response.statusText,
+          data: dataPreview,
+        },
+        duration,
+      },
+      user: getUserInfo(),
+      device: getDeviceInfo(),
+    }
+
+    console.info('[API RESPONSE]', logData)
+    sendLogToServer(logData)
+  },
+
   apiError: (request, error) => {
     const logData = {
       level: 'error',
