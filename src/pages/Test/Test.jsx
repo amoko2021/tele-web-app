@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useTelegram } from '../../hooks/useTelegram'
+import { Loading } from '../../components/common/Loading'
 import md5 from 'crypto-js/md5'
 
 // Replace with your actual app secure hash from CPX Research
@@ -38,34 +39,29 @@ export const Test = () => {
   return (
     <div className="flex flex-col h-full">
       <main className="flex-1 overflow-y-auto">
-        <div className="p-4">
-          <h1 className="text-2xl font-bold text-slate-800 mb-4">
-            CPX Research
-          </h1>
+        {isValidating && (
+          <div className="flex items-center justify-center h-full">
+            <Loading />
+          </div>
+        )}
 
-          {isValidating && (
-            <div className="text-center py-8 text-slate-600">
-              Đang xác thực người dùng...
-            </div>
-          )}
+        {!isValidating && !iframeUrl && (
+          <div className="text-center py-8 text-red-600">
+            Không thể xác thực người dùng Telegram
+          </div>
+        )}
 
-          {!isValidating && !validationData && (
-            <div className="text-center py-8 text-red-600">
-              Không thể xác thực người dùng Telegram
-            </div>
-          )}
-
-          {!isValidating && iframeUrl && (
-            <iframe
-              width="100%"
-              frameBorder="0"
-              height="2000px"
-              src={iframeUrl}
-              title="CPX Research Offers"
-              className="border-0"
-            />
-          )}
-        </div>
+        {!isValidating && iframeUrl && (
+          <iframe
+            width="100%"
+            frameBorder="0"
+            height="100%"
+            src={iframeUrl}
+            title="CPX Research Offers"
+            className="border-0"
+            style={{ minHeight: '100vh' }}
+          />
+        )}
       </main>
     </div>
   )

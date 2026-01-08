@@ -1,4 +1,4 @@
-import { BrowserRouter, useLocation } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { AppRoutes } from './routes/AppRoutes'
 import { BottomNavBar } from './components/layout/BottomNavBar'
 import { Loading } from './components/common/Loading'
@@ -8,14 +8,10 @@ import { useEffect } from 'react'
 import './App.css'
 
 function AppContent() {
-  const location = useLocation()
-  const hideNavBarRoutes = ['/test']
-  const shouldHideNavBar = hideNavBarRoutes.includes(location.pathname)
-
   return (
     <div className="app">
       <AppRoutes />
-      {!shouldHideNavBar && <BottomNavBar />}
+      <BottomNavBar />
     </div>
   )
 }
