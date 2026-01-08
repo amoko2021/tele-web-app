@@ -38,7 +38,7 @@ export const Test = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto pb-20">
         {isValidating && (
           <div className="flex items-center justify-center h-full">
             <Loading />
@@ -59,7 +59,7 @@ export const Test = () => {
             src={iframeUrl}
             title="CPX Research Offers"
             className="border-0"
-            style={{ minHeight: '100vh' }}
+            style={{ minHeight: 'calc(100vh - 80px)' }}
           />
         )}
       </main>
