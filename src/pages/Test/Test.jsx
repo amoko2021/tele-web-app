@@ -7,14 +7,15 @@ const APP_SECURE_HASH = '7kvhJ8lE03UyvH9vvXiG2k90em4UcPrB'
 const APP_ID = '30866'
 
 export const Test = () => {
-  const { validationData, isValidating } = useTelegram()
+  const { validationData, isValidating, user: telegramUser } = useTelegram()
 
   const iframeUrl = useMemo(() => {
-    if (!validationData?.user) return null
+    // Lấy user data giống như trong Home.jsx
+    const userData = validationData?.data?.user || telegramUser
+    if (!userData) return null
 
-    const user = validationData.user
-    const userId = user.id
-    const username = user.username || user.first_name || ''
+    const userId = userData.id
+    const username = userData.username || userData.first_name || ''
     const email = '' // Telegram doesn't provide email
 
     // Generate secure hash: md5(userId-APP_SECURE_HASH)
@@ -32,7 +33,7 @@ export const Test = () => {
     })
 
     return `https://offers.cpx-research.com/index.php?${params.toString()}`
-  }, [validationData])
+  }, [validationData, telegramUser])
 
   return (
     <div className="flex flex-col h-full">
