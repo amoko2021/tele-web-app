@@ -1,6 +1,6 @@
 export const PredictionCard = ({ prediction, index }) => {
   return (
-    <div className="flex-none w-48 rounded-xl border border-slate-200 bg-slate-50 p-4">
+    <div className="flex-none w-24 rounded-xl border border-slate-200 bg-slate-50 p-4">
       <div className="flex flex-col gap-2 mb-3">
         <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
           Lượt {index + 1}
