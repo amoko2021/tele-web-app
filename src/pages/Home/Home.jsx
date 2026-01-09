@@ -255,15 +255,19 @@ export const Home = () => {
       {/* Buttons Container */}
       <div className="flex gap-2 px-4 pt-2">
         {/* Prediction Button */}
-        <PredictionButton
-          onClick={handleFloatingButtonClick}
-          remainingPredictions={remainingPredictions}
-          maxPredictions={maxPredictions}
-          checkingPrediction={checkingPrediction}
-        />
+        <div className="flex-1">
+          <PredictionButton
+            onClick={handleFloatingButtonClick}
+            remainingPredictions={remainingPredictions}
+            maxPredictions={maxPredictions}
+            checkingPrediction={checkingPrediction}
+          />
+        </div>
 
         {/* Task Button */}
-        <TaskButton onClick={() => navigate('/test')} />
+        <div className="flex-1">
+          <TaskButton onClick={() => navigate('/test')} />
+        </div>
       </div>
 
       {/* Main Content */}

@@ -6,7 +6,7 @@ export const TaskButton = ({ onClick }) => {
         e.preventDefault()
         onClick?.()
       }}
-      className="flex-1 flex items-center justify-between rounded-xl bg-white border border-primary/20 p-2 shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:border-primary/30 active:scale-[0.99] transition-all no-underline"
+      className="w-full flex items-center justify-between rounded-xl bg-white border border-primary/20 p-2 shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:border-primary/30 active:scale-[0.99] transition-all no-underline"
     >
       <div className="flex items-center gap-2.5">
         <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 text-white">

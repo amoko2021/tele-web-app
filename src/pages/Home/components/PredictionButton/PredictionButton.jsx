@@ -8,7 +8,7 @@ export const PredictionButton = ({
     <button
       onClick={onClick}
       disabled={checkingPrediction}
-      className="flex-1 flex items-center justify-between rounded-xl bg-white border border-primary/20 p-2 shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:border-primary/30 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      className="w-full flex items-center justify-between rounded-xl bg-white border border-primary/20 p-2 shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:border-primary/30 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
     >
       <div className="flex items-center gap-2.5">
         <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-blue-600 text-white">
