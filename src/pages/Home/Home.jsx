@@ -2,9 +2,10 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useXSMB } from '../../hooks/useApi'
 import { useTelegram } from '../../hooks/useTelegram'
-import { lotteryApi, userApi } from '../../services/api'
-import { Modal } from '../../components/common/Modal'
 import { useAdsgram } from '../../hooks/useAdsgram'
+import { useSonarAds } from '../../hooks/useSonarAds'
+import { lotteryApi } from '../../services/api'
+import { Modal } from '../../components/common/Modal'
 import { LotteryHeader } from './components/LotteryHeader'
 import { DateNavigation } from './components/DateNavigation'
 import { SpecialPrize } from './components/SpecialPrize'
@@ -33,11 +34,13 @@ export const Home = () => {
   const [maxPredictions, setMaxPredictions] = useState(2)
   const [remainingPredictions, setRemainingPredictions] = useState(2)
   const [errorMessage, setErrorMessage] = useState('')
-  const [watchingAds, setWatchingAds] = useState(false)
 
   // Lấy userId từ Telegram
   const userData = validationData?.data?.user || telegramUser
   const userId = userData?.id
+
+  // Sonar Ads hook
+  const { handleWatchAds, watchingAds } = useSonarAds({ userId })
 
   // Adsgram callbacks
   const onReward = useCallback(() => {
@@ -149,61 +152,6 @@ export const Home = () => {
       setCheckingPrediction(false)
     }
   }, [userId, showAd])
-
-  const handleWatchAds = useCallback(async () => {
-    if (!userId) {
-      alert('Không tìm thấy thông tin user!')
-      return
-    }
-
-    if (watchingAds) return
-
-    if (!window.Sonar) {
-      alert('Chức năng quảng cáo chưa sẵn sàng!')
-      return
-    }
-
-    setWatchingAds(true)
-
-    try {
-      const reward = Math.floor(Math.random() * (100 - 10 + 1)) + 10
-
-      const result = await window.Sonar.show({
-        adUnit: 'interstitial',
-        loader: true,
-        onStart: () => {
-          console.log('Ad started loading')
-        },
-        onShow: () => {
-          console.log('Ad is showing')
-        },
-        onError: (error) => {
-          console.error('Ad error:', error)
-          const errorMessage = error?.message || error || 'Không thể hiển thị quảng cáo'
-          alert(`Lỗi quảng cáo:\n${errorMessage}\n\nVui lòng thử lại!`)
-        },
-        onClose: () => {
-          console.log('Ad closed')
-          alert(`Bạn đã nhận được ${reward} đ khi xem quảng cáo!`)
-        },
-      })
-
-      if (result.status === 'showing') {
-        const currentBalance = await userApi.getUserInfo(userId)
-        const newBalance = (currentBalance?.balance || 0) + reward
-
-        await userApi.updateBalance(userId, newBalance)
-
-      } else {
-        console.error('Ad failed to show')
-      }
-    } catch (error) {
-      console.error('Error watching ads:', error)
-      alert('Có lỗi xảy ra. Vui lòng thử lại!')
-    } finally {
-      setWatchingAds(false)
-    }
-  }, [userId, watchingAds])
 
   // Check dự đoán hôm nay khi component mount để hiển thị số lượt
   useEffect(() => {
