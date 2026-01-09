@@ -18,7 +18,7 @@ export const WatchAdsButton = ({ onClick, loading }) => {
             Xem quảng cáo
           </span>
           <span className="text-[10px] text-slate-500 whitespace-nowrap">
-            {loading ? 'Đang tải...' : '+1，000VND'}
+            {loading ? 'Đang tải...' : '+1,000VND'}
           </span>
         </div>
       </div>
