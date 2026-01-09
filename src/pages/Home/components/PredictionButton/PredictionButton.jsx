@@ -16,13 +16,13 @@ export const PredictionButton = ({
         </div>
         <div className="flex flex-col items-start min-w-0">
           <span className="font-bold text-xs whitespace-nowrap text-slate-800">
-            Dự đoán nhận thưởng
+            Dự đoán
           </span>
           <span className="text-[10px] text-slate-500 whitespace-nowrap">
             {checkingPrediction
               ? 'Đang kiểm tra...'
               : remainingPredictions > 0
-              ? `Còn ${remainingPredictions}/${maxPredictions} lượt`
+              ? `+50,000 VND Còn ${remainingPredictions}/${maxPredictions} lượt`
               : 'Xem lịch sử'}
           </span>
         </div>

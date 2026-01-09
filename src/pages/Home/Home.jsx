@@ -182,7 +182,7 @@ export const Home = () => {
         },
         onClose: () => {
           console.log('Ad closed')
-          alert('Bạn đã nhận được 100 đ thưởng!')
+          alert('Bạn đã nhận được 100 đ khi xem quảng cáo!')
         },
       })
 
