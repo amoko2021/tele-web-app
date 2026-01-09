@@ -16,10 +16,10 @@ export const TaskButton = ({ onClick }) => {
         </div>
         <div className="flex flex-col items-start min-w-0">
           <span className="font-bold text-xs whitespace-nowrap text-slate-800">
-            Làm nhiệm vụ quảng cáo
+            Khảo sát kiếm tiền
           </span>
           <span className="text-[10px] text-slate-500 whitespace-nowrap">
-            Nhận thưởng ngay
+            +99,000VND
           </span>
         </div>
       </div>
