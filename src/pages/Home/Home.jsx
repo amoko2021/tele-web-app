@@ -253,21 +253,17 @@ export const Home = () => {
       <DateNavigation date={xsmbData?.time} />
 
       {/* Buttons Container */}
-      <div className="flex gap-2 px-4 pt-2">
+      <div className="flex gap-2 px-4 pt-2 overflow-x-auto scrollbar-hide">
         {/* Prediction Button */}
-        <div className="flex-1">
-          <PredictionButton
-            onClick={handleFloatingButtonClick}
-            remainingPredictions={remainingPredictions}
-            maxPredictions={maxPredictions}
-            checkingPrediction={checkingPrediction}
-          />
-        </div>
+        <PredictionButton
+          onClick={handleFloatingButtonClick}
+          remainingPredictions={remainingPredictions}
+          maxPredictions={maxPredictions}
+          checkingPrediction={checkingPrediction}
+        />
 
         {/* Task Button */}
-        <div className="flex-1">
-          <TaskButton onClick={() => navigate('/test')} />
-        </div>
+        <TaskButton onClick={() => navigate('/test')} />
       </div>
 
       {/* Main Content */}
