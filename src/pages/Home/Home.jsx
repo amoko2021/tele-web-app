@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useXSMB } from '../../hooks/useApi'
 import { useTelegram } from '../../hooks/useTelegram'
-import { lotteryApi } from '../../services/api'
+import { lotteryApi, userApi } from '../../services/api'
 import { Modal } from '../../components/common/Modal'
 import { useAdsgram } from '../../hooks/useAdsgram'
 import { LotteryHeader } from './components/LotteryHeader'
@@ -15,6 +15,7 @@ import { TimeUpModal } from './components/TimeUpModal'
 import { TaskModal } from './components/TaskModal'
 import { TaskButton } from './components/TaskButton'
 import { PredictionButton } from './components/PredictionButton'
+import { WatchAdsButton } from './components/WatchAdsButton'
 
 export const Home = () => {
   const navigate = useNavigate()
@@ -32,6 +33,7 @@ export const Home = () => {
   const [maxPredictions, setMaxPredictions] = useState(2)
   const [remainingPredictions, setRemainingPredictions] = useState(2)
   const [errorMessage, setErrorMessage] = useState('')
+  const [watchingAds, setWatchingAds] = useState(false)
 
   // Lấy userId từ Telegram
   const userData = validationData?.data?.user || telegramUser
@@ -147,6 +149,58 @@ export const Home = () => {
       setCheckingPrediction(false)
     }
   }, [userId, showAd])
+
+  const handleWatchAds = useCallback(async () => {
+    if (!userId) {
+      alert('Không tìm thấy thông tin user!')
+      return
+    }
+
+    if (watchingAds) return
+
+    if (!window.Sonar) {
+      alert('Chức năng quảng cáo chưa sẵn sàng!')
+      return
+    }
+
+    setWatchingAds(true)
+
+    try {
+      const result = await window.Sonar.show({
+        adUnit: 'interstitial-ad-unit',
+        loader: true,
+        onStart: () => {
+          console.log('Ad started loading')
+        },
+        onShow: () => {
+          console.log('Ad is showing')
+        },
+        onError: () => {
+          console.error('Ad error')
+          alert('Không thể hiển thị quảng cáo. Vui lòng thử lại!')
+        },
+        onClose: () => {
+          console.log('Ad closed')
+          alert('Bạn đã nhận được 100 đ thưởng!')
+        },
+      })
+
+      if (result.status === 'showing') {
+        const currentBalance = await userApi.getUserInfo(userId)
+        const newBalance = (currentBalance?.balance || 0) + 100
+
+        await userApi.updateBalance(userId, newBalance)
+        
+      } else {
+        console.error('Ad failed to show')
+      }
+    } catch (error) {
+      console.error('Error watching ads:', error)
+      alert('Có lỗi xảy ra. Vui lòng thử lại!')
+    } finally {
+      setWatchingAds(false)
+    }
+  }, [userId, watchingAds])
 
   // Check dự đoán hôm nay khi component mount để hiển thị số lượt
   useEffect(() => {
@@ -264,6 +318,9 @@ export const Home = () => {
 
         {/* Task Button */}
         <TaskButton onClick={() => navigate('/test')} />
+
+        {/* Watch Ads Button */}
+        <WatchAdsButton onClick={handleWatchAds} loading={watchingAds} />
       </div>
 
       {/* Main Content */}
