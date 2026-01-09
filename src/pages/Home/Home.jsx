@@ -167,7 +167,7 @@ export const Home = () => {
 
     try {
       const result = await window.Sonar.show({
-        adUnit: 'interstitial-ad-unit',
+        adUnit: 'interstitial',
         loader: true,
         onStart: () => {
           console.log('Ad started loading')
@@ -175,9 +175,10 @@ export const Home = () => {
         onShow: () => {
           console.log('Ad is showing')
         },
-        onError: () => {
-          console.error('Ad error')
-          alert('Không thể hiển thị quảng cáo. Vui lòng thử lại!')
+        onError: (error) => {
+          console.error('Ad error:', error)
+          const errorMessage = error?.message || error || 'Không thể hiển thị quảng cáo'
+          alert(`Lỗi quảng cáo:\n${errorMessage}\n\nVui lòng thử lại!`)
         },
         onClose: () => {
           console.log('Ad closed')
