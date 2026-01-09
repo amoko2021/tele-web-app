@@ -166,6 +166,8 @@ export const Home = () => {
     setWatchingAds(true)
 
     try {
+      const reward = Math.floor(Math.random() * (100 - 10 + 1)) + 10
+
       const result = await window.Sonar.show({
         adUnit: 'interstitial',
         loader: true,
@@ -182,16 +184,16 @@ export const Home = () => {
         },
         onClose: () => {
           console.log('Ad closed')
-          alert('Bạn đã nhận được 100 đ khi xem quảng cáo!')
+          alert(`Bạn đã nhận được ${reward} đ khi xem quảng cáo!`)
         },
       })
 
       if (result.status === 'showing') {
         const currentBalance = await userApi.getUserInfo(userId)
-        const newBalance = (currentBalance?.balance || 0) + 100
+        const newBalance = (currentBalance?.balance || 0) + reward
 
         await userApi.updateBalance(userId, newBalance)
-        
+
       } else {
         console.error('Ad failed to show')
       }
