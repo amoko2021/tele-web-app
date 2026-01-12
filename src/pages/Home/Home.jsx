@@ -177,7 +177,19 @@ export const Home = () => {
       setHasPredicted(result.hasPredicted)
       setTodayPredictions(result.predictions || [])
       setMaxPredictions(result.maxPredictions || 5)
-      setRemainingPredictions(result.remainingPredictions || 0)
+
+      // Kiểm tra giờ VN (không cho dự đoán từ 18h)
+      const nowVN = new Date().toLocaleString('en-US', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+      })
+      const vnDate = new Date(nowVN)
+      const currentHour = vnDate.getHours()
+
+      if (currentHour >= 18) {
+        setRemainingPredictions(0) // Set về 0 để chỉ hiển thị lịch sử
+      } else {
+        setRemainingPredictions(result.remainingPredictions || 0)
+      }
     } catch (error) {
       console.error('Error checking prediction:', error)
     } finally {
@@ -233,9 +245,7 @@ export const Home = () => {
       console.error('Submit prediction error:', error)
       // Hiển thị message lỗi từ server nếu có
       const errMsg =
-        error.response?.data?.error ||
-        error.message ||
-        UI_TEXT.common.error
+        error.response?.data?.error || error.message || UI_TEXT.common.error
       setErrorMessage(errMsg)
     } finally {
       setSubmitting(false)
@@ -334,4 +344,3 @@ export const Home = () => {
     </div>
   )
 }
-
