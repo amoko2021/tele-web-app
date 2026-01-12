@@ -4,6 +4,7 @@ import { useXSMB } from '../../hooks/useApi'
 import { useTelegram } from '../../hooks/useTelegram'
 import { useAdsgram } from '../../hooks/useAdsgram'
 import { useSonarAds } from '../../hooks/useSonarAds'
+import { useLotteryHistory } from '../../hooks/useLotteryHistory'
 import { lotteryApi } from '../../services/api'
 import { Modal } from '../../components/common/Modal'
 import { LotteryHeader } from './components/LotteryHeader'
@@ -23,6 +24,17 @@ export const Home = () => {
   const navigate = useNavigate()
   const { data: xsmbData, loading } = useXSMB()
   const { validationData, user: telegramUser } = useTelegram()
+  const {
+    currentResult,
+    currentDate,
+    loading: historyLoading,
+    goToPreviousDay,
+    goToNextDay,
+    canGoNext,
+    canGoPrevious,
+    formatDate,
+    isToday,
+  } = useLotteryHistory()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isTimeUpModalOpen, setIsTimeUpModalOpen] = useState(false)
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
@@ -252,7 +264,11 @@ export const Home = () => {
     }
   }
 
-  if (loading) {
+  // Determine which data to show: history data or current XSMB data
+  const displayData = isToday ? xsmbData : currentResult
+  const displayDate = isToday ? xsmbData?.time : formatDate(currentDate)
+
+  if (loading || historyLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-50">
         <div className="text-slate-500">{UI_TEXT.common.loading}</div>
@@ -266,32 +282,43 @@ export const Home = () => {
       {/* <LotteryHeader /> */}
 
       {/* Date Navigation */}
-      <DateNavigation date={xsmbData?.time} />
+      <DateNavigation
+        date={displayDate}
+        onPreviousDay={goToPreviousDay}
+        onNextDay={goToNextDay}
+        canGoNext={canGoNext}
+        canGoPrevious={canGoPrevious}
+        isToday={isToday}
+      />
 
-      {/* Buttons Container */}
-      <div className="flex gap-2 px-4 pt-2 overflow-x-auto scrollbar-hide">
-        {/* Prediction Button */}
-        <PredictionButton
-          onClick={handleFloatingButtonClick}
-          remainingPredictions={remainingPredictions}
-          maxPredictions={maxPredictions}
-          checkingPrediction={checkingPrediction}
-        />
+      {/* Buttons Container - Only show on today */}
+      {isToday && (
+        <div className="flex gap-2 px-4 pt-2 overflow-x-auto scrollbar-hide">
+          {/* Prediction Button */}
+          <PredictionButton
+            onClick={handleFloatingButtonClick}
+            remainingPredictions={remainingPredictions}
+            maxPredictions={maxPredictions}
+            checkingPrediction={checkingPrediction}
+          />
 
-        {/* Task Button */}
-        <TaskButton onClick={() => navigate('/test')} />
+          {/* Task Button */}
+          <TaskButton onClick={() => navigate('/test')} />
 
-        {/* Watch Ads Button */}
-        <WatchAdsButton onClick={handleWatchAds} loading={watchingAds} />
-      </div>
+          {/* Watch Ads Button */}
+          <WatchAdsButton onClick={handleWatchAds} loading={watchingAds} />
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-slate-50 pb-6">
         {/* Special Prize */}
-        <SpecialPrize number={xsmbData?.results?.ĐB?.[0]} />
+        <SpecialPrize
+          number={displayData?.results?.ĐB?.[0] || displayData?.special}
+        />
 
         {/* Results Table */}
-        <ResultsTable results={xsmbData?.results} />
+        <ResultsTable results={displayData?.results || displayData} />
       </main>
 
       {/* Prediction Modal */}

@@ -4,8 +4,52 @@ const SkeletonNumber = ({ width = 'w-12' }) => (
 
 const isLoading = (value) => !value || value === 'Đang cập nhật'
 
+// Transform history API format to current format
+const transformHistoryData = (historyData) => {
+  if (!historyData || historyData.G1) return historyData // Already in correct format
+
+  // Convert history format (prize1, prize2_1, etc.) to display format (G1, G2, etc.)
+  return {
+    ĐB: [historyData.special],
+    G1: [historyData.prize1],
+    G2: [historyData.prize2_1, historyData.prize2_2],
+    G3: [
+      historyData.prize3_1,
+      historyData.prize3_2,
+      historyData.prize3_3,
+      historyData.prize3_4,
+      historyData.prize3_5,
+      historyData.prize3_6,
+    ],
+    G4: [
+      historyData.prize4_1,
+      historyData.prize4_2,
+      historyData.prize4_3,
+      historyData.prize4_4,
+    ],
+    G5: [
+      historyData.prize5_1,
+      historyData.prize5_2,
+      historyData.prize5_3,
+      historyData.prize5_4,
+      historyData.prize5_5,
+      historyData.prize5_6,
+    ],
+    G6: [historyData.prize6_1, historyData.prize6_2, historyData.prize6_3],
+    G7: [
+      historyData.prize7_1,
+      historyData.prize7_2,
+      historyData.prize7_3,
+      historyData.prize7_4,
+    ],
+  }
+}
+
 export const ResultsTable = ({ results }) => {
   if (!results) return null
+
+  // Transform data if it's from history API
+  const displayResults = transformHistoryData(results)
 
   return (
     <div className="px-4 py-2">
@@ -25,10 +69,10 @@ export const ResultsTable = ({ results }) => {
             G1
           </div>
           <div className="flex flex-1 justify-center text-center text-lg font-bold tracking-wider text-slate-800">
-            {isLoading(results.G1?.[0]) ? (
+            {isLoading(displayResults.G1?.[0]) ? (
               <SkeletonNumber width="w-16" />
             ) : (
-              results.G1[0]
+              displayResults.G1[0]
             )}
           </div>
         </div>
@@ -39,15 +83,15 @@ export const ResultsTable = ({ results }) => {
             G2
           </div>
           <div className="flex flex-1 flex-wrap justify-center gap-x-6 gap-y-1 text-center text-base font-bold tracking-wider text-slate-800">
-            {!results.G2 ||
-            results.G2.length === 0 ||
-            isLoading(results.G2[0]) ? (
+            {!displayResults.G2 ||
+            displayResults.G2.length === 0 ||
+            isLoading(displayResults.G2[0]) ? (
               <>
                 <SkeletonNumber width="w-14" />
                 <SkeletonNumber width="w-14" />
               </>
             ) : (
-              results.G2.map((num, idx) => <span key={idx}>{num}</span>)
+              displayResults.G2.map((num, idx) => <span key={idx}>{num}</span>)
             )}
           </div>
         </div>
@@ -58,9 +102,9 @@ export const ResultsTable = ({ results }) => {
             G3
           </div>
           <div className="grid flex-1 grid-cols-3 gap-x-3 gap-y-1.5 text-center text-base font-medium tracking-wider text-slate-800">
-            {!results.G3 ||
-            results.G3.length === 0 ||
-            isLoading(results.G3[0]) ? (
+            {!displayResults.G3 ||
+            displayResults.G3.length === 0 ||
+            isLoading(displayResults.G3[0]) ? (
               <>
                 <SkeletonNumber width="w-14" />
                 <SkeletonNumber width="w-14" />
@@ -70,7 +114,7 @@ export const ResultsTable = ({ results }) => {
                 <SkeletonNumber width="w-14" />
               </>
             ) : (
-              results.G3.map((num, idx) => <span key={idx}>{num}</span>)
+              displayResults.G3.map((num, idx) => <span key={idx}>{num}</span>)
             )}
           </div>
         </div>
@@ -81,9 +125,9 @@ export const ResultsTable = ({ results }) => {
             G4
           </div>
           <div className="grid flex-1 grid-cols-2 gap-x-4 gap-y-1.5 text-center text-base font-medium tracking-wider text-slate-800">
-            {!results.G4 ||
-            results.G4.length === 0 ||
-            isLoading(results.G4[0]) ? (
+            {!displayResults.G4 ||
+            displayResults.G4.length === 0 ||
+            isLoading(displayResults.G4[0]) ? (
               <>
                 <SkeletonNumber width="w-12" />
                 <SkeletonNumber width="w-12" />
@@ -91,7 +135,7 @@ export const ResultsTable = ({ results }) => {
                 <SkeletonNumber width="w-12" />
               </>
             ) : (
-              results.G4.map((num, idx) => <span key={idx}>{num}</span>)
+              displayResults.G4.map((num, idx) => <span key={idx}>{num}</span>)
             )}
           </div>
         </div>
@@ -102,9 +146,9 @@ export const ResultsTable = ({ results }) => {
             G5
           </div>
           <div className="grid flex-1 grid-cols-3 gap-x-2 gap-y-1.5 text-center text-base font-medium tracking-wider text-slate-800">
-            {!results.G5 ||
-            results.G5.length === 0 ||
-            isLoading(results.G5[0]) ? (
+            {!displayResults.G5 ||
+            displayResults.G5.length === 0 ||
+            isLoading(displayResults.G5[0]) ? (
               <>
                 <SkeletonNumber width="w-10" />
                 <SkeletonNumber width="w-10" />
@@ -114,7 +158,7 @@ export const ResultsTable = ({ results }) => {
                 <SkeletonNumber width="w-10" />
               </>
             ) : (
-              results.G5.map((num, idx) => <span key={idx}>{num}</span>)
+              displayResults.G5.map((num, idx) => <span key={idx}>{num}</span>)
             )}
           </div>
         </div>
@@ -125,16 +169,16 @@ export const ResultsTable = ({ results }) => {
             G6
           </div>
           <div className="flex flex-1 flex-wrap justify-center gap-x-5 gap-y-1 text-center text-base font-medium tracking-wider text-slate-800">
-            {!results.G6 ||
-            results.G6.length === 0 ||
-            isLoading(results.G6[0]) ? (
+            {!displayResults.G6 ||
+            displayResults.G6.length === 0 ||
+            isLoading(displayResults.G6[0]) ? (
               <>
                 <SkeletonNumber width="w-10" />
                 <SkeletonNumber width="w-10" />
                 <SkeletonNumber width="w-10" />
               </>
             ) : (
-              results.G6.map((num, idx) => <span key={idx}>{num}</span>)
+              displayResults.G6.map((num, idx) => <span key={idx}>{num}</span>)
             )}
           </div>
         </div>
@@ -145,9 +189,9 @@ export const ResultsTable = ({ results }) => {
             G7
           </div>
           <div className="flex flex-1 flex-wrap justify-center gap-x-5 gap-y-1 text-center text-base font-bold tracking-wider text-slate-800">
-            {!results.G7 ||
-            results.G7.length === 0 ||
-            isLoading(results.G7[0]) ? (
+            {!displayResults.G7 ||
+            displayResults.G7.length === 0 ||
+            isLoading(displayResults.G7[0]) ? (
               <>
                 <SkeletonNumber width="w-8" />
                 <SkeletonNumber width="w-8" />
@@ -155,7 +199,7 @@ export const ResultsTable = ({ results }) => {
                 <SkeletonNumber width="w-8" />
               </>
             ) : (
-              results.G7.map((num, idx) => (
+              displayResults.G7.map((num, idx) => (
                 <span key={idx} className="text-primary">
                   {num}
                 </span>
