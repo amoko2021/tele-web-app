@@ -1,3 +1,5 @@
+import { UI_TEXT } from '../../../../config/uiText'
+
 export const InviteButton = ({ onInvite }) => {
   return (
     <button
@@ -7,8 +9,9 @@ export const InviteButton = ({ onInvite }) => {
       <span className="material-symbols-outlined -rotate-45 bg-white/40 text-slate-900 p-2 rounded-xl shadow-sm">
         send
       </span>
-      Mời bạn bè
+      {UI_TEXT.settings.invite.button}
       <span className="pointer-events-none absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-20 transition-opacity"></span>
     </button>
   )
 }
+

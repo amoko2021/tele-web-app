@@ -1,3 +1,5 @@
+import { UI_TEXT } from '../../../../config/uiText'
+
 export const TaskButton = ({ onClick }) => {
   return (
     <a
@@ -16,7 +18,7 @@ export const TaskButton = ({ onClick }) => {
         </div>
         <div className="flex flex-col items-start min-w-0">
           <span className="font-bold text-xs whitespace-nowrap text-slate-800">
-            Khảo sát kiếm tiền
+            {UI_TEXT.home.tasks.survey}
           </span>
           <span className="text-[10px] text-slate-500 whitespace-nowrap">
             +99,000VND
@@ -24,7 +26,7 @@ export const TaskButton = ({ onClick }) => {
         </div>
       </div>
       <div className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-orange-600 px-2.5 py-1 text-[11px] font-bold text-white hover:from-amber-600 hover:to-orange-700 transition-colors whitespace-nowrap flex-shrink-0">
-        <span>Tham gia</span>
+        <span>{UI_TEXT.home.tasks.join}</span>
         <span className="material-symbols-outlined text-xs">
           arrow_forward
         </span>
@@ -32,3 +34,4 @@ export const TaskButton = ({ onClick }) => {
     </a>
   )
 }
+

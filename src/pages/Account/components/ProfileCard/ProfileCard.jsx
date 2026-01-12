@@ -1,3 +1,5 @@
+import { UI_TEXT } from '../../../../config/uiText'
+
 export const ProfileCard = ({ userData }) => {
   return (
     <div className="flex flex-col items-center pt-8 pb-6 px-4">
@@ -27,8 +29,9 @@ export const ProfileCard = ({ userData }) => {
         {userData?.username && `@${userData.username}`}
       </p>
       <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
-        ID: {userData?.id}
+        {UI_TEXT.account.profile.uid}: {userData?.id}
       </p>
     </div>
   )
 }
+

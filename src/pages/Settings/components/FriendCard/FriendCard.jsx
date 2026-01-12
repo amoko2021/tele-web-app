@@ -1,3 +1,5 @@
+import { UI_TEXT } from '../../../../config/uiText'
+
 export const FriendCard = ({ friend }) => {
   // Backend trả về: {id, invited_user_id, inviter_user_id, rewarded, created_at}
   const displayName = `User ${friend.invited_user_id}` // Có thể fetch thêm thông tin user nếu cần
@@ -16,7 +18,7 @@ export const FriendCard = ({ friend }) => {
               {displayName}
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Joined {new Date(joinedDate).toLocaleDateString('vi-VN')}
+              {UI_TEXT.settings.friends.joined.replace('{date}', new Date(joinedDate).toLocaleDateString('vi-VN'))}
             </p>
           </div>
         </div>
@@ -27,7 +29,7 @@ export const FriendCard = ({ friend }) => {
                 <span className="material-symbols-outlined text-lg">
                   check_circle
                 </span>
-                <span className="text-sm">Rewarded</span>
+                <span className="text-sm">{UI_TEXT.settings.friends.status.rewarded}</span>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 10 🪙
@@ -39,7 +41,7 @@ export const FriendCard = ({ friend }) => {
                 <span className="material-symbols-outlined text-lg">
                   schedule
                 </span>
-                <span className="text-sm">Pending</span>
+                <span className="text-sm">{UI_TEXT.settings.friends.status.pending}</span>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400">0 🪙</p>
             </>
@@ -49,3 +51,4 @@ export const FriendCard = ({ friend }) => {
     </div>
   )
 }
+

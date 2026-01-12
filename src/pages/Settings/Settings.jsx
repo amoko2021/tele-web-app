@@ -7,6 +7,7 @@ import { InviteButton } from './components/InviteButton'
 import { RewardInfo } from './components/RewardInfo'
 import { FriendsListSection } from './components/FriendsListSection'
 import { BackgroundEffects } from './components/BackgroundEffects'
+import { UI_TEXT } from '../../config/uiText'
 
 export const Settings = () => {
   const { user, tg } = useTelegram()
@@ -55,7 +56,7 @@ export const Settings = () => {
   const handleInviteFriends = useCallback(() => {
     const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(
       referralLink
-    )}&text=${encodeURIComponent('Join me in this amazing lottery game! 🎰')}`
+    )}&text=${encodeURIComponent(UI_TEXT.settings.invite.shareText)}`
     tg?.openTelegramLink(shareUrl)
   }, [referralLink, tg])
 
@@ -77,10 +78,10 @@ export const Settings = () => {
         <div className="pt-4 border-t border-slate-300 dark:border-slate-700">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Friends
+              {UI_TEXT.settings.friends.title}
             </h2>
             <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-              {totalFriends} total
+              {UI_TEXT.settings.friends.total.replace('{count}', totalFriends)}
             </span>
           </div>
 
@@ -92,3 +93,4 @@ export const Settings = () => {
     </div>
   )
 }
+

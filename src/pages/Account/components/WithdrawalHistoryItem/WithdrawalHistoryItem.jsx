@@ -1,3 +1,5 @@
+import { UI_TEXT } from '../../../../config/uiText'
+
 const statusConfig = {
   pending: {
     icon: 'pending',
@@ -5,7 +7,7 @@ const statusConfig = {
     iconColor: 'text-yellow-600 dark:text-yellow-500',
     badgeBg: 'bg-yellow-100 dark:bg-yellow-900/30',
     badgeText: 'text-yellow-700 dark:text-yellow-500',
-    label: 'Đang xử lý',
+    label: UI_TEXT.withdrawal.history.status.pending,
   },
   paid: {
     icon: 'check_circle',
@@ -13,7 +15,7 @@ const statusConfig = {
     iconColor: 'text-green-600 dark:text-green-500',
     badgeBg: 'bg-green-100 dark:bg-green-900/30',
     badgeText: 'text-green-700 dark:text-green-500',
-    label: 'Thành công',
+    label: UI_TEXT.withdrawal.history.status.paid,
   },
   success: {
     icon: 'check_circle',
@@ -21,7 +23,7 @@ const statusConfig = {
     iconColor: 'text-green-600 dark:text-green-500',
     badgeBg: 'bg-green-100 dark:bg-green-900/30',
     badgeText: 'text-green-700 dark:text-green-500',
-    label: 'Thành công',
+    label: UI_TEXT.withdrawal.history.status.success,
   },
   canceled: {
     icon: 'cancel',
@@ -29,7 +31,7 @@ const statusConfig = {
     iconColor: 'text-red-600 dark:text-red-500',
     badgeBg: 'bg-red-100 dark:bg-red-900/30',
     badgeText: 'text-red-700 dark:text-red-500',
-    label: 'Đã hủy',
+    label: UI_TEXT.withdrawal.history.status.canceled,
   },
 }
 
@@ -69,7 +71,7 @@ export const WithdrawalHistoryItem = ({ transaction }) => {
         </div>
         <div>
           <p className="text-slate-900 dark:text-white font-semibold text-sm">
-            Rút về {transaction.bank_name || transaction.bankName}
+            {UI_TEXT.withdrawal.history.withdrawTo.replace('{bank}', transaction.bank_name || transaction.bankName)}
           </p>
           <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
             {formatDate(transaction.created_at || transaction.date)}
@@ -78,7 +80,7 @@ export const WithdrawalHistoryItem = ({ transaction }) => {
       </div>
       <div className="text-right">
         <p className="text-slate-900 dark:text-white font-bold text-sm">
-          - {transaction.amount.toLocaleString()} đ
+          - {transaction.amount.toLocaleString()} {UI_TEXT.common.currency}
         </p>
         <span
           className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium ${config.badgeBg} ${config.badgeText} mt-1`}
@@ -89,3 +91,4 @@ export const WithdrawalHistoryItem = ({ transaction }) => {
     </div>
   )
 }
+

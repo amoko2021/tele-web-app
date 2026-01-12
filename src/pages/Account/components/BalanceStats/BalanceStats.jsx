@@ -1,3 +1,5 @@
+import { UI_TEXT } from '../../../../config/uiText'
+
 export const BalanceStats = ({ balance = 0, points = 340 }) => {
   return (
     <div className="grid grid-cols-2 gap-3">
@@ -8,7 +10,7 @@ export const BalanceStats = ({ balance = 0, points = 340 }) => {
             monetization_on
           </span>
           <span className="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">
-            Số dư Xu
+            {UI_TEXT.account.balance.label}
           </span>
         </div>
         <p className="text-slate-900 dark:text-white text-2xl font-bold tracking-tight">
@@ -23,7 +25,7 @@ export const BalanceStats = ({ balance = 0, points = 340 }) => {
             stars
           </span>
           <span className="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">
-            Điểm thưởng
+            {UI_TEXT.account.balance.points}
           </span>
         </div>
         <p className="text-slate-900 dark:text-white text-2xl font-bold tracking-tight">
@@ -33,3 +35,4 @@ export const BalanceStats = ({ balance = 0, points = 340 }) => {
     </div>
   )
 }
+

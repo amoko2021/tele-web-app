@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useTelegram } from '../../hooks/useTelegram'
 import { Loading } from '../../components/common/Loading'
-import md5 from 'crypto-js/md5'
+import CryptoJS from 'crypto-js'
 
 // Replace with your actual app secure hash from CPX Research
 const APP_SECURE_HASH = '7kvhJ8lE03UyvH9vvXiG2k90em4UcPrB'
@@ -21,7 +21,7 @@ export const Test = () => {
 
     // Generate secure hash: md5(userId-APP_SECURE_HASH)
     const hashInput = `${userId}-${APP_SECURE_HASH}`
-    const secureHash = md5(hashInput).toString()
+    const secureHash = CryptoJS.MD5(hashInput).toString()
 
     const params = new URLSearchParams({
       app_id: APP_ID,

@@ -1,3 +1,5 @@
+import { UI_TEXT } from '../../../config/uiText'
+
 export const WithdrawalConfirmModal = ({
   isOpen,
   onClose,
@@ -24,7 +26,7 @@ export const WithdrawalConfirmModal = ({
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-700/50">
           <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
-            Xác nhận rút tiền
+            {UI_TEXT.withdrawal.modal.confirmTitle}
           </h2>
           <button
             onClick={onClose}
@@ -39,10 +41,10 @@ export const WithdrawalConfirmModal = ({
           {/* Amount Display */}
           <div className="text-center py-2">
             <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">
-              Số tiền muốn rút
+              {UI_TEXT.withdrawal.amountInput.label}
             </p>
             <h3 className="text-3xl font-extrabold text-primary tracking-tight">
-              {amount?.toLocaleString()} đ
+              {amount?.toLocaleString()} {UI_TEXT.common.currency}
             </h3>
           </div>
 
@@ -50,21 +52,18 @@ export const WithdrawalConfirmModal = ({
           <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 border border-slate-100 dark:border-slate-700/50 space-y-3">
             <div className="flex justify-between items-center text-sm">
               <span className="text-slate-500 dark:text-slate-400">
-                Ngân hàng
+                {UI_TEXT.withdrawal.bankInfo.bankName}
               </span>
               <div className="flex items-center">
-                {/* <div className="w-5 h-5 rounded-full bg-green-600 flex items-center justify-center text-[8px] text-white font-bold tracking-tighter">
-                  {bankInfo?.bankCode || 'VCB'}
-                </div> */}
                 <span className="text-slate-900 dark:text-white font-semibold">
-                  {bankInfo?.bankName || 'Vietcombank'}
+                  {bankInfo?.bankName || 'N/A'}
                 </span>
               </div>
             </div>
 
             <div className="flex justify-between items-center text-sm">
               <span className="text-slate-500 dark:text-slate-400">
-                Số tài khoản
+                {UI_TEXT.withdrawal.bankInfo.accountNumber}
               </span>
               <span className="text-slate-900 dark:text-white font-mono font-medium tracking-wide">
                 **** {bankInfo?.accountNumber?.slice(-4) || '0000'}
@@ -73,7 +72,7 @@ export const WithdrawalConfirmModal = ({
 
             <div className="flex justify-between items-center text-sm">
               <span className="text-slate-500 dark:text-slate-400">
-                Chủ tài khoản
+                {UI_TEXT.withdrawal.bankInfo.accountName}
               </span>
               <span className="text-slate-900 dark:text-white font-medium uppercase">
                 {bankInfo?.accountName || 'N/A'}
@@ -84,19 +83,19 @@ export const WithdrawalConfirmModal = ({
 
             <div className="flex justify-between items-center text-sm">
               <span className="text-slate-500 dark:text-slate-400">
-                Phí giao dịch
+                {UI_TEXT.withdrawal.modal.fee}
               </span>
               <span className="text-green-600 dark:text-green-400 font-medium">
-                Miễn phí
+                {UI_TEXT.withdrawal.modal.free}
               </span>
             </div>
 
             <div className="flex justify-between items-center text-sm pt-1">
               <span className="text-slate-900 dark:text-white font-bold">
-                Thực nhận
+                {UI_TEXT.withdrawal.modal.realReceived}
               </span>
               <span className="text-slate-900 dark:text-white font-bold text-base">
-                {amount?.toLocaleString()} đ
+                {amount?.toLocaleString()} {UI_TEXT.common.currency}
               </span>
             </div>
           </div>
@@ -107,8 +106,7 @@ export const WithdrawalConfirmModal = ({
               info
             </span>
             <div className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              Yêu cầu của bạn sẽ được xử lý trong 5-15 phút. Vui lòng kiểm tra
-              kỹ thông tin tài khoản nhận tiền trước khi xác nhận.
+              {UI_TEXT.withdrawal.modal.note}
             </div>
           </div>
         </div>
@@ -119,13 +117,13 @@ export const WithdrawalConfirmModal = ({
             onClick={onClose}
             className="flex-1 h-11 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-600 bg-transparent text-slate-900 dark:text-white text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200"
           >
-            Hủy
+            {UI_TEXT.common.cancel}
           </button>
           <button
             onClick={handleConfirm}
             className="flex-1 h-11 flex items-center justify-center gap-2 rounded-lg bg-primary text-white text-sm font-semibold shadow-md shadow-primary/20 hover:bg-blue-600 transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-800 group"
           >
-            <span>Xác nhận rút tiền</span>
+            <span>{UI_TEXT.common.confirm}</span>
             <span className="material-symbols-outlined text-lg transition-transform group-hover:translate-x-0.5">
               arrow_forward
             </span>
@@ -135,3 +133,4 @@ export const WithdrawalConfirmModal = ({
     </div>
   )
 }
+

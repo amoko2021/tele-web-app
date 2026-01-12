@@ -10,6 +10,7 @@ import { ProfileCard } from './components/ProfileCard'
 import { BalanceStats } from './components/BalanceStats'
 import { ActionButtons } from './components/ActionButtons'
 import { SettingsMenu } from './components/SettingsMenu'
+import { UI_TEXT } from '../../config/uiText'
 
 export const Account = () => {
   const navigate = useNavigate()
@@ -43,21 +44,21 @@ export const Account = () => {
 
   const handleSaveBankAccount = async (data) => {
     if (!userId) {
-      alert('Không tìm thấy thông tin user!')
+      alert(UI_TEXT.home.alerts.noUser)
       return
     }
 
     try {
       const result = await userApi.updateBankAccount(userId, data)
       setBankAccount(result.data)
-      alert(result.message || 'Cập nhật thành công!')
+      alert(result.message || UI_TEXT.account.messages.updateSuccess)
     } catch (error) {
       throw error
     }
   }
 
   const handleDeposit = () => {
-    alert('Tính năng nạp xu đang phát triển')
+    alert(UI_TEXT.account.messages.featureDev)
   }
 
   const handleWithdraw = () => {
@@ -91,9 +92,9 @@ export const Account = () => {
         }
       }
 
-      alert(result.message || 'Yêu cầu rút tiền đã được gửi!')
+      alert(result.message || UI_TEXT.withdrawal.messages.requestSent)
     } catch (error) {
-      alert(error.message || 'Có lỗi xảy ra, vui lòng thử lại!')
+      alert(error.message || UI_TEXT.common.error)
     }
   }
 
@@ -102,13 +103,13 @@ export const Account = () => {
   }
 
   const handleSupport = () => {
-    alert('Liên hệ: @crush_xx')
+    alert(UI_TEXT.account.messages.contactSupport)
   }
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-slate-500">Đang tải...</div>
+        <div className="text-slate-500">{UI_TEXT.common.loading}</div>
       </div>
     )
   }
@@ -118,7 +119,7 @@ export const Account = () => {
       {/* Header Title */}
       <div className="flex items-center justify-center px-6 py-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
         <h1 className="text-slate-900 dark:text-white text-lg font-bold">
-          Tài khoản
+          {UI_TEXT.account.title}
         </h1>
       </div>
 
@@ -173,3 +174,4 @@ export const Account = () => {
     </div>
   )
 }
+

@@ -1,3 +1,5 @@
+import { UI_TEXT } from '../../../config/uiText'
+
 export const BankWarningModal = ({ isOpen, onClose, onSetup }) => {
   if (!isOpen) return null
 
@@ -28,11 +30,10 @@ export const BankWarningModal = ({ isOpen, onClose, onSetup }) => {
         {/* Text Content */}
         <div className="px-6 pb-2 text-center">
           <h3 className="text-slate-900 dark:text-white tracking-tight text-xl font-bold leading-tight mb-3">
-            Chưa cài đặt Tài khoản Rút tiền
+            {UI_TEXT.withdrawal.warning.noBank}
           </h3>
           <p className="text-slate-500 dark:text-slate-400 text-sm font-normal leading-relaxed">
-            Bạn chưa cài đặt tài khoản ngân hàng để rút tiền. Vui lòng cài đặt
-            trước khi thực hiện giao dịch.
+            {UI_TEXT.withdrawal.warning.setupFirst}
           </p>
         </div>
 
@@ -42,7 +43,7 @@ export const BankWarningModal = ({ isOpen, onClose, onSetup }) => {
             onClick={onClose}
             className="group flex-1 h-11 flex items-center justify-center px-4 rounded-lg border border-slate-200 dark:border-slate-600 bg-transparent hover:bg-slate-50 dark:hover:bg-slate-700/50 text-slate-600 dark:text-slate-300 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200"
           >
-            <span>Đóng</span>
+            <span>{UI_TEXT.common.close}</span>
           </button>
           <button
             onClick={onSetup}
@@ -51,10 +52,11 @@ export const BankWarningModal = ({ isOpen, onClose, onSetup }) => {
             <span className="material-symbols-outlined text-lg mr-2">
               add_card
             </span>
-            <span>Cài đặt ngay</span>
+            <span>{UI_TEXT.withdrawal.warning.setupNow}</span>
           </button>
         </div>
       </div>
     </div>
   )
 }
+

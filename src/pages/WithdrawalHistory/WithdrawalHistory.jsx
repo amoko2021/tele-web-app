@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { WithdrawalHistoryItem } from '../Account/components/WithdrawalHistoryItem'
 import { userApi } from '../../services/api'
 import { useTelegram } from '../../hooks/useTelegram'
+import { UI_TEXT } from '../../config/uiText'
 
 export const WithdrawalHistory = () => {
   const navigate = useNavigate()
@@ -47,7 +48,7 @@ export const WithdrawalHistory = () => {
           <span className="material-symbols-outlined">arrow_back</span>
         </button>
         <h1 className="text-slate-900 dark:text-white text-lg font-bold">
-          Lịch sử Rút tiền
+          {UI_TEXT.withdrawal.history.title}
         </h1>
         <div className="w-10"></div>
       </div>
@@ -64,7 +65,7 @@ export const WithdrawalHistory = () => {
               receipt_long
             </span>
             <p className="text-slate-500 dark:text-slate-400 text-sm">
-              Chưa có giao dịch nào
+              {UI_TEXT.withdrawal.history.empty}
             </p>
           </div>
         ) : (
@@ -77,7 +78,7 @@ export const WithdrawalHistory = () => {
             ))}
             <div className="py-4 text-center">
               <p className="text-xs text-slate-400 dark:text-slate-600">
-                Hiển thị {transactions.length}/{total} giao dịch
+                {UI_TEXT.withdrawal.history.showing.replace('{count}', transactions.length).replace('{total}', total)}
               </p>
             </div>
           </>
@@ -86,3 +87,4 @@ export const WithdrawalHistory = () => {
     </div>
   )
 }
+

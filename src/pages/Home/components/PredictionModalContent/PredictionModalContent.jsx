@@ -1,6 +1,7 @@
 import { PredictionCard } from '../PredictionCard'
 import { PrizeTypeSelector } from '../PrizeTypeSelector'
 import { NumberInput } from '../NumberInput'
+import { UI_TEXT } from '../../../../config/uiText'
 
 export const PredictionModalContent = ({
   checkingPrediction,
@@ -19,7 +20,7 @@ export const PredictionModalContent = ({
   if (checkingPrediction) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="text-slate-500">Đang kiểm tra...</div>
+        <div className="text-slate-500">{UI_TEXT.home.prediction.check}</div>
       </div>
     )
   }
@@ -32,14 +33,14 @@ export const PredictionModalContent = ({
           <div className="flex items-center gap-1.5 text-orange-700">
             <span className="material-symbols-outlined text-base">info</span>
             <span className="font-semibold text-xs">
-              Đã hết {maxPredictions} lượt dự đoán hôm nay
+              {UI_TEXT.home.prediction.outOfTurns.replace('{max}', maxPredictions)}
             </span>
           </div>
         </div>
 
         <div>
           <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
-            Danh sách dự đoán
+            {UI_TEXT.home.prediction.history}
           </h4>
           <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100">
             {todayPredictions.map((pred, index) => (
@@ -54,7 +55,7 @@ export const PredictionModalContent = ({
 
         <div className="mt-6 text-center">
           <p className="text-xs text-slate-500">
-            Kết quả sẽ được công bố vào 18:15 hàng ngày
+            {UI_TEXT.home.prediction.resultTime}
           </p>
         </div>
       </div>
@@ -72,18 +73,18 @@ export const PredictionModalContent = ({
                 check_circle
               </span>
               <span className="font-semibold text-xs">
-                Đã dự đoán {todayPredictions.length}/{maxPredictions}
+                {UI_TEXT.home.prediction.predicted.replace('{count}', todayPredictions.length).replace('{max}', maxPredictions)}
               </span>
             </div>
             <span className="text-xs font-bold">
-              Còn {remainingPredictions}
+              {UI_TEXT.home.prediction.remaining.replace('{count}', remainingPredictions)}
             </span>
           </div>
         </div>
 
         <div className="mb-5">
           <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
-            Danh sách dự đoán
+            {UI_TEXT.home.prediction.history}
           </h4>
           <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100">
             {todayPredictions.map((pred, index) => (
@@ -102,7 +103,7 @@ export const PredictionModalContent = ({
         {/* Form dự đoán tiếp */}
         <div>
           <h4 className="mb-4 text-xs font-bold uppercase tracking-wider text-slate-500">
-            Thêm dự đoán mới
+            {UI_TEXT.home.prediction.addNew}
           </h4>
 
           <PrizeTypeSelector value={prizeType} onChange={setPrizeType} />
@@ -118,7 +119,7 @@ export const PredictionModalContent = ({
             disabled={submitting}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/25 hover:bg-blue-600 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span>{submitting ? 'Đang gửi...' : 'Gửi dự đoán ngay'}</span>
+            <span>{submitting ? UI_TEXT.home.prediction.sending : UI_TEXT.home.prediction.sendButton}</span>
             {!submitting && (
               <span className="material-symbols-outlined text-lg">send</span>
             )}
@@ -144,7 +145,7 @@ export const PredictionModalContent = ({
         disabled={submitting}
         className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/25 hover:bg-blue-600 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        <span>{submitting ? 'Đang gửi...' : 'Gửi dự đoán ngay'}</span>
+        <span>{submitting ? UI_TEXT.home.prediction.sending : UI_TEXT.home.prediction.sendButton}</span>
         {!submitting && (
           <span className="material-symbols-outlined text-lg">send</span>
         )}
@@ -152,3 +153,4 @@ export const PredictionModalContent = ({
     </>
   )
 }
+

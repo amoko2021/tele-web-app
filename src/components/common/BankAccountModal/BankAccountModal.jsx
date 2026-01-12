@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Modal } from '../Modal'
+import { UI_TEXT } from '../../../config/uiText'
 
 export const BankAccountModal = ({ isOpen, onClose, onSave, initialData }) => {
   const [formData, setFormData] = useState({
@@ -20,7 +21,7 @@ export const BankAccountModal = ({ isOpen, onClose, onSave, initialData }) => {
       !formData.accountName ||
       !formData.accountNumber
     ) {
-      alert('Vui lòng điền đầy đủ thông tin')
+      alert(UI_TEXT.validation.required)
       return
     }
 
@@ -29,7 +30,7 @@ export const BankAccountModal = ({ isOpen, onClose, onSave, initialData }) => {
       await onSave(formData)
       onClose()
     } catch (error) {
-      alert('Có lỗi xảy ra, vui lòng thử lại!')
+      alert(UI_TEXT.common.error)
     } finally {
       setSaving(false)
     }
@@ -39,13 +40,13 @@ export const BankAccountModal = ({ isOpen, onClose, onSave, initialData }) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Thông tin Tài khoản Ngân hàng"
+      title={UI_TEXT.withdrawal.bankInfo.title}
     >
       <div className="flex flex-col gap-5">
         {/* Bank Name */}
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-slate-900 dark:text-white">
-            Tên Ngân hàng <span className="text-red-500">*</span>
+            {UI_TEXT.withdrawal.bankInfo.bankName} <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 dark:text-slate-400">
@@ -57,7 +58,7 @@ export const BankAccountModal = ({ isOpen, onClose, onSave, initialData }) => {
               type="text"
               value={formData.bankName}
               onChange={(e) => handleChange('bankName', e.target.value)}
-              placeholder="Nhập tên ngân hàng (VD: Vietcombank)"
+              placeholder={UI_TEXT.withdrawal.bankInfo.bankName}
               className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white h-12 pl-10 pr-4 placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all"
             />
           </div>
@@ -66,7 +67,7 @@ export const BankAccountModal = ({ isOpen, onClose, onSave, initialData }) => {
         {/* Account Name */}
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-slate-900 dark:text-white">
-            Tên Tài khoản <span className="text-red-500">*</span>
+            {UI_TEXT.withdrawal.bankInfo.accountName} <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 dark:text-slate-400">
@@ -85,14 +86,14 @@ export const BankAccountModal = ({ isOpen, onClose, onSave, initialData }) => {
             />
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 pl-1">
-            Tên chủ tài khoản viết hoa không dấu
+            {UI_TEXT.withdrawal.bankInfo.note}
           </p>
         </div>
 
         {/* Account Number */}
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-slate-900 dark:text-white">
-            Số Tài khoản <span className="text-red-500">*</span>
+            {UI_TEXT.withdrawal.bankInfo.accountNumber} <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 dark:text-slate-400">
@@ -106,7 +107,7 @@ export const BankAccountModal = ({ isOpen, onClose, onSave, initialData }) => {
               onChange={(e) =>
                 handleChange('accountNumber', e.target.value.replace(/\D/g, ''))
               }
-              placeholder="Nhập số tài khoản"
+              placeholder={UI_TEXT.withdrawal.bankInfo.accountNumber}
               className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white h-12 pl-10 pr-4 placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all"
             />
           </div>
@@ -118,7 +119,7 @@ export const BankAccountModal = ({ isOpen, onClose, onSave, initialData }) => {
             onClick={onClose}
             className="flex items-center justify-center h-10 px-6 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-900 dark:text-white text-sm font-semibold transition-colors"
           >
-            Hủy
+            {UI_TEXT.common.cancel}
           </button>
           <button
             onClick={handleSave}
@@ -126,10 +127,11 @@ export const BankAccountModal = ({ isOpen, onClose, onSave, initialData }) => {
             className="flex items-center justify-center h-10 px-6 rounded-lg bg-primary hover:bg-blue-600 text-white text-sm font-bold shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed gap-2"
           >
             <span className="material-symbols-outlined text-[18px]">save</span>
-            <span>{saving ? 'Đang lưu...' : 'Lưu thông tin'}</span>
+            <span>{saving ? UI_TEXT.common.loading : UI_TEXT.common.save}</span>
           </button>
         </div>
       </div>
     </Modal>
   )
 }
+

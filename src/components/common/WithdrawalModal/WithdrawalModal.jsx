@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { WithdrawalConfirmModal } from '../WithdrawalConfirmModal'
+import { UI_TEXT } from '../../../config/uiText'
 
 export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
   const [amount, setAmount] = useState('')
@@ -10,7 +11,7 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
   const handleNext = () => {
     const amountNum = parseInt(amount.replace(/\D/g, ''))
     if (!amountNum || amountNum < 50000) {
-      alert('Số tiền rút tối thiểu là 50.000 đ')
+      alert(UI_TEXT.validation.minAmount.replace('{amount}', '50.000'))
       return
     }
     setShowConfirm(true)
@@ -55,7 +56,7 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-700">
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-                Rút tiền
+                {UI_TEXT.withdrawal.title}
               </h2>
               <button
                 onClick={handleClose}
@@ -70,7 +71,7 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
               {/* Amount Input */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Số tiền muốn rút
+                  {UI_TEXT.withdrawal.amountInput.label}
                 </label>
                 <div className="relative">
                   <input
@@ -81,11 +82,11 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
                     className="w-full px-4 py-3 text-2xl font-bold text-center border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 text-lg">
-                    đ
+                    {UI_TEXT.common.currency}
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-                  Số tiền rút tối thiểu: 50.000 đ
+                  {UI_TEXT.withdrawal.amountInput.placeholder}
                 </p>
               </div>
 
@@ -93,7 +94,7 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
               {bankInfo && (
                 <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 border border-slate-100 dark:border-slate-700">
                   <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
-                    Rút về tài khoản
+                    {UI_TEXT.withdrawal.bankInfo.title}
                   </p>
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-xs text-white font-bold">
@@ -119,7 +120,7 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
                 disabled={!amount}
                 className="w-full h-11 bg-primary text-white rounded-lg font-semibold hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
-                Tiếp tục
+                {UI_TEXT.common.continue}
               </button>
             </div>
           </div>
@@ -137,3 +138,4 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
     </>
   )
 }
+

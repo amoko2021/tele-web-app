@@ -3,6 +3,7 @@ import { AppRoutes } from './routes/AppRoutes'
 import { BottomNavBar } from './components/layout/BottomNavBar'
 import { Loading } from './components/common/Loading'
 import { useTelegram } from './hooks/useTelegram'
+import { useAutoUpdate } from './hooks/useAutoUpdate'
 import { logger } from './services/logger'
 import { useEffect } from 'react'
 import './App.css'
@@ -18,6 +19,9 @@ function AppContent() {
 
 function App() {
   const { isValidating, validationError } = useTelegram()
+  
+  // Enable auto-update check
+  useAutoUpdate()
 
   useEffect(() => {
     if (!isValidating && !validationError) {

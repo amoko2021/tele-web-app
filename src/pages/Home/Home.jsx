@@ -17,6 +17,7 @@ import { TaskModal } from './components/TaskModal'
 import { TaskButton } from './components/TaskButton'
 import { PredictionButton } from './components/PredictionButton'
 import { WatchAdsButton } from './components/WatchAdsButton'
+import { UI_TEXT } from '../../config/uiText'
 
 export const Home = () => {
   const navigate = useNavigate()
@@ -71,7 +72,7 @@ export const Home = () => {
     (detail) => {
       console.log('Task reward received:', detail)
       // Có thể gọi API để cộng coins cho user ở đây
-      alert('Bạn đã nhận được phần thưởng!')
+      alert(UI_TEXT.home.alerts.rewardReceived)
       // Refresh prediction count sau khi nhận thưởng
       if (userId) {
         lotteryApi
@@ -92,17 +93,17 @@ export const Home = () => {
 
   const handleTaskError = useCallback((detail) => {
     console.error('Task error:', detail)
-    alert('Có lỗi xảy ra khi thực hiện nhiệm vụ. Vui lòng thử lại!')
+    alert(UI_TEXT.home.alerts.taskError)
   }, [])
 
   const handleBannerNotFound = useCallback((detail) => {
     console.warn('Banner not found:', detail)
-    alert('Hiện không có nhiệm vụ nào. Vui lòng thử lại sau!')
+    alert(UI_TEXT.home.alerts.noTask)
   }, [])
 
   const handleTooLongSession = useCallback((detail) => {
     console.warn('Session too long:', detail)
-    alert('Phiên làm việc quá lâu. Vui lòng khởi động lại ứng dụng!')
+    alert(UI_TEXT.home.alerts.sessionTimeout)
   }, [])
 
   // Khởi tạo Adsgram - blockId chính 20539, fallback 20540
@@ -117,7 +118,7 @@ export const Home = () => {
   const handleFloatingButtonClick = useCallback(async () => {
     // Kiểm tra user
     if (!userId) {
-      alert('Không tìm thấy thông tin user!')
+      alert(UI_TEXT.home.alerts.noUser)
       return
     }
 
@@ -188,19 +189,19 @@ export const Home = () => {
     setErrorMessage('')
 
     if (!prediction) {
-      setErrorMessage('Vui lòng nhập số dự đoán')
+      setErrorMessage(UI_TEXT.validation.required)
       return
     }
 
     if (!userId) {
-      setErrorMessage('Không tìm thấy thông tin user!')
+      setErrorMessage(UI_TEXT.home.alerts.noUser)
       return
     }
 
     // Kiểm tra giới hạn từ backend
     if (remainingPredictions <= 0) {
       setErrorMessage(
-        `Bạn đã sử dụng hết ${maxPredictions} lượt dự đoán hôm nay!`
+        UI_TEXT.home.prediction.outOfTurns.replace('{max}', maxPredictions)
       )
       return
     }
@@ -216,13 +217,13 @@ export const Home = () => {
       // Kiểm tra response từ backend
       if (result.ok === false) {
         // Backend trả về lỗi
-        setErrorMessage(result.error || 'Có lỗi xảy ra, vui lòng thử lại!')
+        setErrorMessage(result.error || UI_TEXT.common.error)
         setSubmitting(false)
         return
       }
 
       // Thành công
-      alert(result.message || 'Dự đoán của bạn đã được ghi nhận!')
+      alert(result.message || UI_TEXT.home.alerts.predictionRecorded)
       setIsModalOpen(false)
       setPrediction('')
       setErrorMessage('')
@@ -234,7 +235,7 @@ export const Home = () => {
       const errMsg =
         error.response?.data?.error ||
         error.message ||
-        'Có lỗi xảy ra, vui lòng thử lại!'
+        UI_TEXT.common.error
       setErrorMessage(errMsg)
     } finally {
       setSubmitting(false)
@@ -244,7 +245,7 @@ export const Home = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-50">
-        <div className="text-slate-500">Đang tải...</div>
+        <div className="text-slate-500">{UI_TEXT.common.loading}</div>
       </div>
     )
   }
@@ -289,10 +290,10 @@ export const Home = () => {
         onClose={() => setIsModalOpen(false)}
         title={
           remainingPredictions <= 0
-            ? 'Lịch sử dự đoán hôm nay'
+            ? UI_TEXT.home.prediction.history
             : hasPredicted
-            ? `Dự đoán (${remainingPredictions}/${maxPredictions} lượt)`
-            : 'Dự đoán kết quả'
+            ? `${UI_TEXT.home.prediction.title} (${remainingPredictions}/${maxPredictions})`
+            : UI_TEXT.home.prediction.title
         }
       >
         <PredictionModalContent
@@ -333,3 +334,4 @@ export const Home = () => {
     </div>
   )
 }
+

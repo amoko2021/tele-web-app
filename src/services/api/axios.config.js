@@ -2,7 +2,8 @@ import axios from 'axios'
 import { logger } from '../logger'
 
 // Base URL cho production API
-const BASE_URL = 'https://betestminiapp-production-9a0b.up.railway.app'
+// Ưu tiên lấy từ biến môi trường, fallback về localhost hoặc URL mặc định
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://betestminiapp-production-9a0b.up.railway.app'
 
 // Tạo axios instance
 const apiClient = axios.create({
