@@ -291,24 +291,22 @@ export const Home = () => {
         isToday={isToday}
       />
 
-      {/* Buttons Container - Only show on today */}
-      {isToday && (
-        <div className="flex gap-2 px-4 pt-2 overflow-x-auto scrollbar-hide">
-          {/* Prediction Button */}
-          <PredictionButton
-            onClick={handleFloatingButtonClick}
-            remainingPredictions={remainingPredictions}
-            maxPredictions={maxPredictions}
-            checkingPrediction={checkingPrediction}
-          />
+      {/* Buttons Container */}
+      <div className="flex gap-2 px-4 pt-2 overflow-x-auto scrollbar-hide">
+        {/* Prediction Button */}
+        <PredictionButton
+          onClick={handleFloatingButtonClick}
+          remainingPredictions={remainingPredictions}
+          maxPredictions={maxPredictions}
+          checkingPrediction={checkingPrediction}
+        />
 
-          {/* Task Button */}
-          <TaskButton onClick={() => navigate('/test')} />
+        {/* Task Button */}
+        <TaskButton onClick={() => navigate('/test')} />
 
-          {/* Watch Ads Button */}
-          <WatchAdsButton onClick={handleWatchAds} loading={watchingAds} />
-        </div>
-      )}
+        {/* Watch Ads Button */}
+        <WatchAdsButton onClick={handleWatchAds} loading={watchingAds} />
+      </div>
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-slate-50 pb-6">
