@@ -39,10 +39,12 @@ export function useSonarAds({ userId }) {
         onClose: () => {
           console.log('Sonar ad closed')
         },
+        onReward: async () => {
+          await rewardUser(reward)
+        },
       })
 
       if (result.status === 'showing') {
-        await rewardUser(reward)
         return true
       }
       return false
