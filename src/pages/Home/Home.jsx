@@ -47,6 +47,7 @@ export const Home = () => {
   const [maxPredictions, setMaxPredictions] = useState(2)
   const [remainingPredictions, setRemainingPredictions] = useState(2)
   const [errorMessage, setErrorMessage] = useState('')
+  const [pendingPrediction, setPendingPrediction] = useState(null)
 
   // Lấy userId từ Telegram
   const userData = validationData?.data?.user || telegramUser
@@ -56,27 +57,50 @@ export const Home = () => {
   const { handleWatchAds, watchingAds } = useSonarAds({ userId })
 
   // Adsgram callbacks
-  const onReward = useCallback(() => {
-    // Khi user xem xong quảng cáo, kiểm tra giờ để mở modal phù hợp
-    const nowVN = new Date().toLocaleString('en-US', {
-      timeZone: 'Asia/Ho_Chi_Minh',
-    })
-    const vnDate = new Date(nowVN)
-    const currentHour = vnDate.getHours()
-
-    if (currentHour >= 18) {
-      // Sau 18h, mở modal time up
-      setIsTimeUpModalOpen(true)
-    } else {
-      // Trước 18h, mở modal dự đoán bình thường
-      setIsModalOpen(true)
+  const onReward = useCallback(async () => {
+    // Sau khi xem xong quảng cáo, gọi API submit prediction
+    if (!pendingPrediction) {
+      console.error('No pending prediction found')
+      return
     }
-  }, [])
+
+    try {
+      const result = await lotteryApi.submitPrediction(userId, {
+        prizeType: pendingPrediction.prizeType,
+        number: pendingPrediction.number,
+        date: new Date().toISOString(),
+      })
+
+      // Kiểm tra response từ backend
+      if (result.ok === false) {
+        // Backend trả về lỗi
+        alert(result.error || UI_TEXT.common.error)
+        return
+      }
+
+      // Thành công
+      alert(result.message || UI_TEXT.home.alerts.predictionRecorded)
+      setIsModalOpen(false)
+      setPrediction('')
+      setErrorMessage('')
+      setPendingPrediction(null)
+      // Refresh prediction status
+      checkTodayPrediction()
+    } catch (error) {
+      console.error('Submit prediction error:', error)
+      const errMsg =
+        error.response?.data?.error ||
+        error.message ||
+        UI_TEXT.common.error
+      alert(errMsg)
+    }
+  }, [pendingPrediction, userId])
 
   const onError = useCallback((result) => {
     console.error('Adsgram error:', result)
-    // Mở modal ngay cả khi ads lỗi để user vẫn dự đoán được
-    setIsModalOpen(true)
+    // Nếu ads lỗi, reset pending prediction
+    alert('Có lỗi khi hiển thị quảng cáo. Vui lòng thử lại!')
+    setPendingPrediction(null)
   }, [])
 
   // Task modal handlers
@@ -151,20 +175,18 @@ export const Home = () => {
 
       if (currentHour >= 18) {
         setRemainingPredictions(0) // Set về 0 để chỉ hiển thị lịch sử
+        setIsTimeUpModalOpen(true) // Hiển thị time up modal
       } else {
         setRemainingPredictions(result.remainingPredictions || 0)
+        setIsModalOpen(true) // Hiển thị modal dự đoán
       }
-
-      // Luôn hiển thị quảng cáo
-      showAd()
     } catch (error) {
       console.error('Error checking prediction:', error)
-      // Nếu lỗi, vẫn hiển thị quảng cáo
-      showAd()
+      alert('Có lỗi xảy ra, vui lòng thử lại!')
     } finally {
       setCheckingPrediction(false)
     }
-  }, [userId, showAd])
+  }, [userId])
 
   // Check dự đoán hôm nay khi component mount để hiển thị số lượt
   useEffect(() => {
@@ -230,38 +252,14 @@ export const Home = () => {
       return
     }
 
-    setSubmitting(true)
-    try {
-      const result = await lotteryApi.submitPrediction(userId, {
-        prizeType,
-        number: prediction,
-        date: new Date().toISOString(),
-      })
+    // Lưu prediction data và hiển thị quảng cáo
+    setPendingPrediction({
+      prizeType,
+      number: prediction,
+    })
 
-      // Kiểm tra response từ backend
-      if (result.ok === false) {
-        // Backend trả về lỗi
-        setErrorMessage(result.error || UI_TEXT.common.error)
-        setSubmitting(false)
-        return
-      }
-
-      // Thành công
-      alert(result.message || UI_TEXT.home.alerts.predictionRecorded)
-      setIsModalOpen(false)
-      setPrediction('')
-      setErrorMessage('')
-      // Refresh prediction status
-      checkTodayPrediction()
-    } catch (error) {
-      console.error('Submit prediction error:', error)
-      // Hiển thị message lỗi từ server nếu có
-      const errMsg =
-        error.response?.data?.error || error.message || UI_TEXT.common.error
-      setErrorMessage(errMsg)
-    } finally {
-      setSubmitting(false)
-    }
+    // Hiển thị quảng cáo
+    showAd()
   }
 
   // Determine which data to show: history data or current XSMB data
