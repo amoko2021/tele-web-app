@@ -321,7 +321,7 @@ export const Home = () => {
         <WatchAdsButton onClick={handleSonarAds} loading={watchingSonarAds} />
 
         {/* Monetag Watch Ads Button */}
-        <WatchAdsButton onClick={() => handleMonetagAds(1000)} loading={watchingMonetagAds} />
+        <WatchAdsButton onClick={() => handleMonetagAds(10)} loading={watchingMonetagAds} />
       </div>
 
       {/* Main Content */}
