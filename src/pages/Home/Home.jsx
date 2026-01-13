@@ -321,12 +321,19 @@ export const Home = () => {
       {/* Watch Ads Buttons Container */}
       <div className="flex gap-2 px-4 pt-2 overflow-x-auto scrollbar-hide">
         {/* Sonar Watch Ads Button */}
-        <WatchAdsButton onClick={handleSonarAds} loading={watchingSonarAds} />
+        <WatchAdsButton
+          onClick={handleSonarAds}
+          loading={watchingSonarAds}
+          adType="Sonar"
+          reward="5-20"
+        />
 
         {/* Monetag Watch Ads Button */}
         <WatchAdsButton
           onClick={() => handleMonetagAds(10)}
           loading={watchingMonetagAds}
+          adType="Monetag"
+          reward="1,000"
         />
       </div>
 

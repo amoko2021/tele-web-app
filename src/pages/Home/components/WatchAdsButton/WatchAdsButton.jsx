@@ -1,4 +1,4 @@
-export const WatchAdsButton = ({ onClick, loading }) => {
+export const WatchAdsButton = ({ onClick, loading, adType, reward }) => {
   return (
     <a
       onClick={(e) => {
@@ -15,10 +15,10 @@ export const WatchAdsButton = ({ onClick, loading }) => {
         </div>
         <div className="flex flex-col items-start min-w-0">
           <span className="font-bold text-xs whitespace-nowrap text-slate-800">
-            Xem quảng cáo
+            Xem quảng cáo {adType}
           </span>
           <span className="text-[10px] text-slate-500 whitespace-nowrap">
-            {loading ? 'Đang tải...' : '+1,000VND'}
+            {loading ? 'Đang tải...' : `+${reward}VND`}
           </span>
         </div>
       </div>
