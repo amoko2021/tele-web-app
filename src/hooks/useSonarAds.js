@@ -50,25 +50,6 @@ export function useSonarAds({ userId }) {
     [rewardUser]
   )
 
-  const showAdsgramAd = useCallback(
-    async (reward) => {
-      if (!window.Adsgram) {
-        return false
-      }
-
-      try {
-        const controller = window.Adsgram.init({ blockId: '20539' })
-        await controller.show()
-        await rewardUser(reward)
-        return true
-      } catch (error) {
-        console.error('Adsgram ad error:', error)
-        return false
-      }
-    },
-    [rewardUser]
-  )
-
   const handleWatchAds = useCallback(async () => {
     if (!userId) {
       alert('Không tìm thấy thông tin user!')
@@ -82,17 +63,12 @@ export function useSonarAds({ userId }) {
     try {
       const reward = Math.floor(Math.random() * (20 - 5 + 1)) + 5
 
-      let adShown = false
-
-      if (window.Adsgram) {
-        console.log('Trying Adsgram first...')
-        adShown = await showAdsgramAd(reward)
+      if (!window.Sonar) {
+        alert('Sonar SDK chưa được tải. Vui lòng thử lại!')
+        return
       }
 
-      if (!adShown && window.Sonar) {
-        console.log('Adsgram failed, trying Sonar...')
-        adShown = await showSonarAd(reward)
-      }
+      const adShown = await showSonarAd(reward)
 
       if (!adShown) {
         alert('Không thể hiển thị quảng cáo. Vui lòng thử lại!')
@@ -103,7 +79,7 @@ export function useSonarAds({ userId }) {
     } finally {
       setWatchingAds(false)
     }
-  }, [userId, watchingAds, showAdsgramAd, showSonarAd])
+  }, [userId, watchingAds, showSonarAd])
 
   return { handleWatchAds, watchingAds }
 }
