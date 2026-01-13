@@ -4,6 +4,7 @@ import { useXSMB } from '../../hooks/useApi'
 import { useTelegram } from '../../hooks/useTelegram'
 import { useAdsgram } from '../../hooks/useAdsgram'
 import { useSonarAds } from '../../hooks/useSonarAds'
+import { useMonetag } from '../../hooks/useMonetag'
 import { lotteryApi } from '../../services/api'
 import { Modal } from '../../components/common/Modal'
 import { LotteryHeader } from './components/LotteryHeader'
@@ -41,7 +42,21 @@ export const Home = () => {
   const userId = userData?.id
 
   // Sonar Ads hook
-  const { handleWatchAds, watchingAds } = useSonarAds({ userId })
+  const { handleWatchAds: handleSonarAds, watchingAds: watchingSonarAds } =
+    useSonarAds({ userId })
+
+  // Monetag hook
+  const { handleWatchAds: handleMonetagAds, watchingAds: watchingMonetagAds } =
+    useMonetag({
+      userId,
+      zoneId: import.meta.env.VITE_MONETAG_ZONE_ID || '',
+      onReward: () => {
+        console.log('Monetag ad watched successfully')
+      },
+      onError: (error) => {
+        console.error('Monetag ad error:', error)
+      },
+    })
 
   // Adsgram callbacks
   const onReward = useCallback(() => {
@@ -271,8 +286,11 @@ export const Home = () => {
         {/* Task Button */}
         <TaskButton onClick={() => navigate('/test')} />
 
-        {/* Watch Ads Button */}
-        <WatchAdsButton onClick={handleWatchAds} loading={watchingAds} />
+        {/* Sonar Watch Ads Button */}
+        <WatchAdsButton onClick={handleSonarAds} loading={watchingSonarAds} />
+
+        {/* Monetag Watch Ads Button */}
+        <WatchAdsButton onClick={() => handleMonetagAds(1000)} loading={watchingMonetagAds} />
       </div>
 
       {/* Main Content */}
