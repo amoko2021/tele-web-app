@@ -104,9 +104,7 @@ export const Home = () => {
     } catch (error) {
       console.error('Submit prediction error:', error)
       const errMsg =
-        error.response?.data?.error ||
-        error.message ||
-        UI_TEXT.common.error
+        error.response?.data?.error || error.message || UI_TEXT.common.error
       alert(errMsg)
     }
   }, [pendingPrediction, userId])
@@ -333,7 +331,7 @@ export const Home = () => {
           onClick={() => handleMonetagAds(10)}
           loading={watchingMonetagAds}
           adType="Monetag"
-          reward="1,000"
+          reward="10-20"
         />
       </div>
 

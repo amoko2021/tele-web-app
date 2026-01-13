@@ -38,7 +38,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       setWatchingAds(true)
 
       try {
-        await adHandler({type: 'pop', ymid })
+        await adHandler({ ymid })
 
         try {
           const currentBalance = await userApi.getUserInfo(userId)
@@ -48,7 +48,9 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
           onReward?.()
         } catch (error) {
           console.error('Error updating balance:', error)
-          alert(`Bạn đã nhận được ${rewardAmount} đ nhưng có lỗi khi cập nhật số dư!`)
+          alert(
+            `Bạn đã nhận được ${rewardAmount} đ nhưng có lỗi khi cập nhật số dư!`
+          )
         }
 
         return true
