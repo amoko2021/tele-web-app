@@ -58,10 +58,11 @@ src/
 - API data fetched through hooks in `/hooks/` directory
 - Async state pattern: `const [data, setData] = useState(null)` with loading/error states
 
-### Error Handling
+### Error Handling & Logging
 - Async functions wrapped in try-catch blocks
 - Error state maintained: `const [error, setError] = useState(null)`
-- Log errors with `console.error('Context:', error)`
+- Log errors with context: `console.error('Context:', error)` or `logger.error('Context:', error)`
+- Use logger service for structured logging: `logger.info()`, `logger.warn()`, `logger.apiError()`
 - Display user-friendly error messages in UI
 
 ### Naming Conventions
@@ -74,9 +75,9 @@ src/
 ### API Layer
 - All API calls go through `src/services/api/`
 - Axios instance configured in `axios.config.js` with interceptors
-- Authentication handled via Telegram `initData` in request header
+- Authentication handled via Telegram `initData` in request header: `Authorization: 'tma ' + tg.initData`
 - API response data returned directly (not full response object)
-- Error handling with try-catch and console.error
+- Error handling with try-catch and logger.apiError()
 
 ### React Hooks
 - Use `useCallback` for event handlers passed as props to prevent re-renders
