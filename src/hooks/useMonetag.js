@@ -44,7 +44,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
 
       try {
         // Use Rewarded Popup format with type: 'pop'
-        await adHandler({ type: 'pop', ymid })
+        await adHandler({ ymid })
 
         // Popup attempt completed - reward user
         try {
