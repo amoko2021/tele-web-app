@@ -18,7 +18,7 @@ export const Prediction = () => {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
+  
   // Use a ref to store the pending category for ad callbacks to access latest value
   const pendingCategoryRef = useRef(null)
 
@@ -40,6 +40,19 @@ export const Prediction = () => {
     predictionId: null,
     number: ''
   })
+
+  // Helper function to check if time is up (18:00 VN time)
+  const checkIsTimeUp = () => {
+    const nowVN = new Date().toLocaleString('en-US', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+    })
+    const vnDate = new Date(nowVN)
+    const currentHour = vnDate.getHours()
+    // Block from 18:00
+    return currentHour >= 18
+  }
+
+  const isTimeUp = checkIsTimeUp()
 
   // Helper to open modal
   const openAddModal = useCallback((category) => {
@@ -134,6 +147,11 @@ export const Prediction = () => {
   }
 
   const handleAdd = (category) => {
+    // Check time first
+    if (isTimeUp) {
+      return
+    }
+
     // Store category in ref for callback access
     pendingCategoryRef.current = category
     
@@ -157,7 +175,7 @@ export const Prediction = () => {
   }
 
   const handleFloatingAdd = () => {
-    if (categories.length > 0) {
+    if (categories.length > 0 && !isTimeUp) {
       handleAdd(categories[0])
     }
   }
@@ -258,6 +276,7 @@ export const Prediction = () => {
                 onManage={() => handleManage(category.id)}
                 onAdd={() => handleAdd(category)}
                 onDelete={handleDelete}
+                isTimeUp={isTimeUp}
               />
             ))
           )}
@@ -269,12 +288,14 @@ export const Prediction = () => {
         </div>
       </main>
 
-      <button
-        className="fixed bottom-28 right-4 lg:right-[calc(50%-220px)] z-20 flex size-14 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-blue-500/40 hover:scale-105 active:scale-95 transition-all"
-        onClick={handleFloatingAdd}
-      >
-        <span className="material-symbols-outlined text-2xl">add</span>
-      </button>
+      {!isTimeUp && (
+        <button
+          className="fixed bottom-28 right-4 lg:right-[calc(50%-220px)] z-20 flex size-14 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-blue-500/40 hover:scale-105 active:scale-95 transition-all"
+          onClick={handleFloatingAdd}
+        >
+          <span className="material-symbols-outlined text-2xl">add</span>
+        </button>
+      )}
 
       {/* Add Prediction Modal */}
       <Modal

@@ -10,7 +10,8 @@ export const PredictionCategoryCard = ({
   updateTime,
   onManage,
   onAdd,
-  onDelete // New prop for handling deletion
+  onDelete, // New prop for handling deletion
+  isTimeUp = false // New prop to indicate if prediction time is over
 }) => {
   const colorClasses = {
     red: {
@@ -74,15 +75,28 @@ export const PredictionCategoryCard = ({
     })
     const remaining = maxCount - numbers.length
     for (let i = 0; i < remaining; i++) {
-      elements.push(
-        <button
-          key={`add-${i}`}
-          className={`flex aspect-square items-center justify-center rounded-xl border-2 border-dashed border-slate-100 text-slate-300 ${theme.hoverBorder} ${theme.hoverText} transition-colors`}
-          onClick={onAdd}
-        >
-          <span className="material-symbols-outlined">add</span>
-        </button>
-      )
+      if (isTimeUp) {
+        // Render closed slot (X icon)
+        elements.push(
+          <div
+            key={`closed-${i}`}
+            className="flex aspect-square items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 text-slate-300 cursor-not-allowed"
+          >
+            <span className="material-symbols-outlined">close</span>
+          </div>
+        )
+      } else {
+        // Render add button (+ icon)
+        elements.push(
+          <button
+            key={`add-${i}`}
+            className={`flex aspect-square items-center justify-center rounded-xl border-2 border-dashed border-slate-100 text-slate-300 ${theme.hoverBorder} ${theme.hoverText} transition-colors`}
+            onClick={onAdd}
+          >
+            <span className="material-symbols-outlined">add</span>
+          </button>
+        )
+      }
     }
     return elements
   }
