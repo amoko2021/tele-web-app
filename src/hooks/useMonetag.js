@@ -38,7 +38,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       setWatchingAds(true)
 
       try {
-        await adHandler({ type : 'pop', ymid })
+        await adHandler({ ymid })
 
         try {
           const currentBalance = await userApi.getUserInfo(userId)
