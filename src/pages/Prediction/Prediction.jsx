@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { DateDisplay } from './components/DateDisplay'
 import { PredictionCategoryCard } from './components/PredictionCategoryCard'
 import lotteryApi from '../../services/api/lotteryApi'
+import userApi from '../../services/api/userApi'
 import { Modal } from '../../components/common/Modal/Modal'
 import { useTelegram } from '../../hooks/useTelegram'
 import { useAdsgram } from '../../hooks/useAdsgram'
@@ -103,6 +104,36 @@ export const Prediction = () => {
     }
   }, [openAddModal])
 
+  // Ad Success Handler for time-up ads (earn random money instead of opening modal)
+  const handleAdSuccessForMoney = useCallback(async () => {
+    try {
+      // Random amount between 10-100
+      const randomAmount = Math.floor(Math.random() * 91) + 10
+
+      // Get current balance
+      const userInfo = await userApi.getUserInfo(userId)
+      const currentBalance = userInfo?.data?.balance || 0
+      const newBalance = currentBalance + randomAmount
+
+      // Update balance
+      await userApi.updateBalance(userId, newBalance)
+
+      // Show success notification
+      if (window.Telegram?.WebApp) {
+        window.Telegram.WebApp.showAlert(
+          `🎉 Bạn nhận được ${randomAmount}đ từ quảng cáo!`
+        )
+      }
+
+      pendingCategoryRef.current = null
+    } catch (err) {
+      console.error('Failed to add money after ad:', err)
+      if (window.Telegram?.WebApp) {
+        window.Telegram.WebApp.showAlert('Có lỗi xảy ra, vui lòng thử lại!')
+      }
+    }
+  }, [userId])
+
   const handleAdError = useCallback((err) => {
     console.error('Ad failed', err)
     pendingCategoryRef.current = null
@@ -128,6 +159,27 @@ export const Prediction = () => {
     userId,
     zoneId: import.meta.env.VITE_MONETAG_ZONE_ID || '',
     onReward: handleAdSuccess,
+    onError: handleAdError,
+  })
+
+  // Ad hooks for time-up (earn money instead of opening modal)
+  const showAdsgramForMoney = useAdsgram({
+    blockId: '20539',
+    fallbackBlockId: '20540',
+    onReward: handleAdSuccessForMoney,
+    onError: handleAdError,
+  })
+
+  const { handleWatchAds: showSonarForMoney } = useSonarAds({
+    userId,
+    onReward: handleAdSuccessForMoney,
+    onError: handleAdError,
+  })
+
+  const { handleWatchAds: showMonetagForMoney } = useMonetag({
+    userId,
+    zoneId: import.meta.env.VITE_MONETAG_ZONE_ID || '',
+    onReward: handleAdSuccessForMoney,
     onError: handleAdError,
   })
 
@@ -190,6 +242,28 @@ export const Prediction = () => {
   const handleFloatingAdd = () => {
     if (categories.length > 0 && !isTimeUp) {
       handleAdd(categories[0])
+    }
+  }
+
+  // Handle ad click for time-up slots (earn money instead of prediction)
+  const handleAdClick = (category) => {
+    // Store category in ref for callback access
+    pendingCategoryRef.current = category
+
+    // Logic: check category ID and show appropriate ad
+    // db_2 (1), loto_2 (2) -> Monetag (for money)
+    // db_3 (3) -> Sonar (for money)
+    // loto_3 (4) -> Adsgram (for money)
+
+    if (category.id === 1 || category.id === 2) {
+      showMonetagForMoney(0)
+    } else if (category.id === 3) {
+      showSonarForMoney(0)
+    } else if (category.id === 4) {
+      showAdsgramForMoney()
+    } else {
+      // Fallback
+      pendingCategoryRef.current = null
     }
   }
 
@@ -260,7 +334,7 @@ export const Prediction = () => {
             <span className="material-symbols-outlined text-lg">schedule</span>
             <span className="text-xs font-bold uppercase tracking-wider">
               {isAfter1830
-                ? 'Thời gian dự đoán kết thúc. Bạn vẫn có thể xem quảng cáo để nhận thưởng'
+                ? 'Thời gian dự đoán kết thúc. Nhấn vào biểu tượng quảng cáo để nhận 10-100đ'
                 : 'Đang chờ kết quả (18:15)'}
             </span>
           </div>
@@ -288,6 +362,7 @@ export const Prediction = () => {
                 onAdd={() => handleAdd(category)}
                 onDelete={handleDelete}
                 isTimeUp={isTimeUp}
+                onAdClick={() => handleAdClick(category)}
               />
             ))
           )}
