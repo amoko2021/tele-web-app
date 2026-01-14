@@ -264,9 +264,9 @@ export const Prediction = () => {
     // loto_3 (4) -> Adsgram (for money)
 
     if (category.id === 1 || category.id === 2) {
-      showMonetagForMoney(0)
-    } else if (category.id === 3) {
       showSonarForMoney(0)
+    } else if (category.id === 3) {
+      showMonetagForMoney(0)
     } else if (category.id === 4) {
       showAdsgramForMoney()
     } else {
