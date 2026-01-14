@@ -9,7 +9,7 @@ export function useSonarAds({ userId, onReward, onError }) {
       try {
         const currentBalance = await userApi.getUserInfo(userId)
         const newBalance = (currentBalance?.balance || 0) + reward
-        await userApi.updateBalance(userId, newBalance)
+        await userApi.updateBalance(userId, reward)
         alert(`Bạn đã nhận được ${reward} đ khi xem quảng cáo!`)
       } catch (error) {
         console.error('Error updating balance:', error)
@@ -59,41 +59,44 @@ export function useSonarAds({ userId, onReward, onError }) {
     [rewardUser, onReward, onError]
   )
 
-  const handleWatchAds = useCallback(async (rewardAmount = 0) => {
-    if (!userId) {
-      alert('Không tìm thấy thông tin user!')
-      return
-    }
-
-    if (watchingAds) return
-
-    setWatchingAds(true)
-
-    try {
-      // Use provided reward amount or random if not provided and no custom handler
-      let reward = rewardAmount
-      if (!onReward && reward <= 0) {
-          reward = Math.floor(Math.random() * (20 - 5 + 1)) + 5
-      }
-
-      if (!window.Sonar) {
-        alert('Sonar SDK chưa được tải. Vui lòng thử lại!')
+  const handleWatchAds = useCallback(
+    async (rewardAmount = 0) => {
+      if (!userId) {
+        alert('Không tìm thấy thông tin user!')
         return
       }
 
-      const adShown = await showSonarAd(reward)
+      if (watchingAds) return
 
-      if (!adShown) {
-        alert('Không thể hiển thị quảng cáo. Vui lòng thử lại!')
+      setWatchingAds(true)
+
+      try {
+        // Use provided reward amount or random if not provided and no custom handler
+        let reward = rewardAmount
+        if (!onReward && reward <= 0) {
+          reward = Math.floor(Math.random() * (20 - 5 + 1)) + 5
+        }
+
+        if (!window.Sonar) {
+          alert('Sonar SDK chưa được tải. Vui lòng thử lại!')
+          return
+        }
+
+        const adShown = await showSonarAd(reward)
+
+        if (!adShown) {
+          alert('Không thể hiển thị quảng cáo. Vui lòng thử lại!')
+        }
+      } catch (error) {
+        console.error('Error watching ads:', error)
+        alert('Có lỗi xảy ra. Vui lòng thử lại!')
+        onError?.(error)
+      } finally {
+        setWatchingAds(false)
       }
-    } catch (error) {
-      console.error('Error watching ads:', error)
-      alert('Có lỗi xảy ra. Vui lòng thử lại!')
-      onError?.(error)
-    } finally {
-      setWatchingAds(false)
-    }
-  }, [userId, watchingAds, showSonarAd, onReward, onError])
+    },
+    [userId, watchingAds, showSonarAd, onReward, onError]
+  )
 
   return { handleWatchAds, watchingAds }
 }
