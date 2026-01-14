@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { userApi } from '../services/api'
 
-export function useSonarAds({ userId }) {
+export function useSonarAds({ userId, onReward, onError }) {
   const [watchingAds, setWatchingAds] = useState(false)
 
   const rewardUser = useCallback(
@@ -35,12 +35,19 @@ export function useSonarAds({ userId }) {
           const errorMessage =
             error?.message || error || 'Không thể hiển thị quảng cáo'
           alert(`Lỗi quảng cáo:\n${errorMessage}\n\nVui lòng thử lại!`)
+          onError?.(error)
         },
         onClose: () => {
           console.log('Sonar ad closed')
         },
         onReward: async () => {
-          await rewardUser(reward)
+          // If custom onReward is provided, use it.
+          // Otherwise fall back to default balance reward behavior if reward > 0
+          if (onReward) {
+            onReward()
+          } else if (reward > 0) {
+            await rewardUser(reward)
+          }
         },
       })
 
@@ -49,10 +56,10 @@ export function useSonarAds({ userId }) {
       }
       return false
     },
-    [rewardUser]
+    [rewardUser, onReward, onError]
   )
 
-  const handleWatchAds = useCallback(async () => {
+  const handleWatchAds = useCallback(async (rewardAmount = 0) => {
     if (!userId) {
       alert('Không tìm thấy thông tin user!')
       return
@@ -63,7 +70,11 @@ export function useSonarAds({ userId }) {
     setWatchingAds(true)
 
     try {
-      const reward = Math.floor(Math.random() * (20 - 5 + 1)) + 5
+      // Use provided reward amount or random if not provided and no custom handler
+      let reward = rewardAmount
+      if (!onReward && reward <= 0) {
+          reward = Math.floor(Math.random() * (20 - 5 + 1)) + 5
+      }
 
       if (!window.Sonar) {
         alert('Sonar SDK chưa được tải. Vui lòng thử lại!')
@@ -78,10 +89,11 @@ export function useSonarAds({ userId }) {
     } catch (error) {
       console.error('Error watching ads:', error)
       alert('Có lỗi xảy ra. Vui lòng thử lại!')
+      onError?.(error)
     } finally {
       setWatchingAds(false)
     }
-  }, [userId, watchingAds, showSonarAd])
+  }, [userId, watchingAds, showSonarAd, onReward, onError])
 
   return { handleWatchAds, watchingAds }
 }

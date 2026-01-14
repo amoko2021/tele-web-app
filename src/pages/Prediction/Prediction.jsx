@@ -1,16 +1,26 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HeaderSection } from './components/HeaderSection'
 import { DateDisplay } from './components/DateDisplay'
 import { PredictionCategoryCard } from './components/PredictionCategoryCard'
 import lotteryApi from '../../services/api/lotteryApi'
 import { Modal } from '../../components/common/Modal/Modal'
+import { useTelegram } from '../../hooks/useTelegram'
+import { useAdsgram } from '../../hooks/useAdsgram'
+import { useSonarAds } from '../../hooks/useSonarAds'
+import { useMonetag } from '../../hooks/useMonetag'
 
 export const Prediction = () => {
   const navigate = useNavigate()
+  const { user } = useTelegram()
+  const userId = user?.id
+
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  // Use a ref to store the pending category for ad callbacks to access latest value
+  const pendingCategoryRef = useRef(null)
 
   // Add Modal State
   const [addModal, setAddModal] = useState({
@@ -29,6 +39,70 @@ export const Prediction = () => {
     isOpen: false,
     predictionId: null,
     number: ''
+  })
+
+  // Helper to open modal
+  const openAddModal = useCallback((category) => {
+    const getCategoryKey = (id) => {
+      const map = {
+        1: 'db_2',
+        2: 'loto_2',
+        3: 'db_3',
+        4: 'loto_3'
+      }
+      return map[id]
+    }
+
+    const getDigitCount = (id) => {
+      return (id === 3 || id === 4) ? 3 : 2
+    }
+
+    setAddModal({
+      isOpen: true,
+      categoryId: category.id,
+      categoryKey: getCategoryKey(category.id),
+      title: category.title,
+      maxDigits: getDigitCount(category.id)
+    })
+    setInputNumber('')
+    setAddError('')
+  }, [])
+
+  // Common Ad Success Handler
+  const handleAdSuccess = useCallback(() => {
+    const category = pendingCategoryRef.current
+    if (category) {
+      openAddModal(category)
+      pendingCategoryRef.current = null
+    }
+  }, [openAddModal])
+
+  const handleAdError = useCallback((err) => {
+    console.error("Ad failed", err)
+    pendingCategoryRef.current = null
+  }, [])
+
+  // 1. Adsgram Hook (for db_2, loto_2)
+  const showAdsgram = useAdsgram({
+    blockId: '20539',
+    fallbackBlockId: '20540',
+    onReward: handleAdSuccess,
+    onError: handleAdError
+  })
+
+  // 2. SonarAds Hook (for db_3)
+  const { handleWatchAds: showSonar } = useSonarAds({
+    userId,
+    onReward: handleAdSuccess,
+    onError: handleAdError
+  })
+
+  // 3. Monetag Hook (for loto_3)
+  const { handleWatchAds: showMonetag } = useMonetag({
+    userId,
+    zoneId: import.meta.env.VITE_MONETAG_ZONE_ID || '',
+    onReward: handleAdSuccess,
+    onError: handleAdError
   })
 
   // Fetch predictions
@@ -56,41 +130,33 @@ export const Prediction = () => {
   }
 
   const handleManage = (id) => {
-    // For now, just show a message or toggle a delete mode if we wanted complex UI
-    // But per requirement, clicking "Edit/Delete" (which we interpret as clicking items) works.
-    // The "Manage" button could potentially just be visual or scroll to the list.
     console.log('Manage category:', id)
   }
 
-  const getCategoryKey = (id) => {
-    const map = {
-      1: 'db_2',
-      2: 'loto_2',
-      3: 'db_3',
-      4: 'loto_3'
-    }
-    return map[id]
-  }
-
-  const getDigitCount = (id) => {
-    return (id === 3 || id === 4) ? 3 : 2
-  }
-
   const handleAdd = (category) => {
-    setAddModal({
-      isOpen: true,
-      categoryId: category.id,
-      categoryKey: getCategoryKey(category.id),
-      title: category.title,
-      maxDigits: getDigitCount(category.id)
-    })
-    setInputNumber('')
-    setAddError('')
+    // Store category in ref for callback access
+    pendingCategoryRef.current = category
+    
+    // Logic: check category ID and show appropriate ad
+    // db_2 (1), loto_2 (2) -> Adsgram
+    // db_3 (3) -> Sonar
+    // loto_3 (4) -> Monetag
+    
+    if (category.id === 1 || category.id === 2) {
+        showAdsgram()
+    } else if (category.id === 3) {
+        // Pass 0 or minimal reward since the goal is just gating
+        showSonar(0)
+    } else if (category.id === 4) {
+        showMonetag(0)
+    } else {
+        // Fallback for unknown categories, just open modal
+        openAddModal(category)
+        pendingCategoryRef.current = null
+    }
   }
 
   const handleFloatingAdd = () => {
-    // Default to first category or show a selector. 
-    // For simplicity, let's open the first category or just ignore if data not loaded
     if (categories.length > 0) {
       handleAdd(categories[0])
     }
