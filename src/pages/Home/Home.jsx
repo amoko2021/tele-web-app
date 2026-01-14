@@ -313,7 +313,7 @@ export const Home = () => {
         />
 
         {/* Task Button */}
-        <TaskButton onClick={() => navigate('/test')} />
+        <TaskButton onClick={() => navigate('/prediction')} />
       </div>
 
       {/* Watch Ads Buttons Container */}
