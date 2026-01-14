@@ -10,14 +10,19 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
 
   const preloadAd = useCallback(
     async (ymid) => {
+      if (!adHandler) {
+        console.warn('Monetag SDK not available or zoneId not set')
+        return false
+      }
+
       try {
-        if (adHandler) {
-          await adHandler({ type: 'preload', ymid })
-          setAdReady(true)
-        }
+        await adHandler({ type: 'preload', ymid })
+        setAdReady(true)
+        return true
       } catch (error) {
         console.error('Monetag preload error:', error)
         setAdReady(false)
+        return false
       }
     },
     [adHandler]
@@ -38,11 +43,13 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       setWatchingAds(true)
 
       try {
-        await adHandler({ ymid })
+        // Use Rewarded Popup format with type: 'pop'
+        await adHandler({ type: 'pop', ymid })
 
+        // Popup attempt completed - reward user
         try {
           const currentBalance = await userApi.getUserInfo(userId)
-          const newBalance = (currentBalance?.balance || 0) + rewardAmount
+          const newBalance = (currentBalance?.data?.balance || 0) + rewardAmount
           await userApi.updateBalance(userId, newBalance)
           alert(`Bạn đã nhận được ${rewardAmount} đ khi xem quảng cáo!`)
           onReward?.()
@@ -55,7 +62,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
 
         return true
       } catch (error) {
-        console.error('Monetag ad error:', error)
+        console.error('Monetag popup ad failed:', error)
         onError?.(error)
         return false
       } finally {
@@ -69,7 +76,8 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
     async (rewardAmount) => {
       if (watchingAds) return false
 
-      const ymid = userId || 'guest-user'
+      // Use userId as ymid for tracking, fallback to 'guest-user'
+      const ymid = userId?.toString() || 'guest-user'
 
       return await showMonetagAd(ymid, rewardAmount)
     },
