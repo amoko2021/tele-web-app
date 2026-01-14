@@ -51,7 +51,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
           const currentBalance = await userApi.getUserInfo(userId)
           const newBalance = (currentBalance?.data?.balance || 0) + rewardAmount
           await userApi.updateBalance(userId, rewardAmount)
-          alert(`Bạn đã nhận được ${rewardAmount} đ khi xem quảng cáo!`)
+          // alert(`Bạn đã nhận được ${rewardAmount} đ khi xem quảng cáo!`)
           onReward?.()
         } catch (error) {
           console.error('Error updating balance:', error)
