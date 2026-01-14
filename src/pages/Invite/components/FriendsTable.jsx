@@ -29,20 +29,31 @@ export const FriendsTable = ({ friends, loading }) => {
                     </td>
                  </tr>
             ) : (
-                friends.map((friend, index) => (
-                    <tr key={friend.id || index} className="bg-card-light dark:bg-card-dark border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                      <td className="px-4 py-3 font-medium text-gray-900 dark:text-text-dark flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
-                             {friend.first_name ? friend.first_name[0] : 'U'}
-                        </div>
-                        <span>{friend.first_name} {friend.last_name}</span>
-                      </td>
-                      <td className="px-4 py-3 text-center">
-                        <span className="bg-accent-green/10 text-accent-green text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-accent-green/20">Hoàn tất</span>
-                      </td>
-                      <td className="px-4 py-3 text-right font-medium text-accent-green">+10 USD</td>
-                    </tr>
-                ))
+                friends.map((friend, index) => {
+                    const displayName = `User ${friend.invited_user_id}`
+                    const isRewarded = friend.rewarded
+
+                    return (
+                        <tr key={friend.id || index} className="bg-card-light dark:bg-card-dark border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                          <td className="px-4 py-3 font-medium text-gray-900 dark:text-text-dark flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                                 {displayName.charAt(0)}
+                            </div>
+                            <span>{displayName}</span>
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            {isRewarded ? (
+                                <span className="bg-accent-green/10 text-accent-green text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-accent-green/20">Hoàn tất</span>
+                            ) : (
+                                <span className="bg-accent-red/10 text-accent-red text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-accent-red/20">Đang chờ</span>
+                            )}
+                          </td>
+                          <td className={`px-4 py-3 text-right font-medium ${isRewarded ? 'text-accent-green' : 'text-gray-500'}`}>
+                              {isRewarded ? '+1,000 VND' : '0 VND'}
+                          </td>
+                        </tr>
+                    )
+                })
             )}
           </tbody>
         </table>

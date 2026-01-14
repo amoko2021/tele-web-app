@@ -29,10 +29,15 @@ export const Invite = () => {
       if (response.ok) {
         const friendList = response.data || []
         setFriends(friendList)
+        
+        // Calculate stats based on rewarded status
+        const earnings = friendList.reduce((acc, friend) => acc + (friend.rewarded ? 1000 : 0), 0)
+        const pending = friendList.reduce((acc, friend) => acc + (!friend.rewarded ? 1000 : 0), 0)
+        
         setStats({
-          total: response.total || 0,
-          earnings: (response.total || 0) * 10,
-          pending: 0
+          total: friendList.length,
+          earnings: earnings,
+          pending: pending
         })
       }
     } catch (error) {
