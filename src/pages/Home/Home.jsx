@@ -68,7 +68,9 @@ export const Home = () => {
       },
       onError: (error) => {
         console.error('Monetag ad error:', error)
-        alert("Quảng cáo hiện không khả dụng. Vui lòng đợi hoặc tải lại trang!!!")
+        alert(
+          'Quảng cáo hiện không khả dụng. Vui lòng đợi hoặc tải lại trang!!!'
+        )
       },
     })
 
@@ -320,20 +322,20 @@ export const Home = () => {
       {/* Watch Ads Buttons Container */}
       <div className="flex gap-2 px-4 pt-2 overflow-x-auto scrollbar-hide">
         {/* Sonar Watch Ads Button */}
-        <WatchAdsButton
+        {/* <WatchAdsButton
           onClick={handleSonarAds}
           loading={watchingSonarAds}
           adType="Sonar"
           reward="5-20"
-        />
+        /> */}
 
         {/* Monetag Watch Ads Button */}
-        <WatchAdsButton
+        {/* <WatchAdsButton
           onClick={() => handleMonetagAds(10)}
           loading={watchingMonetagAds}
           adType="Monetag"
           reward="10-20"
-        />
+        /> */}
       </div>
 
       {/* Main Content */}
