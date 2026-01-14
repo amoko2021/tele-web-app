@@ -1,1 +1,0 @@
-export { FriendsListSection } from './FriendsListSection'

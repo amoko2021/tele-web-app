@@ -1,1 +1,0 @@
-export { ReferralLinkCard } from './ReferralLinkCard'

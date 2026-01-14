@@ -1,1 +1,0 @@
-export { FriendCard } from './FriendCard'

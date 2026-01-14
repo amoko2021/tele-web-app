@@ -5,7 +5,7 @@ import styles from './BottomNavBar.module.css'
 const navItems = [
   { path: '/account', icon: User, label: 'Tài khoản' },
   { path: '/', icon: Home, label: 'Trang chủ', variant: 'primary' },
-  { path: '/settings', icon: Navigation, label: 'Mời bạn bè' },
+  { path: '/invite', icon: Navigation, label: 'Mời bạn bè' },
 ]
 
 export const BottomNavBar = () => {
