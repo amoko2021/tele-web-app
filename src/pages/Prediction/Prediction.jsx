@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HeaderSection } from './components/HeaderSection'
 import { DateDisplay } from './components/DateDisplay'
 import { PredictionCategoryCard } from './components/PredictionCategoryCard'
 import lotteryApi from '../../services/api/lotteryApi'
@@ -9,6 +8,7 @@ import { useTelegram } from '../../hooks/useTelegram'
 import { useAdsgram } from '../../hooks/useAdsgram'
 import { useSonarAds } from '../../hooks/useSonarAds'
 import { useMonetag } from '../../hooks/useMonetag'
+// import { HeaderSection } from './components/HeaderSection'
 
 export const Prediction = () => {
   const navigate = useNavigate()
@@ -53,6 +53,19 @@ export const Prediction = () => {
   }
 
   const isTimeUp = checkIsTimeUp()
+
+  // Helper to check if current time is after 18:30 VN
+  const checkIsAfter1830 = () => {
+    const nowVN = new Date().toLocaleString('en-US', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+    })
+    const vnDate = new Date(nowVN)
+    const hours = vnDate.getHours()
+    const minutes = vnDate.getMinutes()
+    return hours > 18 || (hours === 18 && minutes >= 30)
+  }
+
+  const isAfter1830 = checkIsAfter1830()
 
   // Helper to open modal
   const openAddModal = useCallback((category) => {
@@ -239,14 +252,6 @@ export const Prediction = () => {
 
   return (
     <div className="flex flex-col h-full bg-slate-100 pb-20">
-      <HeaderSection
-        onBack={handleBack}
-        title="Dự đoán của tôi"
-        icon={
-          <span className="material-symbols-outlined filled-icon">history</span>
-        }
-      />
-
       <main className="flex-1 overflow-y-auto no-scrollbar pb-32">
         <DateDisplay />
 
@@ -254,7 +259,9 @@ export const Prediction = () => {
           <div className="flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-2 text-amber-700 border border-amber-100">
             <span className="material-symbols-outlined text-lg">schedule</span>
             <span className="text-xs font-bold uppercase tracking-wider">
-              Đang chờ kết quả (18:15)
+              {isAfter1830
+                ? 'Thời gian dự đoán kết thúc. Bạn vẫn có thể xem quảng cáo để nhận thưởng'
+                : 'Đang chờ kết quả (18:15)'}
             </span>
           </div>
 
