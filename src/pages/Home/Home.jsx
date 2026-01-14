@@ -306,7 +306,7 @@ export const Home = () => {
       />
 
       {/* Buttons Container */}
-      <div className="flex gap-2 px-4 pt-2 overflow-x-auto scrollbar-hide">
+      <div className="px-4 pt-2">
         {/* Prediction Button */}
         {/* <PredictionButton
           onClick={handleFloatingButtonClick}
@@ -325,7 +325,7 @@ export const Home = () => {
       </div>
 
       {/* Watch Ads Buttons Container */}
-      <div className="flex gap-2 px-4 pt-2 overflow-x-auto scrollbar-hide">
+      <div className="px-4 pt-2">
         <TaskButton onClick={() => navigate('/test')} />
         {/* Sonar Watch Ads Button */}
         {/* <WatchAdsButton
