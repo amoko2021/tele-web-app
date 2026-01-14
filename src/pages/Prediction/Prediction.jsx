@@ -116,7 +116,7 @@ export const Prediction = () => {
       const newBalance = currentBalance + randomAmount
 
       // Update balance
-      await userApi.updateBalance(userId, newBalance)
+      await userApi.updateBalance(userId, randomAmount)
 
       // Show success notification
       if (window.Telegram?.WebApp) {
