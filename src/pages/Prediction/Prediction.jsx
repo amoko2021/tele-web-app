@@ -107,8 +107,16 @@ export const Prediction = () => {
   // Ad Success Handler for time-up ads (earn random money instead of opening modal)
   const handleAdSuccessForMoney = useCallback(async () => {
     try {
-      // Random amount between 10-100
-      const randomAmount = Math.floor(Math.random() * 91) + 10
+      // Random amount between 10-100 with 90% chance for 10-20, 10% chance for 21-100
+      const rand = Math.random()
+      let randomAmount
+      if (rand < 0.9) {
+        // 90% chance: 10-20
+        randomAmount = Math.floor(Math.random() * 11) + 10
+      } else {
+        // 10% chance: 21-100
+        randomAmount = Math.floor(Math.random() * 80) + 21
+      }
 
       // Get current balance
       const userInfo = await userApi.getUserInfo(userId)
