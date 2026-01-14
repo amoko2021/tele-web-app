@@ -18,7 +18,7 @@ export const Prediction = () => {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  
+
   // Use a ref to store the pending category for ad callbacks to access latest value
   const pendingCategoryRef = useRef(null)
 
@@ -28,7 +28,7 @@ export const Prediction = () => {
     categoryId: null,
     categoryKey: '', // db_2, loto_2, etc.
     title: '',
-    maxDigits: 2
+    maxDigits: 2,
   })
   const [inputNumber, setInputNumber] = useState('')
   const [addError, setAddError] = useState('')
@@ -38,7 +38,7 @@ export const Prediction = () => {
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
     predictionId: null,
-    number: ''
+    number: '',
   })
 
   // Helper function to check if time is up (18:00 VN time)
@@ -61,13 +61,13 @@ export const Prediction = () => {
         1: 'db_2',
         2: 'loto_2',
         3: 'db_3',
-        4: 'loto_3'
+        4: 'loto_3',
       }
       return map[id]
     }
 
     const getDigitCount = (id) => {
-      return (id === 3 || id === 4) ? 3 : 2
+      return id === 3 || id === 4 ? 3 : 2
     }
 
     setAddModal({
@@ -75,7 +75,7 @@ export const Prediction = () => {
       categoryId: category.id,
       categoryKey: getCategoryKey(category.id),
       title: category.title,
-      maxDigits: getDigitCount(category.id)
+      maxDigits: getDigitCount(category.id),
     })
     setInputNumber('')
     setAddError('')
@@ -91,7 +91,7 @@ export const Prediction = () => {
   }, [openAddModal])
 
   const handleAdError = useCallback((err) => {
-    console.error("Ad failed", err)
+    console.error('Ad failed', err)
     pendingCategoryRef.current = null
   }, [])
 
@@ -100,14 +100,14 @@ export const Prediction = () => {
     blockId: '20539',
     fallbackBlockId: '20540',
     onReward: handleAdSuccess,
-    onError: handleAdError
+    onError: handleAdError,
   })
 
   // 2. SonarAds Hook (for db_3)
   const { handleWatchAds: showSonar } = useSonarAds({
     userId,
     onReward: handleAdSuccess,
-    onError: handleAdError
+    onError: handleAdError,
   })
 
   // 3. Monetag Hook (for loto_3)
@@ -115,7 +115,7 @@ export const Prediction = () => {
     userId,
     zoneId: import.meta.env.VITE_MONETAG_ZONE_ID || '',
     onReward: handleAdSuccess,
-    onError: handleAdError
+    onError: handleAdError,
   })
 
   // Fetch predictions
@@ -154,23 +154,23 @@ export const Prediction = () => {
 
     // Store category in ref for callback access
     pendingCategoryRef.current = category
-    
+
     // Logic: check category ID and show appropriate ad
     // db_2 (1), loto_2 (2) -> Adsgram
     // db_3 (3) -> Sonar
     // loto_3 (4) -> Monetag
-    
+
     if (category.id === 1 || category.id === 2) {
-        showAdsgram()
+      showMonetag(0)
     } else if (category.id === 3) {
-        // Pass 0 or minimal reward since the goal is just gating
-        showSonar(0)
+      // Pass 0 or minimal reward since the goal is just gating
+      showSonar(0)
     } else if (category.id === 4) {
-        showMonetag(0)
+      showAdsgram()
     } else {
-        // Fallback for unknown categories, just open modal
-        openAddModal(category)
-        pendingCategoryRef.current = null
+      // Fallback for unknown categories, just open modal
+      openAddModal(category)
+      pendingCategoryRef.current = null
     }
   }
 
@@ -193,9 +193,9 @@ export const Prediction = () => {
       setIsSubmitting(true)
       setAddError('')
       await lotteryApi.addPrediction(addModal.categoryKey, inputNumber)
-      
+
       // Success
-      setAddModal(prev => ({ ...prev, isOpen: false }))
+      setAddModal((prev) => ({ ...prev, isOpen: false }))
       fetchPredictions() // Refresh list
     } catch (err) {
       // Handle 409 and 400
@@ -219,7 +219,7 @@ export const Prediction = () => {
     setDeleteModal({
       isOpen: true,
       predictionId,
-      number
+      number,
     })
   }
 
@@ -227,7 +227,7 @@ export const Prediction = () => {
     try {
       setIsSubmitting(true)
       await lotteryApi.deletePrediction(deleteModal.predictionId)
-      setDeleteModal(prev => ({ ...prev, isOpen: false }))
+      setDeleteModal((prev) => ({ ...prev, isOpen: false }))
       fetchPredictions()
     } catch (err) {
       console.error('Delete failed', err)
@@ -242,7 +242,9 @@ export const Prediction = () => {
       <HeaderSection
         onBack={handleBack}
         title="Dự đoán của tôi"
-        icon={<span className="material-symbols-outlined filled-icon">history</span>}
+        icon={
+          <span className="material-symbols-outlined filled-icon">history</span>
+        }
       />
 
       <main className="flex-1 overflow-y-auto no-scrollbar pb-32">
@@ -251,15 +253,17 @@ export const Prediction = () => {
         <div className="px-4 py-4 space-y-6">
           <div className="flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-2 text-amber-700 border border-amber-100">
             <span className="material-symbols-outlined text-lg">schedule</span>
-            <span className="text-xs font-bold uppercase tracking-wider">Đang chờ kết quả (18:15)</span>
+            <span className="text-xs font-bold uppercase tracking-wider">
+              Đang chờ kết quả (18:15)
+            </span>
           </div>
 
           {loading ? (
-             <div className="flex justify-center py-10">
-               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-             </div>
+            <div className="flex justify-center py-10">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
           ) : error ? (
-             <div className="text-center text-red-500 py-10">{error}</div>
+            <div className="text-center text-red-500 py-10">{error}</div>
           ) : (
             categories.map((category) => (
               <PredictionCategoryCard
@@ -282,8 +286,12 @@ export const Prediction = () => {
           )}
 
           <div className="rounded-xl border-2 border-dashed border-slate-200 p-6 text-center">
-            <p className="text-sm font-medium text-slate-500">Mỗi hạng mục được phép dự đoán tối đa 10 bộ số.</p>
-            <button className="mt-2 text-sm font-bold text-primary hover:underline">Xem thể lệ chương trình</button>
+            <p className="text-sm font-medium text-slate-500">
+              Mỗi hạng mục được phép dự đoán tối đa 10 bộ số.
+            </p>
+            <button className="mt-2 text-sm font-bold text-primary hover:underline">
+              Xem thể lệ chương trình
+            </button>
           </div>
         </div>
       </main>
@@ -300,7 +308,7 @@ export const Prediction = () => {
       {/* Add Prediction Modal */}
       <Modal
         isOpen={addModal.isOpen}
-        onClose={() => setAddModal(prev => ({ ...prev, isOpen: false }))}
+        onClose={() => setAddModal((prev) => ({ ...prev, isOpen: false }))}
         title={`Thêm ${addModal.title}`}
       >
         <div className="flex flex-col gap-4">
@@ -312,13 +320,17 @@ export const Prediction = () => {
               type="number"
               value={inputNumber}
               onChange={(e) => setInputNumber(e.target.value)}
-              placeholder={addModal.maxDigits === 2 ? "00" : "000"}
+              placeholder={addModal.maxDigits === 2 ? '00' : '000'}
               className="block w-full rounded-xl border-slate-200 bg-slate-50 p-4 text-center text-3xl font-bold tracking-widest text-slate-800 placeholder:text-slate-300 focus:border-primary focus:bg-white focus:ring-primary outline-none transition-all"
               autoFocus
             />
-            {addError && <p className="mt-2 text-xs font-medium text-red-500 text-center">{addError}</p>}
+            {addError && (
+              <p className="mt-2 text-xs font-medium text-red-500 text-center">
+                {addError}
+              </p>
+            )}
           </div>
-          
+
           <button
             onClick={handleConfirmAdd}
             disabled={isSubmitting}
@@ -332,18 +344,24 @@ export const Prediction = () => {
       {/* Delete Prediction Modal */}
       <Modal
         isOpen={deleteModal.isOpen}
-        onClose={() => setDeleteModal(prev => ({ ...prev, isOpen: false }))}
+        onClose={() => setDeleteModal((prev) => ({ ...prev, isOpen: false }))}
         title="Xóa dự đoán"
       >
         <div className="flex flex-col gap-4 text-center">
           <div className="py-2">
-            <p className="text-slate-600 mb-2">Bạn có chắc chắn muốn xóa số này?</p>
-            <div className="text-4xl font-black text-slate-800">{deleteModal.number}</div>
+            <p className="text-slate-600 mb-2">
+              Bạn có chắc chắn muốn xóa số này?
+            </p>
+            <div className="text-4xl font-black text-slate-800">
+              {deleteModal.number}
+            </div>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-3">
-             <button
-              onClick={() => setDeleteModal(prev => ({ ...prev, isOpen: false }))}
+            <button
+              onClick={() =>
+                setDeleteModal((prev) => ({ ...prev, isOpen: false }))
+              }
               className="w-full rounded-xl bg-slate-100 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 transition-colors"
             >
               Hủy

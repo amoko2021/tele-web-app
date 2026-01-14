@@ -1,6 +1,6 @@
 import { UI_TEXT } from '../../../../config/uiText'
 
-export const TaskButton = ({ onClick }) => {
+export const TaskButton = ({ onClick, text = UI_TEXT.home.tasks.survey, amount = '+99,000VND' }) => {
   return (
     <a
       href="/test"
@@ -18,10 +18,10 @@ export const TaskButton = ({ onClick }) => {
         </div>
         <div className="flex flex-col items-start min-w-0">
           <span className="font-bold text-xs whitespace-nowrap text-slate-800">
-            {UI_TEXT.home.tasks.survey}
+            {text}
           </span>
           <span className="text-[10px] text-slate-500 whitespace-nowrap">
-            +99,000VND
+            {amount}
           </span>
         </div>
       </div>

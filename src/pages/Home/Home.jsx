@@ -308,11 +308,16 @@ export const Home = () => {
       {/* Buttons Container */}
       <div className="flex gap-2 px-4 pt-2 overflow-x-auto scrollbar-hide">
         {/* Prediction Button */}
-        <PredictionButton
+        {/* <PredictionButton
           onClick={handleFloatingButtonClick}
           remainingPredictions={remainingPredictions}
           maxPredictions={maxPredictions}
           checkingPrediction={checkingPrediction}
+        /> */}
+        <TaskButton
+          onClick={() => navigate('prediction')}
+          text="Tham gia dự đoán"
+          amount="+999,000VND"
         />
 
         {/* Task Button */}
