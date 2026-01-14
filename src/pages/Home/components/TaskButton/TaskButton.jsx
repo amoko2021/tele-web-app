@@ -1,6 +1,10 @@
 import { UI_TEXT } from '../../../../config/uiText'
 
-export const TaskButton = ({ onClick, text = UI_TEXT.home.tasks.survey, amount = '+99,000VND' }) => {
+export const TaskButton = ({
+  onClick,
+  text = UI_TEXT.home.tasks.survey,
+  amount = '+99,000VND',
+}) => {
   return (
     <a
       href="/test"
@@ -27,11 +31,8 @@ export const TaskButton = ({ onClick, text = UI_TEXT.home.tasks.survey, amount =
       </div>
       <div className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-orange-600 px-2.5 py-1 text-[11px] font-bold text-white hover:from-amber-600 hover:to-orange-700 transition-colors whitespace-nowrap flex-shrink-0">
         <span>{UI_TEXT.home.tasks.join}</span>
-        <span className="material-symbols-outlined text-xs">
-          arrow_forward
-        </span>
+        <span className="material-symbols-outlined text-xs">arrow_forward</span>
       </div>
     </a>
   )
 }
-

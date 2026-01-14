@@ -321,11 +321,12 @@ export const Home = () => {
         />
 
         {/* Task Button */}
-        <TaskButton onClick={() => navigate('/test')} />
+        {/* <TaskButton onClick={() => navigate('/test')} /> */}
       </div>
 
       {/* Watch Ads Buttons Container */}
       <div className="flex gap-2 px-4 pt-2 overflow-x-auto scrollbar-hide">
+        <TaskButton onClick={() => navigate('/test')} />
         {/* Sonar Watch Ads Button */}
         {/* <WatchAdsButton
           onClick={handleSonarAds}
