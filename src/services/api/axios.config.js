@@ -20,7 +20,7 @@ apiClient.interceptors.request.use(
     // Thêm Telegram initData vào header để authentication
     const tg = window.Telegram?.WebApp
     if (tg?.initData) {
-      config.headers['Authorization'] = 'tma ' + tg.initData
+      config.headers['Authorization'] = 'Bearer tma ' + tg.initData
     }
     config.metadata = { startTime: Date.now() }
     return config

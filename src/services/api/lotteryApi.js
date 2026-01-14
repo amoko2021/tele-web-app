@@ -262,6 +262,149 @@ export const lotteryApi = {
       throw error
     }
   },
+
+  // Lấy tất cả dự đoán của user (grouped by category)
+  getMyPredictions: async () => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          // Mock data format match spec
+          resolve({
+            ok: true,
+            data: {
+              categories: [
+                {
+                  id: 1,
+                  title: 'Giải ĐB 2 số',
+                  subtitle: 'Tối đa 10 lượt dự đoán',
+                  count: 2,
+                  max_count: 10,
+                  color: 'red',
+                  icon: 'stars',
+                  numbers: ['89', '23'],
+                  prediction_ids: [1, 2],
+                  update_time: '08:30',
+                },
+                {
+                  id: 2,
+                  title: 'Lô Tô 2 số',
+                  subtitle: 'Tối đa 10 lượt dự đoán',
+                  count: 0,
+                  max_count: 10,
+                  color: 'blue',
+                  icon: 'filter_2',
+                  numbers: [],
+                  prediction_ids: [],
+                  update_time: '--:--',
+                },
+                {
+                  id: 3,
+                  title: 'Đặc Biệt 3 số',
+                  subtitle: 'Tối đa 10 lượt dự đoán',
+                  count: 1,
+                  max_count: 10,
+                  color: 'orange',
+                  icon: 'workspace_premium',
+                  numbers: ['489'],
+                  prediction_ids: [3],
+                  update_time: '10:45',
+                },
+                {
+                  id: 4,
+                  title: 'Lô Tô 3 số',
+                  subtitle: 'Tối đa 10 lượt dự đoán',
+                  count: 0,
+                  max_count: 10,
+                  color: 'indigo',
+                  icon: 'filter_3',
+                  numbers: [],
+                  prediction_ids: [],
+                  update_time: '--:--',
+                },
+              ],
+            },
+          })
+        }, 500)
+      })
+    }
+
+    try {
+      const response = await apiClient.get('/my-predictions')
+      return response
+    } catch (error) {
+      console.error('Error fetching my predictions:', error)
+      throw error
+    }
+  },
+
+  // Thêm dự đoán mới
+  addPrediction: async (category, number) => {
+    if (USE_MOCK) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // Simple validation logic for mock
+          if (number === '00') {
+             // Example conflict
+             reject({
+                response: {
+                    data: {
+                        ok: false,
+                        error: "This prediction already exists"
+                    },
+                    status: 409
+                }
+             })
+             return;
+          }
+          resolve({
+            ok: true,
+            message: 'Prediction added successfully',
+            data: {
+              id: Date.now(),
+              number: number,
+              created_at: new Date().toISOString(),
+            },
+          })
+        }, 500)
+      })
+    }
+
+    try {
+      const response = await apiClient.post('/my-predictions', {
+        category,
+        number,
+      })
+      return response
+    } catch (error) {
+      console.error('Error adding prediction:', error)
+      throw error
+    }
+  },
+
+  // Xóa dự đoán
+  deletePrediction: async (predictionId) => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            message: 'Prediction deleted successfully',
+            data: {
+              deleted: true,
+            },
+          })
+        }, 500)
+      })
+    }
+
+    try {
+      const response = await apiClient.delete(`/my-predictions/${predictionId}`)
+      return response
+    } catch (error) {
+      console.error('Error deleting prediction:', error)
+      throw error
+    }
+  },
 }
 
 export default lotteryApi

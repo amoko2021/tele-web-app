@@ -6,9 +6,11 @@ export const PredictionCategoryCard = ({
   color,
   icon,
   numbers,
+  predictionIds = [], // Array of IDs corresponding to numbers
   updateTime,
   onManage,
-  onAdd
+  onAdd,
+  onDelete // New prop for handling deletion
 }) => {
   const colorClasses = {
     red: {
@@ -58,9 +60,15 @@ export const PredictionCategoryCard = ({
   const renderNumbers = () => {
     const elements = []
     numbers.forEach((num, i) => {
+      const predId = predictionIds[i]
       elements.push(
-        <div key={i} className={`flex aspect-square items-center justify-center rounded-xl ${theme.bg} ${theme.border}`}>
+        <div 
+          key={i} 
+          className={`relative group/item flex aspect-square items-center justify-center rounded-xl ${theme.bg} ${theme.border} cursor-pointer transition-transform active:scale-95`}
+          onClick={() => onDelete && onDelete(predId, num)}
+        >
           <span className={`font-black ${theme.text} ${num.length > 2 ? 'text-xl' : 'text-2xl'}`}>{num}</span>
+          {/* Optional delete indicator on hover if desktop, or just implied click-to-manage */}
         </div>
       )
     })
@@ -102,7 +110,7 @@ export const PredictionCategoryCard = ({
           <span className="text-[10px] font-bold text-primary flex items-center gap-1 cursor-pointer" onClick={onManage}>
             {count > 0 ? (
               <>
-                Sửa <span className="material-symbols-outlined text-sm">edit</span>
+                Quản lý <span className="material-symbols-outlined text-sm">settings</span>
               </>
             ) : (
               'Quản lý'
