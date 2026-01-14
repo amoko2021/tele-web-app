@@ -68,6 +68,7 @@ export const Home = () => {
       },
       onError: (error) => {
         console.error('Monetag ad error:', error)
+        alert("Quảng cáo hiện không khả dụng. Vui lòng đợi hoặc tải lại trang!!!")
       },
     })
 
