@@ -1,12 +1,29 @@
+import { useState, useEffect } from 'react'
+
 export const DateDisplay = () => {
+  const [dateStr, setDateStr] = useState('')
+
+  useEffect(() => {
+    const now = new Date()
+    const formatter = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })
+    setDateStr(formatter.format(now))
+  }, [])
+
   return (
     <div className="px-4 pt-6 pb-2">
       <div className="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-slate-100 shadow-sm">
         <div className="flex items-center gap-2 text-slate-500">
-          <span className="material-symbols-outlined text-sm">calendar_today</span>
+          <span className="material-symbols-outlined text-sm">
+            calendar_today
+          </span>
           <span className="text-sm font-semibold">Dự đoán hôm nay</span>
         </div>
-        <span className="text-sm font-bold text-slate-900">24/10/2023</span>
+        <span className="text-sm font-bold text-slate-900">{dateStr}</span>
       </div>
     </div>
   )

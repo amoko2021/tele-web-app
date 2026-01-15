@@ -318,6 +318,7 @@ export const Home = () => {
           onClick={() => navigate('prediction')}
           text="Tham gia dự đoán"
           amount="+999,000VND"
+          gradientColors='from-blue-500 to-sky-600'
         />
 
         {/* Task Button */}
