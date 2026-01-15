@@ -59,7 +59,16 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       setMonetagWatching(true)
 
       try {
-        // Show Rewarded Interstitial ad
+        // 1. Attempt to preload (or check availability)
+        // As per docs: show_XXX({ type: 'preload', ... }).then(...).catch(...)
+        try {
+          await adHandler({ type: 'preload', ymid })
+        } catch (preloadError) {
+          console.warn('Monetag preload failed, trying fallback', preloadError)
+          throw preloadError // Re-throw to go to outer catch
+        }
+
+        // 2. Show Rewarded Interstitial ad
         await adHandler({ ymid })
 
         // Ad completed - reward user
