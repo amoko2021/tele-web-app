@@ -16,7 +16,10 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       onError,
     })
 
-  const adHandler = createAdHandler(zoneId)
+  const adHandler = useMemo(
+    () => (zoneId ? createAdHandler(zoneId) : null),
+    [zoneId]
+  )
 
   const preloadAd = useCallback(
     async (ymid) => {
@@ -78,7 +81,10 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
         } catch (error) {
           console.error('Error updating balance:', error)
           alert(
-            UI_TEXT.home.alerts.rewardUpdateError.replace('{amount}', rewardAmount)
+            UI_TEXT.home.alerts.rewardUpdateError.replace(
+              '{amount}',
+              rewardAmount
+            )
           )
         }
 
