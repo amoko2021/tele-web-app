@@ -13,6 +13,7 @@ export const PredictionCategoryCard = ({
   onDelete, // New prop for handling deletion
   isTimeUp = false, // New prop to indicate if prediction time is over
   onAdClick, // New prop for handling ad click when time is up
+  reward,
 }) => {
   const colorClasses = {
     red: {
@@ -126,11 +127,18 @@ export const PredictionCategoryCard = ({
               <p className="text-[10px] text-slate-500">{subtitle}</p>
             </div>
           </div>
-          <span
-            className={`text-[10px] font-bold ${theme.badge} px-2 py-1 rounded`}
-          >
-            {count}/{maxCount}
-          </span>
+          <div className="flex items-center gap-2">
+            {reward && (
+              <span className="text-[10px] font-bold bg-amber-100 text-amber-600 px-2 py-1 rounded whitespace-nowrap">
+                {reward}
+              </span>
+            )}
+            <span
+              className={`text-[10px] font-bold ${theme.badge} px-2 py-1 rounded`}
+            >
+              {count}/{maxCount}
+            </span>
+          </div>
         </div>
         <div className="grid grid-cols-5 gap-2">{renderNumbers()}</div>
         <div className="flex items-center justify-between border-t border-slate-50 pt-3">

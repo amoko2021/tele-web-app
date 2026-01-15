@@ -42,6 +42,9 @@ export const Prediction = () => {
     number: '',
   })
 
+  // Rules Modal State
+  const [rulesModalOpen, setRulesModalOpen] = useState(false)
+
   // Helper function to check if time is up (18:00 VN time)
   const checkIsTimeUp = () => {
     const nowVN = new Date().toLocaleString('en-US', {
@@ -67,6 +70,21 @@ export const Prediction = () => {
   }
 
   const isAfter1830 = checkIsAfter1830()
+
+  const getRewardValue = (id) => {
+    switch (id) {
+      case 1:
+        return '+15k'
+      case 2:
+        return '3k'
+      case 3:
+        return '+50K'
+      case 4:
+        return '+10K'
+      default:
+        return ''
+    }
+  }
 
   // Helper to open modal
   const openAddModal = useCallback((category) => {
@@ -371,6 +389,7 @@ export const Prediction = () => {
                 onDelete={handleDelete}
                 isTimeUp={isTimeUp}
                 onAdClick={() => handleAdClick(category)}
+                reward={getRewardValue(category.id)}
               />
             ))
           )}
@@ -379,7 +398,10 @@ export const Prediction = () => {
             <p className="text-sm font-medium text-slate-500">
               Mỗi hạng mục được phép dự đoán tối đa 10 bộ số.
             </p>
-            <button className="mt-2 text-sm font-bold text-primary hover:underline">
+            <button
+              className="mt-2 text-sm font-bold text-primary hover:underline"
+              onClick={() => setRulesModalOpen(true)}
+            >
               Xem thể lệ chương trình
             </button>
           </div>
@@ -464,6 +486,59 @@ export const Prediction = () => {
               {isSubmitting ? '...' : 'Xóa'}
             </button>
           </div>
+        </div>
+      </Modal>
+
+      {/* Rules Modal */}
+      <Modal
+        isOpen={rulesModalOpen}
+        onClose={() => setRulesModalOpen(false)}
+        title="Thể lệ chương trình"
+      >
+        <div className="flex flex-col gap-4 text-sm text-slate-600">
+          <div className="space-y-2">
+            <h4 className="font-bold text-slate-800">1. Thời gian dự đoán</h4>
+            <p>
+              Hệ thống mở cổng dự đoán từ{' '}
+              <span className="font-bold text-primary">00:00</span> đến{' '}
+              <span className="font-bold text-primary">18:00</span> hàng ngày.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <h4 className="font-bold text-slate-800">2. Quy định tham gia</h4>
+            <p>
+              Mỗi lượt dự đoán bạn cần xem 1 quảng cáo ngắn để ủng hộ hệ thống.
+            </p>
+            <p>Mỗi hạng mục được phép dự đoán tối đa 10 bộ số.</p>
+          </div>
+
+          <div className="space-y-2">
+            <h4 className="font-bold text-slate-800">3. Cơ cấu giải thưởng</h4>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>
+                Đặc biệt 2 số:{' '}
+                <span className="font-bold text-amber-600">+15k</span>
+              </li>
+              <li>
+                Lô 2 số: <span className="font-bold text-amber-600">3k</span>
+              </li>
+              <li>
+                Đặc biệt 3 số:{' '}
+                <span className="font-bold text-amber-600">+50K</span>
+              </li>
+              <li>
+                Lô 3 số: <span className="font-bold text-amber-600">+10K</span>
+              </li>
+            </ul>
+          </div>
+
+          <button
+            onClick={() => setRulesModalOpen(false)}
+            className="w-full rounded-xl bg-slate-100 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 transition-colors mt-2"
+          >
+            Đã hiểu
+          </button>
         </div>
       </Modal>
     </div>
