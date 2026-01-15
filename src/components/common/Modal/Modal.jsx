@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import styles from './Modal.module.css'
 
 export const Modal = ({ isOpen, onClose, title, children }) => {
   useEffect(() => {
@@ -15,19 +16,20 @@ export const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex h-full w-full items-center justify-center bg-slate-900/60 p-4 pb-24 backdrop-blur-sm">
-      <div className="absolute inset-0 cursor-pointer" onClick={onClose}></div>
-      <div className="relative w-full max-w-sm max-h-[75vh] flex flex-col overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-slate-900/5">
-        <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/80 px-5 py-4 flex-shrink-0">
-          <h3 className="text-lg font-bold text-slate-800">{title}</h3>
+    <div className={styles.overlay}>
+      <div className={styles.backdrop} onClick={onClose}></div>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h3 className={styles.title}>{title}</h3>
           <button
             onClick={onClose}
-            className="flex size-8 cursor-pointer items-center justify-center rounded-full text-slate-400 hover:bg-slate-200/80 hover:text-slate-600 transition-colors"
+            className={styles.closeButton}
+            aria-label="Close modal"
           >
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
-        <div className="p-5 overflow-y-auto flex-1">{children}</div>
+        <div className={styles.content}>{children}</div>
       </div>
     </div>
   )

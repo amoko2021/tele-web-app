@@ -10,20 +10,19 @@
   width: calc(100% - 32px);
   max-width: 380px;
   padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  border-radius: 20px;
-  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.18),
-    0 2px 0 rgba(255, 255, 255, 0.7) inset;
-  backdrop-filter: blur(12px);
-  z-index: 1000;
+  background: var(--color-bg-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-glass), var(--shadow-glass-inset);
+  backdrop-filter: blur(var(--blur-glass));
+  z-index: var(--z-navbar);
 }
 
 .navbar::before {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 20px;
+  border-radius: var(--radius-lg);
   background: radial-gradient(
     circle at 50% 120%,
     rgba(59, 130, 246, 0.2),
@@ -45,21 +44,21 @@
   min-height: 50px;
   padding: 6px 8px;
   text-decoration: none;
-  color: #64748b;
+  color: var(--color-text-secondary);
   background: transparent;
-  border-radius: 14px;
+  border-radius: var(--radius-md);
   transition: all 0.2s ease;
 }
 
 .navItem:hover {
-  color: #0ea5e9;
-  background: rgba(14, 165, 233, 0.08);
+  color: var(--color-primary);
+  background: var(--color-bg-glass-hover);
   transform: translateY(-2px);
 }
 
 .navItem.active {
-  color: #0ea5e9;
-  background: rgba(14, 165, 233, 0.12);
+  color: var(--color-primary);
+  background: var(--color-bg-glass-active);
   box-shadow: 0 10px 24px rgba(14, 165, 233, 0.18);
 }
 
@@ -70,7 +69,7 @@
 .primaryItem {
   flex: 1.2;
   color: #0b2237;
-  background: linear-gradient(135deg, #facc15, #fb923c);
+  background: linear-gradient(135deg, var(--color-accent-gradient-start), var(--color-accent-gradient-end));
   box-shadow: 0 14px 28px rgba(251, 146, 60, 0.35),
     0 0 0 1px rgba(255, 255, 255, 0.35) inset;
 }
@@ -117,36 +116,14 @@
   border-radius: 50%;
 }
 
-/* Dark mode support */
+/* Dark mode overrides that aren't handled by variables */
 @media (prefers-color-scheme: dark) {
-  .navbar {
-    background: rgba(15, 23, 42, 0.9);
-    border-color: rgba(51, 65, 85, 0.6);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45),
-      0 1px 0 rgba(255, 255, 255, 0.04) inset;
-  }
-
   .navbar::before {
     background: radial-gradient(
       circle at 50% 120%,
       rgba(14, 165, 233, 0.15),
       transparent 45%
     );
-  }
-
-  .navItem {
-    color: #cbd5e1;
-  }
-
-  .navItem:hover {
-    background: rgba(59, 130, 246, 0.12);
-    color: #7dd3fc;
-  }
-
-  .navItem.active {
-    color: #38bdf8;
-    background: rgba(14, 165, 233, 0.14);
-    box-shadow: 0 10px 24px rgba(14, 165, 233, 0.28);
   }
 
   .primaryItem {

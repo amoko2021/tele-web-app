@@ -1,6 +1,6 @@
 .app {
   min-height: 100vh;
   position: relative;
-  background: #fff;
-  color: #333;
+  background: var(--color-bg-main);
+  color: var(--color-text-main);
 }
