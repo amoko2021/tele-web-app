@@ -129,7 +129,7 @@ export const PredictionCategoryCard = ({
           </div>
           <div className="flex items-center gap-2">
             {reward && (
-              <span className="text-[10px] font-bold bg-amber-100 text-amber-600 px-2 py-1 rounded whitespace-nowrap">
+              <span className="text-[10px] font-bold bg-lime-300 text-amber-600 px-2 py-1 rounded whitespace-nowrap">
                 {reward}
               </span>
             )}

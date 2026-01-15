@@ -74,13 +74,13 @@ export const Prediction = () => {
   const getRewardValue = (id) => {
     switch (id) {
       case 1:
-        return '+15k'
+        return '+15,000VND'
       case 2:
-        return '3k'
+        return '+3,000VND/1số'
       case 3:
-        return '+50K'
+        return '+50,000VND'
       case 4:
-        return '+10K'
+        return '+10,000VND/1số'
       default:
         return ''
     }
