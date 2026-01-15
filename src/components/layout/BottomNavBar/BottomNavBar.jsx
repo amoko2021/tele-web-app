@@ -1,16 +1,17 @@
 import { NavLink } from 'react-router-dom'
 import { Home, User, Navigation } from 'lucide-react'
 import styles from './BottomNavBar.module.css'
+import { UI_TEXT } from '../../../config/uiText'
 
 const navItems = [
-  { path: '/account', icon: User, label: 'Tài khoản' },
-  { path: '/', icon: Home, label: 'Trang chủ', variant: 'primary' },
-  { path: '/invite', icon: Navigation, label: 'Mời bạn bè' },
+  { path: '/account', icon: User, label: UI_TEXT.navigation.account },
+  { path: '/', icon: Home, label: UI_TEXT.navigation.home, variant: 'primary' },
+  { path: '/invite', icon: Navigation, label: UI_TEXT.navigation.invite },
 ]
 
 export const BottomNavBar = () => {
   return (
-    <nav className={styles.navbar} aria-label="Điều hướng chính">
+    <nav className={styles.navbar} aria-label={UI_TEXT.navigation.ariaLabel}>
       {navItems.map(({ path, icon: Icon, label, variant }) => (
         <NavLink
           key={path}

@@ -1,7 +1,8 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useMemo } from 'react'
 import { userApi } from '../services/api'
 import createAdHandler from 'monetag-tg-sdk'
 import { useSonarAds } from './useSonarAds'
+import { UI_TEXT } from '../config/uiText'
 
 export function useMonetag({ userId, zoneId, onReward, onError }) {
   const [monetagWatching, setMonetagWatching] = useState(false)
@@ -15,7 +16,10 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       onError,
     })
 
-  const adHandler = zoneId ? createAdHandler(zoneId) : null
+  const adHandler = useMemo(
+    () => (zoneId ? createAdHandler(zoneId) : null),
+    [zoneId]
+  )
 
   const preloadAd = useCallback(
     async (ymid) => {
@@ -40,13 +44,14 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
   const showMonetagAd = useCallback(
     async (ymid, rewardAmount) => {
       if (!userId) {
-        alert('Không tìm thấy thông tin user!')
+        alert(UI_TEXT.home.alerts.noUser)
         return false
       }
 
       // Fallback to Sonar if Monetag handler is missing
       if (!adHandler) {
         console.warn('Monetag handler missing, falling back to Sonar')
+        alert(UI_TEXT.home.alerts.monetagFallback)
         await showSonarAds(rewardAmount)
         return true
       }
@@ -54,26 +59,27 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       setMonetagWatching(true)
 
       try {
-        // Use Rewarded Popup format with type: 'pop'
+        // Show Rewarded Interstitial ad
         await adHandler({ ymid })
 
-        // Popup attempt completed - reward user
+        // Ad completed - reward user
         try {
-          const currentBalance = await userApi.getUserInfo(userId)
+          // const currentBalance = await userApi.getUserInfo(userId)
           // const newBalance = (currentBalance?.data?.balance || 0) + rewardAmount
           await userApi.updateBalance(userId, rewardAmount)
-          // alert(`Bạn đã nhận được ${rewardAmount} đ khi xem quảng cáo!`)
+          // alert(UI_TEXT.home.alerts.rewardFromAd.replace('{amount}', rewardAmount))
           onReward?.()
         } catch (error) {
           console.error('Error updating balance:', error)
           alert(
-            `Bạn đã nhận được ${rewardAmount} đ nhưng có lỗi khi cập nhật số dư!`
+            UI_TEXT.home.alerts.rewardUpdateError.replace('{amount}', rewardAmount)
           )
         }
 
         return true
       } catch (error) {
-        console.error('Monetag popup ad failed, falling back to Sonar:', error)
+        console.error('Monetag ad failed, falling back to Sonar:', error)
+        alert(UI_TEXT.home.alerts.monetagError)
         // Fallback to Sonar on error
         setMonetagWatching(false) // Ensure we reset this before switching
         await showSonarAds(rewardAmount)
@@ -82,7 +88,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
         setMonetagWatching(false)
       }
     },
-    [userId, onReward, onError, adHandler, showSonarAds]
+    [userId, onReward, adHandler, showSonarAds]
   )
 
   const handleWatchAds = useCallback(

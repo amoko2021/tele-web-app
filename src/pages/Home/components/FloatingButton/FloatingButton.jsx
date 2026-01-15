@@ -1,3 +1,5 @@
+import { UI_TEXT } from '../../../../config/uiText'
+
 export const FloatingButton = ({
   onClick,
   remainingPredictions,
@@ -15,13 +17,13 @@ export const FloatingButton = ({
         </span>
         <div className="flex flex-col items-start">
           <span className="font-bold text-sm leading-tight">
-            Tham gia dự đoán
+            {UI_TEXT.home.prediction.join}
           </span>
           {!checkingPrediction && (
             <span className="text-[10px] opacity-90 leading-tight">
               {remainingPredictions > 0
-                ? `Còn ${remainingPredictions}/${maxPredictions} lượt`
-                : 'Xem lịch sử'}
+                ? UI_TEXT.home.prediction.remaining.replace('{count}', `${remainingPredictions}/${maxPredictions}`)
+                : UI_TEXT.common.history}
             </span>
           )}
         </div>

@@ -1,3 +1,5 @@
+import { UI_TEXT } from '../../../config/uiText'
+
 export const FriendsTable = ({ friends, loading }) => {
   if (loading) {
      return (
@@ -11,21 +13,21 @@ export const FriendsTable = ({ friends, loading }) => {
 
   return (
     <section className="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-soft border border-border-light dark:border-border-dark space-y-4">
-      <h2 className="text-xl font-semibold text-gray-800 dark:text-text-dark">Bạn bè đã mời</h2>
+      <h2 className="text-xl font-semibold text-gray-800 dark:text-text-dark">{UI_TEXT.settings.friends.title}</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm whitespace-nowrap">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b dark:border-gray-600">
             <tr>
-              <th scope="col" className="px-4 py-3">Tên</th>
-              <th scope="col" className="px-4 py-3 text-center">Trạng thái</th>
-              <th scope="col" className="px-4 py-3 text-right">Thu nhập</th>
+              <th scope="col" className="px-4 py-3">{UI_TEXT.settings.friends.name}</th>
+              <th scope="col" className="px-4 py-3 text-center">{UI_TEXT.settings.friends.statusLabel}</th>
+              <th scope="col" className="px-4 py-3 text-right">{UI_TEXT.settings.friends.income}</th>
             </tr>
           </thead>
           <tbody>
             {friends.length === 0 ? (
                  <tr>
                     <td colSpan="3" className="px-4 py-8 text-center text-gray-500">
-                        Chưa có bạn bè nào. Hãy mời ngay!
+                        {UI_TEXT.settings.friends.empty}
                     </td>
                  </tr>
             ) : (
@@ -43,9 +45,9 @@ export const FriendsTable = ({ friends, loading }) => {
                           </td>
                           <td className="px-4 py-3 text-center">
                             {isRewarded ? (
-                                <span className="bg-accent-green/10 text-accent-green text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-accent-green/20">Hoàn tất</span>
+                                <span className="bg-accent-green/10 text-accent-green text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-accent-green/20">{UI_TEXT.settings.friends.status.rewarded}</span>
                             ) : (
-                                <span className="bg-accent-red/10 text-accent-red text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-accent-red/20">Đang chờ</span>
+                                <span className="bg-accent-red/10 text-accent-red text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-accent-red/20">{UI_TEXT.settings.friends.status.pending}</span>
                             )}
                           </td>
                           <td className={`px-4 py-3 text-right font-medium ${isRewarded ? 'text-accent-green' : 'text-gray-500'}`}>
@@ -59,7 +61,7 @@ export const FriendsTable = ({ friends, loading }) => {
         </table>
       </div>
       <div className="mt-4 text-center p-8 bg-gray-50 dark:bg-gray-700 rounded-lg border border-dashed border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 text-sm">
-        <p>Không có lượt giới thiệu nào nữa để hiển thị.</p>
+        <p>{UI_TEXT.settings.friends.noMore}</p>
       </div>
     </section>
   )

@@ -1,3 +1,5 @@
+import { UI_TEXT } from '../../../../config/uiText'
+
 export const DateNavigation = ({
   date,
   onPreviousDay,
@@ -19,7 +21,7 @@ export const DateNavigation = ({
       </button>
       <div className="flex flex-col items-center">
         <span className="text-xs font-medium opacity-90">
-          {isToday ? 'Hôm nay' : 'Lịch sử'}
+          {isToday ? UI_TEXT.common.today : UI_TEXT.common.history}
         </span>
         <span className="text-sm font-bold">{date}</span>
       </div>

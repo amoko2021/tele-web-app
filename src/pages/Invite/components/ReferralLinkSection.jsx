@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { UI_TEXT } from '../../../config/uiText'
 
 export const ReferralLinkSection = ({ referralLink, onShare }) => {
   const [copied, setCopied] = useState(false)
@@ -11,7 +12,7 @@ export const ReferralLinkSection = ({ referralLink, onShare }) => {
 
   return (
     <section className="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-soft border border-border-light dark:border-border-dark space-y-4">
-      <h2 className="text-xl font-semibold text-gray-800 dark:text-text-dark">Liên kết giới thiệu của bạn</h2>
+      <h2 className="text-xl font-semibold text-gray-800 dark:text-text-dark">{UI_TEXT.settings.invite.refLink}</h2>
       <div className="relative">
         <label className="sr-only" htmlFor="referral-link-input">Your referral link</label>
         <input
@@ -38,7 +39,7 @@ export const ReferralLinkSection = ({ referralLink, onShare }) => {
         className="w-full bg-primary hover:bg-primary-hover text-white font-semibold text-base py-3 rounded-lg shadow-sm transform active:scale-[0.99] transition-all flex items-center justify-center gap-2 tracking-wide"
       >
         <span className="material-symbols-outlined text-lg fill-1">share</span>
-        Chia sẻ liên kết
+        {UI_TEXT.settings.invite.button}
       </button>
     </section>
   )

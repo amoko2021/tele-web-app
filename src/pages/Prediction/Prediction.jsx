@@ -9,6 +9,7 @@ import { useTelegram } from '../../hooks/useTelegram'
 import { useAdsgram } from '../../hooks/useAdsgram'
 import { useSonarAds } from '../../hooks/useSonarAds'
 import { useMonetag } from '../../hooks/useMonetag'
+import { UI_TEXT } from '../../config/uiText'
 // import { HeaderSection } from './components/HeaderSection'
 
 export const Prediction = () => {
@@ -147,7 +148,7 @@ export const Prediction = () => {
       // Show success notification
       if (window.Telegram?.WebApp) {
         window.Telegram.WebApp.showAlert(
-          `🎉 Bạn nhận được ${randomAmount}đ từ quảng cáo!`
+          UI_TEXT.home.alerts.rewardFromAd.replace('{amount}', randomAmount)
         )
       }
 
@@ -155,7 +156,7 @@ export const Prediction = () => {
     } catch (err) {
       console.error('Failed to add money after ad:', err)
       if (window.Telegram?.WebApp) {
-        window.Telegram.WebApp.showAlert('Có lỗi xảy ra, vui lòng thử lại!')
+        window.Telegram.WebApp.showAlert(UI_TEXT.common.error)
       }
     }
   }, [userId])
@@ -219,7 +220,7 @@ export const Prediction = () => {
       }
     } catch (err) {
       console.error('Failed to fetch predictions', err)
-      setError('Không thể tải dữ liệu dự đoán')
+      setError(UI_TEXT.prediction.loadingError)
     } finally {
       setLoading(false)
     }
@@ -298,7 +299,7 @@ export const Prediction = () => {
 
     // Validate length
     if (inputNumber.length !== addModal.maxDigits) {
-      setAddError(`Vui lòng nhập đủ ${addModal.maxDigits} chữ số`)
+      setAddError(UI_TEXT.prediction.inputLabel.replace('{digits}', addModal.maxDigits))
       return
     }
 
@@ -314,14 +315,14 @@ export const Prediction = () => {
       // Handle 409 and 400
       if (err.response) {
         if (err.response.status === 409) {
-          setAddError('Số này đã được dự đoán')
+          setAddError(UI_TEXT.prediction.alreadyPredicted)
         } else if (err.response.status === 400) {
-          setAddError(err.response.data?.error || 'Đã đạt giới hạn dự đoán')
+          setAddError(err.response.data?.error || UI_TEXT.prediction.limitReached)
         } else {
-          setAddError('Đã có lỗi xảy ra')
+          setAddError(UI_TEXT.common.error)
         }
       } else {
-        setAddError('Lỗi kết nối')
+        setAddError(UI_TEXT.prediction.connectionError)
       }
     } finally {
       setIsSubmitting(false)
@@ -344,7 +345,7 @@ export const Prediction = () => {
       fetchPredictions()
     } catch (err) {
       console.error('Delete failed', err)
-      alert('Không thể xóa dự đoán')
+      alert(UI_TEXT.prediction.deleteError)
     } finally {
       setIsSubmitting(false)
     }
@@ -360,8 +361,8 @@ export const Prediction = () => {
             <span className="material-symbols-outlined text-lg">schedule</span>
             <span className="text-xs font-bold uppercase tracking-wider">
               {isAfter1830
-                ? 'Thời gian dự đoán kết thúc. Nhấn vào biểu tượng quảng cáo để nhận 10-100đ'
-                : 'Đang chờ kết quả (18:15)'}
+                ? UI_TEXT.prediction.timeOver
+                : UI_TEXT.prediction.waitingResults}
             </span>
           </div>
 
@@ -396,13 +397,13 @@ export const Prediction = () => {
 
           <div className="rounded-xl border-2 border-dashed border-slate-200 p-6 text-center">
             <p className="text-sm font-medium text-slate-500">
-              Mỗi hạng mục được phép dự đoán tối đa 10 bộ số.
+              {UI_TEXT.home.rules.limit}
             </p>
             <button
               className="mt-2 text-sm font-bold text-primary hover:underline"
               onClick={() => setRulesModalOpen(true)}
             >
-              Xem thể lệ chương trình
+              {UI_TEXT.home.rules.view}
             </button>
           </div>
         </div>
@@ -421,12 +422,12 @@ export const Prediction = () => {
       <Modal
         isOpen={addModal.isOpen}
         onClose={() => setAddModal((prev) => ({ ...prev, isOpen: false }))}
-        title={`Thêm ${addModal.title}`}
+        title={UI_TEXT.prediction.addTitle.replace('{title}', addModal.title)}
       >
         <div className="flex flex-col gap-4">
           <div>
             <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">
-              Nhập số dự đoán ({addModal.maxDigits} số)
+              {UI_TEXT.prediction.inputLabel.replace('{digits}', addModal.maxDigits)}
             </label>
             <input
               type="number"
@@ -448,7 +449,7 @@ export const Prediction = () => {
             disabled={isSubmitting}
             className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-white hover:bg-blue-600 disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
           >
-            {isSubmitting ? 'Đang xử lý...' : 'Xác nhận'}
+            {isSubmitting ? UI_TEXT.common.loading : UI_TEXT.common.confirm}
           </button>
         </div>
       </Modal>
@@ -457,12 +458,12 @@ export const Prediction = () => {
       <Modal
         isOpen={deleteModal.isOpen}
         onClose={() => setDeleteModal((prev) => ({ ...prev, isOpen: false }))}
-        title="Xóa dự đoán"
+        title={UI_TEXT.prediction.deleteTitle}
       >
         <div className="flex flex-col gap-4 text-center">
           <div className="py-2">
             <p className="text-slate-600 mb-2">
-              Bạn có chắc chắn muốn xóa số này?
+              {UI_TEXT.prediction.confirmDelete}
             </p>
             <div className="text-4xl font-black text-slate-800">
               {deleteModal.number}
@@ -476,14 +477,14 @@ export const Prediction = () => {
               }
               className="w-full rounded-xl bg-slate-100 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 transition-colors"
             >
-              Hủy
+              {UI_TEXT.common.cancel}
             </button>
             <button
               onClick={handleConfirmDelete}
               disabled={isSubmitting}
               className="w-full rounded-xl bg-red-500 py-3 text-sm font-bold text-white hover:bg-red-600 disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
             >
-              {isSubmitting ? '...' : 'Xóa'}
+              {isSubmitting ? '...' : UI_TEXT.common.delete}
             </button>
           </div>
         </div>
@@ -493,42 +494,38 @@ export const Prediction = () => {
       <Modal
         isOpen={rulesModalOpen}
         onClose={() => setRulesModalOpen(false)}
-        title="Thể lệ chương trình"
+        title={UI_TEXT.home.rules.title}
       >
         <div className="flex flex-col gap-4 text-sm text-slate-600">
           <div className="space-y-2">
-            <h4 className="font-bold text-slate-800">1. Thời gian dự đoán</h4>
+            <h4 className="font-bold text-slate-800">{UI_TEXT.home.rules.timeTitle}</h4>
             <p>
-              Hệ thống mở cổng dự đoán từ{' '}
-              <span className="font-bold text-primary">00:00</span> đến{' '}
-              <span className="font-bold text-primary">18:00</span> hàng ngày.
+              {UI_TEXT.home.rules.timeContent.replace('{start}', '00:00').replace('{end}', '18:00')}
             </p>
           </div>
 
           <div className="space-y-2">
-            <h4 className="font-bold text-slate-800">2. Quy định tham gia</h4>
+            <h4 className="font-bold text-slate-800">{UI_TEXT.home.rules.ruleTitle}</h4>
             <p>
-              Mỗi lượt dự đoán bạn cần xem 1 quảng cáo ngắn để ủng hộ hệ thống.
+              {UI_TEXT.home.rules.ruleContent1}
             </p>
-            <p>Mỗi hạng mục được phép dự đoán tối đa 10 bộ số.</p>
+            <p>{UI_TEXT.home.rules.ruleContent2}</p>
           </div>
 
           <div className="space-y-2">
-            <h4 className="font-bold text-slate-800">3. Cơ cấu giải thưởng</h4>
+            <h4 className="font-bold text-slate-800">{UI_TEXT.home.rules.prizeTitle}</h4>
             <ul className="list-disc pl-5 space-y-1">
               <li>
-                Đặc biệt 2 số:{' '}
-                <span className="font-bold text-amber-600">+15k</span>
+                {UI_TEXT.home.rules.prizeSpecial2}
               </li>
               <li>
-                Lô 2 số: <span className="font-bold text-amber-600">3k</span>
+                {UI_TEXT.home.rules.prizeLoto2}
               </li>
               <li>
-                Đặc biệt 3 số:{' '}
-                <span className="font-bold text-amber-600">+50K</span>
+                {UI_TEXT.home.rules.prizeSpecial3}
               </li>
               <li>
-                Lô 3 số: <span className="font-bold text-amber-600">+10K</span>
+                {UI_TEXT.home.rules.prizeLoto3}
               </li>
             </ul>
           </div>
@@ -537,7 +534,7 @@ export const Prediction = () => {
             onClick={() => setRulesModalOpen(false)}
             className="w-full rounded-xl bg-slate-100 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 transition-colors mt-2"
           >
-            Đã hiểu
+            {UI_TEXT.home.rules.understood}
           </button>
         </div>
       </Modal>

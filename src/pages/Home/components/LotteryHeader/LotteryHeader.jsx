@@ -1,3 +1,5 @@
+import { UI_TEXT } from '../../../../config/uiText'
+
 export const LotteryHeader = () => {
   return (
     <header className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-100 bg-white/95 px-4 py-3 backdrop-blur-sm">
@@ -8,7 +10,7 @@ export const LotteryHeader = () => {
           </span>
         </div>
         <h1 className="text-lg font-bold leading-tight tracking-tight text-slate-900">
-          Xổ số Miền Bắc
+          {UI_TEXT.home.lotteryName}
         </h1>
       </div>
       <button className="flex size-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 transition-colors">

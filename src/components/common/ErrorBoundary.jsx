@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import { logger } from '../../services/logger'
+import { UI_TEXT } from '../../config/uiText'
 
 export class ErrorBoundary extends Component {
   constructor(props) {
@@ -31,15 +32,15 @@ export class ErrorBoundary extends Component {
             <span className="material-symbols-outlined text-red-500 text-4xl mb-4">
               error
             </span>
-            <h1 className="text-xl font-semibold mb-2">Có lỗi xảy ra</h1>
+            <h1 className="text-xl font-semibold mb-2">{UI_TEXT.errorBoundary.title}</h1>
             <p className="text-slate-600 mb-4">
-              Ứng dụng gặp sự cố không mong muốn. Vui lòng thử lại sau.
+              {UI_TEXT.errorBoundary.message}
             </p>
             <button
               onClick={() => window.location.reload()}
               className="bg-primary text-white px-6 py-2 rounded-lg hover:opacity-90"
             >
-              Tải lại trang
+              {UI_TEXT.errorBoundary.reload}
             </button>
           </div>
         </div>

@@ -52,6 +52,8 @@ src/
 - **Functional**: All components must be functional components with Hooks.
 - **Props**: Destructure props immediately in function signature.
 - **Booleans**: Prefix boolean props with `is`, `has`, or `should` (e.g., `isLoading`, `hasError`).
+- **UI Text**: **MANDATORY**. All user-facing text must be imported from `src/config/uiText.js`. Never hardcode strings in components.
+  - Usage: `import { UI_TEXT } from '@/config/uiText'` -> `<span>{UI_TEXT.common.loading}</span>`.
 
 ### Import Strategy
 **Order**:

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { UI_TEXT } from '../../../config/uiText'
 
 export const DateDisplay = () => {
   const [dateStr, setDateStr] = useState('')
@@ -21,7 +22,7 @@ export const DateDisplay = () => {
           <span className="material-symbols-outlined text-sm">
             calendar_today
           </span>
-          <span className="text-sm font-semibold">Dự đoán hôm nay</span>
+          <span className="text-sm font-semibold">{UI_TEXT.prediction.title}</span>
         </div>
         <span className="text-sm font-bold text-slate-900">{dateStr}</span>
       </div>

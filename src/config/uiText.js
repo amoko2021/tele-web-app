@@ -19,11 +19,15 @@ export const UI_TEXT = {
     copy: "Sao chép",
     copied: "Đã sao chép!",
     currency: "VND",
+    delete: "Xóa",
+    today: "Hôm nay",
+    history: "Lịch sử",
   },
 
   // Màn hình Trang chủ (Home)
   home: {
     title: "Dự Đoán XSMB",
+    lotteryName: "Xổ số Miền Bắc",
     predictionInput: {
       label: "Nhập số dự đoán của bạn (00-99)",
       placeholder: "VD: 68",
@@ -43,11 +47,23 @@ export const UI_TEXT = {
       resultTime: "Kết quả sẽ được công bố vào 18:15 hàng ngày",
       addNew: "Thêm dự đoán mới",
       check: "Đang kiểm tra...",
+      join: "Tham gia dự đoán",
+      predict: "Dự đoán",
+      view: "Xem",
+      selectPrize: "Chọn loại giải",
     },
     prizeSection: {
       title: "Giải Thưởng",
       specialPrize: "Giải Đặc Biệt",
       lotoPrize: "Giải Lô Tô",
+      specialPrizeShort: "Giải ĐB",
+      lotoPrizeShort: "Lô tô",
+    },
+    results: {
+      updateTime: "Kết quả được cập nhật trực tiếp lúc 18:15 hàng ngày",
+      prize: "Giải",
+      result: "Kết quả",
+      updating: "Đang cập nhật",
     },
     tasks: {
       title: "Nhiệm vụ hàng ngày",
@@ -55,6 +71,7 @@ export const UI_TEXT = {
       joinChannel: "Tham gia kênh thông báo",
       survey: "Khảo sát kiếm tiền",
       join: "Tham gia",
+      watchAds: "Xem quảng cáo {adType}",
     },
     alerts: {
       rewardReceived: "Bạn đã nhận được phần thưởng!",
@@ -63,7 +80,45 @@ export const UI_TEXT = {
       sessionTimeout: "Phiên làm việc quá lâu. Vui lòng khởi động lại ứng dụng!",
       noUser: "Không tìm thấy thông tin user!",
       predictionRecorded: "Dự đoán của bạn đã được ghi nhận!",
+      adUnavailable: "Quảng cáo hiện không khả dụng. Vui lòng đợi hoặc tải lại trang!!!",
+      adError: "Có lỗi khi hiển thị quảng cáo. Vui lòng thử lại!",
+      monetagFallback: "Quảng cáo Monetag chưa sẵn sàng, đang chuyển sang nguồn dự phòng...",
+      monetagError: "Lỗi khi tải quảng cáo Monetag, đang thử nguồn dự phòng...",
+      rewardFromAd: "Bạn đã nhận được {amount}đ khi xem quảng cáo!",
+      rewardUpdateError: "Bạn đã nhận được {amount}đ nhưng có lỗi khi cập nhật số dư!",
+    },
+    rules: {
+      title: "Thể lệ chương trình",
+      limit: "Mỗi hạng mục được phép dự đoán tối đa 10 bộ số.",
+      view: "Xem thể lệ chương trình",
+      timeTitle: "1. Thời gian dự đoán",
+      timeContent: "Hệ thống mở cổng dự đoán từ {start} đến {end} hàng ngày.",
+      ruleTitle: "2. Quy định tham gia",
+      ruleContent1: "Mỗi lượt dự đoán bạn cần xem 1 quảng cáo ngắn để ủng hộ hệ thống.",
+      ruleContent2: "Mỗi hạng mục được phép dự đoán tối đa 10 bộ số.",
+      prizeTitle: "3. Cơ cấu giải thưởng",
+      prizeSpecial2: "Đặc biệt 2 số: +15k",
+      prizeLoto2: "Lô 2 số: 3k",
+      prizeSpecial3: "Đặc biệt 3 số: +50K",
+      prizeLoto3: "Lô 3 số: +10K",
+      understood: "Đã hiểu",
     }
+  },
+
+  // Màn hình Dự đoán (Prediction)
+  prediction: {
+    title: "Dự đoán hôm nay",
+    loadingError: "Không thể tải dữ liệu dự đoán",
+    timeOver: "Thời gian dự đoán kết thúc. Nhấn vào biểu tượng quảng cáo để nhận 10-100đ",
+    waitingResults: "Đang chờ kết quả (18:15)",
+    addTitle: "Thêm {title}",
+    inputLabel: "Nhập số dự đoán ({digits} số)",
+    confirmDelete: "Bạn có chắc chắn muốn xóa số này?",
+    deleteTitle: "Xóa dự đoán",
+    alreadyPredicted: "Số này đã được dự đoán",
+    limitReached: "Đã đạt giới hạn dự đoán",
+    connectionError: "Lỗi kết nối",
+    deleteError: "Không thể xóa dự đoán",
   },
 
   // Màn hình Tài khoản (Account)
@@ -88,6 +143,12 @@ export const UI_TEXT = {
       featureDev: "Tính năng nạp xu đang phát triển",
       contactSupport: "Liên hệ: @crush_xx",
       updateSuccess: "Cập nhật thành công!",
+    },
+    settings: {
+      general: "Cài đặt chung",
+      bankAccount: "Tài khoản ngân hàng",
+      bankDesc: "Liên kết để rút tiền",
+      support: "Hỗ trợ khách hàng",
     }
   },
 
@@ -145,36 +206,53 @@ export const UI_TEXT = {
       subtitle: "Giới thiệu bạn bè và nhận thưởng.",
     },
     invite: {
+      title: "Xây dựng team của bạn!",
+      subtitle: "Giới thiệu bạn bè và nhận thưởng.",
       cardTitle: "Mời bạn bè",
       description: "Nhận ngay phần thưởng khi mời bạn bè tham gia.",
       button: "Mời bạn bè",
       refLink: "Link giới thiệu của bạn",
       shareText: "Tham gia cùng tôi nào! 🎰",
+      statsTitle: "Thống kê giới thiệu",
+      totalRef: "Tổng số lượt giới thiệu",
+      estimatedEarnings: "Thu nhập ước tính",
+      pending: "Đang chờ xử lý",
     },
+
     friends: {
       title: "Bạn bè",
       total: "{count} người",
       loading: "Đang tải danh sách...",
       empty: "Chưa có ai tham gia.",
       joined: "Tham gia {date}",
+      name: "Tên",
+      statusLabel: "Trạng thái",
+      income: "Thu nhập",
+      noMore: "Không có lượt giới thiệu nào nữa để hiển thị.",
       status: {
         rewarded: "Đã nhận thưởng",
         pending: "Đang chờ",
       }
     },
-    community: {
-      title: "Cộng đồng",
-      channel: "Kênh Telegram Chính Thức",
-      support: "Hỗ trợ khách hàng",
-    },
-    system: {
-      theme: "Giao diện (Sáng/Tối)",
-      language: "Ngôn ngữ",
-      version: "Phiên bản",
-    }
+  },
+
+  // Navigation
+  navigation: {
+    home: "Trang chủ",
+    account: "Tài khoản",
+    invite: "Mời bạn bè",
+    ariaLabel: "Điều hướng chính",
+  },
+
+  // Error Boundary
+  errorBoundary: {
+    title: "Có lỗi xảy ra",
+    message: "Ứng dụng gặp sự cố không mong muốn. Vui lòng thử lại sau.",
+    reload: "Tải lại trang",
   },
 
   // Các thông báo lỗi (Validation/Errors)
+
   validation: {
     required: "Vui lòng không bỏ trống.",
     invalidNumber: "Vui lòng nhập số hợp lệ.",

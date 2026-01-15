@@ -1,8 +1,10 @@
+import { UI_TEXT } from '../../../../config/uiText'
+
 const SkeletonNumber = ({ width = 'w-12' }) => (
   <div className={`${width} h-5 animate-pulse rounded bg-slate-200`}></div>
 )
 
-const isLoading = (value) => !value || value === 'Đang cập nhật'
+const isLoading = (value) => !value || value === UI_TEXT.home.results.updating
 
 // Transform history API format to current format
 const transformHistoryData = (historyData) => {
@@ -56,10 +58,10 @@ export const ResultsTable = ({ results }) => {
       <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
         <div className="flex border-b border-slate-100 bg-slate-50 px-3 py-1.5">
           <div className="w-12 flex-none text-[10px] font-semibold uppercase text-slate-400">
-            Giải
+            {UI_TEXT.home.results.prize}
           </div>
           <div className="flex-1 text-center text-[10px] font-semibold uppercase text-slate-400">
-            Kết quả
+            {UI_TEXT.home.results.result}
           </div>
         </div>
 
@@ -211,7 +213,7 @@ export const ResultsTable = ({ results }) => {
 
       <div className="mt-3 text-center">
         <p className="text-[10px] text-slate-400">
-          Kết quả được cập nhật trực tiếp lúc 18:15 hàng ngày
+          {UI_TEXT.home.results.updateTime}
         </p>
       </div>
     </div>

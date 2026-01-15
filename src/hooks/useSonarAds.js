@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { userApi } from '../services/api'
+import { UI_TEXT } from '../config/uiText'
 
 export function useSonarAds({ userId, onReward, onError }) {
   const [watchingAds, setWatchingAds] = useState(false)
@@ -7,13 +8,13 @@ export function useSonarAds({ userId, onReward, onError }) {
   const rewardUser = useCallback(
     async (reward) => {
       try {
-        const currentBalance = await userApi.getUserInfo(userId)
-        const newBalance = (currentBalance?.balance || 0) + reward
+        // const currentBalance = await userApi.getUserInfo(userId)
+        // const newBalance = (currentBalance?.balance || 0) + reward
         await userApi.updateBalance(userId, reward)
-        alert(`Bạn đã nhận được ${reward} đ khi xem quảng cáo!`)
+        alert(UI_TEXT.home.alerts.rewardFromAd.replace('{amount}', reward))
       } catch (error) {
         console.error('Error updating balance:', error)
-        alert(`Bạn đã nhận được ${reward} đ nhưng có lỗi khi cập nhật số dư!`)
+        alert(UI_TEXT.home.alerts.rewardUpdateError.replace('{amount}', reward))
       }
     },
     [userId]
@@ -33,8 +34,8 @@ export function useSonarAds({ userId, onReward, onError }) {
         onError: (error) => {
           console.error('Sonar ad error:', error)
           const errorMessage =
-            error?.message || error || 'Không thể hiển thị quảng cáo'
-          alert(`Lỗi quảng cáo:\n${errorMessage}\n\nVui lòng thử lại!`)
+            error?.message || error || UI_TEXT.common.error
+          alert(`${UI_TEXT.home.alerts.adError}\n${errorMessage}`)
           onError?.(error)
         },
         onClose: () => {
@@ -62,7 +63,7 @@ export function useSonarAds({ userId, onReward, onError }) {
   const handleWatchAds = useCallback(
     async (rewardAmount = 0) => {
       if (!userId) {
-        alert('Không tìm thấy thông tin user!')
+        alert(UI_TEXT.home.alerts.noUser)
         return
       }
 
@@ -78,18 +79,18 @@ export function useSonarAds({ userId, onReward, onError }) {
         }
 
         if (!window.Sonar) {
-          alert('Sonar SDK chưa được tải. Vui lòng thử lại!')
+          alert(UI_TEXT.home.alerts.adUnavailable)
           return
         }
 
         const adShown = await showSonarAd(reward)
 
         if (!adShown) {
-          alert('Không thể hiển thị quảng cáo. Vui lòng thử lại!')
+          alert(UI_TEXT.home.alerts.adError)
         }
       } catch (error) {
         console.error('Error watching ads:', error)
-        alert('Có lỗi xảy ra. Vui lòng thử lại!')
+        alert(UI_TEXT.common.error)
         onError?.(error)
       } finally {
         setWatchingAds(false)
