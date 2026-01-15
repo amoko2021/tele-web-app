@@ -7,6 +7,7 @@ export const PredictionCategoryCard = ({
   icon,
   numbers,
   predictionIds = [], // Array of IDs corresponding to numbers
+  isWin = [], // Array of booleans indicating win status
   updateTime,
   onManage,
   onAdd,
@@ -64,19 +65,41 @@ export const PredictionCategoryCard = ({
     const elements = []
     numbers.forEach((num, i) => {
       const predId = predictionIds[i]
+      const winStatus = isWin && isWin.length > i ? isWin[i] : null
+
+      let statusClasses = ''
+      let statusIcon = null
+      let textClasses = ''
+
+      if (winStatus === true) {
+        statusClasses = '!bg-green-100 !border-green-500 ring-1 ring-green-500'
+        textClasses = '!text-green-700'
+        statusIcon = (
+          <div className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full p-0.5 shadow-sm z-10">
+            <span className="material-symbols-outlined text-[10px] font-bold block">
+              check
+            </span>
+          </div>
+        )
+      } else if (winStatus === false) {
+        statusClasses = '!bg-slate-100 !border-slate-200 opacity-70'
+        textClasses = '!text-slate-400'
+      }
+
       elements.push(
         <div
           key={i}
-          className={`relative group/item flex aspect-square items-center justify-center rounded-xl ${theme.bg} ${theme.border} cursor-pointer transition-transform active:scale-95`}
+          className={`relative group/item flex aspect-square items-center justify-center rounded-xl ${theme.bg} ${theme.border} cursor-pointer transition-transform active:scale-95 ${statusClasses}`}
           onClick={() => onDelete && onDelete(predId, num)}
         >
           <span
             className={`font-black ${theme.text} ${
               num.length > 2 ? 'text-xl' : 'text-2xl'
-            }`}
+            } ${textClasses}`}
           >
             {num}
           </span>
+          {statusIcon}
           {/* Optional delete indicator on hover if desktop, or just implied click-to-manage */}
         </div>
       )

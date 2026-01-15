@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { DateDisplay } from './components/DateDisplay'
 import { PredictionCategoryCard } from './components/PredictionCategoryCard'
 import lotteryApi from '../../services/api/lotteryApi'
@@ -13,7 +12,6 @@ import { UI_TEXT } from '../../config/uiText'
 // import { HeaderSection } from './components/HeaderSection'
 
 export const Prediction = () => {
-  const navigate = useNavigate()
   const { user } = useTelegram()
   const userId = user?.id
 
@@ -71,6 +69,20 @@ export const Prediction = () => {
   }
 
   const isAfter1830 = checkIsAfter1830()
+
+  // Helper to check if current time is result time (18:45 - 24:00 VN)
+  const checkIsResultTime = () => {
+    const nowVN = new Date().toLocaleString('en-US', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+    })
+    const vnDate = new Date(nowVN)
+    const hours = vnDate.getHours()
+    const minutes = vnDate.getMinutes()
+    // From 18:45 to 23:59
+    return hours > 18 || (hours === 18 && minutes >= 45)
+  }
+
+  const isResultTime = checkIsResultTime()
 
   const getRewardValue = (id) => {
     switch (id) {
@@ -138,9 +150,9 @@ export const Prediction = () => {
       }
 
       // Get current balance
-      const userInfo = await userApi.getUserInfo(userId)
-      const currentBalance = userInfo?.data?.balance || 0
-      const newBalance = currentBalance + randomAmount
+      // const userInfo = await userApi.getUserInfo(userId)
+      // const currentBalance = userInfo?.data?.balance || 0
+      // const newBalance = currentBalance + randomAmount
 
       // Update balance
       await userApi.updateBalance(userId, randomAmount)
@@ -211,10 +223,16 @@ export const Prediction = () => {
   })
 
   // Fetch predictions
-  const fetchPredictions = async () => {
+  const fetchPredictions = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await lotteryApi.getMyPredictions()
+      let response
+      if (isResultTime) {
+        response = await lotteryApi.getMyPredictionResults()
+      } else {
+        response = await lotteryApi.getMyPredictions()
+      }
+
       if (response && response.data && response.data.categories) {
         setCategories(response.data.categories)
       }
@@ -224,15 +242,11 @@ export const Prediction = () => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [isResultTime])
 
   useEffect(() => {
     fetchPredictions()
-  }, [])
-
-  const handleBack = () => {
-    navigate('/')
-  }
+  }, [fetchPredictions])
 
   const handleManage = (id) => {
     console.log('Manage category:', id)
@@ -384,6 +398,7 @@ export const Prediction = () => {
                 icon={category.icon}
                 numbers={category.numbers}
                 predictionIds={category.prediction_ids}
+                isWin={category.is_win}
                 updateTime={category.update_time}
                 onManage={() => handleManage(category.id)}
                 onAdd={() => handleAdd(category)}

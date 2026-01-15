@@ -1,6 +1,6 @@
 import axios from 'axios'
 import apiClient from './axios.config'
-import { mockXSMBData, generateRandomXSMB } from './mockData'
+import { generateRandomXSMB } from './mockData'
 
 // API URL cho bên thứ 3 cung cấp kết quả XSMB
 const XSMB_API_URL = 'https://api-xsmb-today.onrender.com/api/v1'
@@ -333,6 +333,85 @@ export const lotteryApi = {
       return response
     } catch (error) {
       console.error('Error fetching my predictions:', error)
+      throw error
+    }
+  },
+
+  // Lấy kết quả dự đoán (sau 18h45)
+  getMyPredictionResults: async () => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            message: null,
+            data: {
+              categories: [
+                {
+                  id: 1,
+                  title: 'Giải ĐB 2 số',
+                  subtitle: 'Tối đa 10 lượt dự đoán',
+                  count: 4,
+                  max_count: 10,
+                  color: 'red',
+                  icon: 'stars',
+                  numbers: ['11', '31', '19', '79'],
+                  is_win: [false, false, false, false],
+                  prediction_ids: [48, 96, 106, 337],
+                  update_time: '14:20',
+                },
+                {
+                  id: 2,
+                  title: 'Lô Tô 2 số',
+                  subtitle: 'Tối đa 10 lượt dự đoán',
+                  count: 4,
+                  max_count: 10,
+                  color: 'blue',
+                  icon: 'filter_2',
+                  numbers: ['15', '16', '18', '13'],
+                  is_win: [false, true, false, false],
+                  prediction_ids: [98, 99, 137, 338],
+                  update_time: '14:20',
+                },
+                {
+                  id: 3,
+                  title: 'Đặc Biệt 3 số',
+                  subtitle: 'Tối đa 10 lượt dự đoán',
+                  count: 1,
+                  max_count: 10,
+                  color: 'orange',
+                  icon: 'workspace_premium',
+                  numbers: ['333'],
+                  is_win: [false],
+                  prediction_ids: [34],
+                  update_time: '03:40',
+                },
+                {
+                  id: 4,
+                  title: 'Lô Tô 3 số',
+                  subtitle: 'Tối đa 10 lượt dự đoán',
+                  count: 1,
+                  max_count: 10,
+                  color: 'indigo',
+                  icon: 'filter_3',
+                  numbers: ['159'],
+                  is_win: [false],
+                  prediction_ids: [35],
+                  update_time: '03:41',
+                },
+              ],
+            },
+            total: null,
+          })
+        }, 500)
+      })
+    }
+
+    try {
+      const response = await apiClient.get('/my-predictions/result')
+      return response
+    } catch (error) {
+      console.error('Error fetching my prediction results:', error)
       throw error
     }
   },
