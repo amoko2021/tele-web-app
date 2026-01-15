@@ -16,10 +16,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       onError,
     })
 
-  const adHandler = useMemo(
-    () => (zoneId ? createAdHandler(zoneId) : null),
-    [zoneId]
-  )
+  const adHandler = createAdHandler(zoneId)
 
   const preloadAd = useCallback(
     async (ymid) => {
