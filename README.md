@@ -1,118 +1,104 @@
 # Telegram XSMB Mini App
 
-Ứng dụng Mini App trên Telegram cho Xổ số Miền Bắc với tính năng dự đoán kết quả và hệ thống giới thiệu bạn bè.
+Telegram Mini App for Northern Vietnam Lottery (XSMB) featuring live results, predictions, and a referral system.
 
-## 🚀 Tính năng
+## 🚀 Features
 
-- 📊 **Kết quả XSMB trực tiếp** - Xem kết quả xổ số miền Bắc mỗi ngày
-- 🔮 **Dự đoán kết quả** - Đăng ký dự đoán giải đặc biệt và lô tô
-- 👥 **Hệ thống giới thiệu** - Mời bạn bè nhận thưởng
-- 💰 **Tích điểm** - Nhận điểm thưởng khi giới thiệu bạn bè thành công
-- 📱 **Telegram Integration** - Tối ưu hóa cho Telegram Mini App
-- 🎨 **UI/UX hiện đại** - Giao diện đẹp, thân thiện trên mobile
+- 📊 **Live XSMB Results** - View daily Northern Lottery results
+- 🔮 **Predictions** - Submit predictions for Special Prize and Loto
+- 👥 **Referral System** - Invite friends and earn rewards
+- 💰 **Points & Rewards** - Accumulate points for successful referrals
+- 📱 **Telegram Integration** - Optimized for Telegram Mini App (TMA) experience
+- 🎨 **Modern UI/UX** - Responsive design with native feel
 
 ## 🛠️ Tech Stack
 
 - **Framework**: React 19.2.0
 - **Build Tool**: Vite 7.2.4
 - **Package Manager**: pnpm
-- **Styling**: Tailwind CSS
+- **Styling**: CSS Modules (`*.module.css`) + Global CSS Variables
 - **Routing**: React Router DOM 7.11.0
 - **HTTP Client**: Axios
 - **Icons**: Material Symbols Outlined, Lucide React
 - **Ads**: @adsgram/react
 
-## 📦 Cài đặt
+## 📦 Installation
 
 ```bash
 # Clone repository
 git clone <repository-url>
 cd tele-web-app
 
-# Cài đặt dependencies
+# Install dependencies
 pnpm install
 
-# Chạy development server
+# Start development server
 pnpm run dev
 ```
 
 ## 🏃 Scripts
 
 ```bash
-pnpm run dev        # Khởi động dev server
+pnpm run dev        # Start dev server
 pnpm run build      # Build production bundle
 pnpm run preview    # Preview production build
-pnpm run lint       # Chạy ESLint check
+pnpm run lint       # Run ESLint validation
 ```
 
-## 📁 Cấu trúc dự án
+## 📁 Project Structure
 
 ```
 src/
 ├── components/
-│   ├── common/         # Components dùng chung
-│   └── layout/         # Components layout (BottomNavBar, etc.)
-├── pages/              # Trang ứng dụng
-│   ├── Home/          # Trang chủ - Kết quả XSMB
-│   ├── Account/       # Tài khoản, rút tiền
-│   ├── Settings/      # Cài đặt, giới thiệu bạn bè
-│   └── WithdrawalHistory/ # Lịch sử rút tiền
+│   ├── common/         # Shared components (Modal, Button, etc.)
+│   └── layout/         # Layout components (BottomNavBar)
+├── pages/              # Application pages
+│   ├── Home/           # Homepage - Lottery Results
+│   ├── Account/        # User profile & withdrawal
+│   ├── Settings/       # Settings & Referrals
+│   └── WithdrawalHistory/ # Transaction history
 ├── hooks/              # Custom React hooks
-│   ├── useApi.js      # Hook cho API calls
-│   ├── useTelegram.js # Hook cho Telegram WebApp
-│   └── useAdsgram.js  # Hook cho quảng cáo
+│   ├── useApi.js       # API interaction hook
+│   ├── useTelegram.js  # Telegram WebApp hook
+│   └── useAdsgram.js   # Ads integration hook
 ├── services/
-│   ├── api/           # API services
-│   │   ├── lotteryApi.js
-│   │   ├── userApi.js
-│   │   └── axios.config.js
-│   └── telegram/      # Telegram services
+│   ├── api/            # API services & config
+│   └── telegram/       # Telegram integration services
 ├── routes/             # Route configuration
 └── utils/              # Helper functions
 ```
 
-## 🔧 Cấu hình
+## 🔧 Configuration
 
 ### Vite Server
-
-`vite.config.js` đã được cấu hình để hỗ trợ:
-- Host: `0.0.0.0` (cho phép truy cập từ mạng ngoài)
+`vite.config.js` is configured to support:
+- Host: `0.0.0.0` (external access allowed)
 - Allowed hosts: `vsc.skick.xyz`, `.vsc.skick.xyz`, `localhost`
-- Port: 5173 (hoặc tự động tìm port khác nếu bận)
+- Port: 5173 (auto-fallback if busy)
 
 ### Environment Variables
-
-API URL đã được cấu hình sẵn trong `src/services/api/axios.config.js`:
+API URL is configured in `src/services/api/axios.config.js`:
 ```
 BASE_URL: https://betestminiapp-production-9a0b.up.railway.app
 ```
 
 ## 📱 Telegram Integration
 
-Ứng dụng sử dụng Telegram WebApp SDK:
-- Authentication qua `initData`
-- Xác thực người dùng qua backend
-- Haptic Feedback cho các tương tác
-- Mở link, chia sẻ qua Telegram
-
-## 🎯 Mock Data Mode
-
-Để test UI với mock data, enable trong file API:
-```javascript
-// src/services/api/lotteryApi.js
-const USE_MOCK = true
-```
+The app leverages the Telegram WebApp SDK for:
+- **Authentication**: Validating users via `initData`
+- **Security**: Backend validation of Telegram signatures
+- **UX**: Haptic feedback, native theme params, and main button integration
 
 ## 🔐 Authentication
 
-- Xác thực qua Telegram `initData`
-- Token được gửi trong header: `Authorization: tma {initData}`
-- Validated tại backend endpoint
+- Authentication is handled via Telegram `initData`.
+- Token is sent in the Authorization header: `Authorization: tma {initData}`.
+- Requests are validated at the backend endpoint.
+
+## 👨‍💻 Development Guidelines
+
+For detailed coding standards, conventions, and agent workflows, please refer to **[AGENTS.md](./AGENTS.md)**.
 
 ## 📄 License
 
 Private
-
-## 👨‍💻 Development
-
-Xem [AGENTS.md](./AGENTS.md) để biết guidelines về code style và conventions cho phát triển.

@@ -2,6 +2,7 @@
 
 ## Build & Validation Commands
 
+- `pnpm install`     - Install dependencies
 - `pnpm run dev`     - Start development server (Vite + HMR)
 - `pnpm run build`   - Build production bundle to `dist/`
 - `pnpm run lint`    - Run ESLint validation
@@ -11,6 +12,7 @@
 - No test framework (Vitest/Jest) is currently configured.
 - **Do not** attempt to run tests.
 - If implementing tests, use Vitest compatible with Vite.
+- For manual validation, ensure the app loads in Telegram WebApp context or mock it.
 
 ## Code Style Guidelines
 
@@ -19,7 +21,7 @@
 - **Language**: JavaScript (ESModules)
 - **Routing**: react-router-dom 7.11.0
 - **State**: React Hooks (`useState`, `useContext`) + Custom Hooks
-- **Styling**: **CSS Modules** (`*.module.css`) + Global CSS (Variables). **NO Tailwind**.
+- **Styling**: **CSS Modules** (`*.module.css`) + Global CSS. **NO Tailwind**.
 - **HTTP**: Axios with interceptors
 - **Platform**: Telegram Mini App (TMA) specific features
 
@@ -27,7 +29,7 @@
 ```
 src/
 ├── components/
-│   ├── common/         # Shared UI (Modal, Button, etc.)
+│   ├── common/         # Shared UI (Modal, Button, ErrorBoundary)
 │   └── layout/         # Layout shells (BottomNavBar)
 ├── pages/              # Route views
 │   └── [PageName]/     # Domain-grouped features
@@ -37,7 +39,8 @@ src/
 ├── hooks/              # Shared logic (useApi, useTelegram)
 ├── services/           # External integration
 │   ├── api/            # API endpoints & config
-│   └── telegram/       # TMA integration
+│   ├── telegram/       # TMA integration
+│   └── logger.js       # Centralized logging service
 ├── styles/             # Global variables & themes
 └── utils/              # Helpers & constants
 ```
@@ -48,6 +51,7 @@ src/
 - **Barrels**: Always use `index.js` for clean imports from directories.
 - **Functional**: All components must be functional components with Hooks.
 - **Props**: Destructure props immediately in function signature.
+- **Booleans**: Prefix boolean props with `is`, `has`, or `should` (e.g., `isLoading`, `hasError`).
 
 ### Import Strategy
 **Order**:
@@ -72,6 +76,7 @@ import styles from './styles.module.css'
 - **Usage**: `import styles from './Component.module.css'` → `className={styles.container}`.
 - **Global**: Use variables from `src/styles/variables.css` (e.g., `var(--primary-color)`).
 - **Icons**: Material Symbols Outlined (`<span className="material-symbols-outlined">key</span>`).
+- **Themes**: Respect `tg.themeParams` for native feel.
 
 ### State & Data Fetching
 - **Local State**: `useState` for UI toggle/input.
@@ -87,7 +92,7 @@ import styles from './styles.module.css'
         const result = await api.getData()
         setData(result)
       } catch (err) {
-        logger.apiError('Fetch failed', err)
+        logger.apiError(null, err) // Pass request context if available
       } finally {
         setLoading(false)
       }
@@ -100,25 +105,43 @@ import styles from './styles.module.css'
 - **Location**: All API logic in `src/services/api/`.
 - **Client**: Use the pre-configured `apiClient` instance (handles auth/interceptors).
 - **Auth**: Telegram `initData` is automatically injected into `Authorization` header (`tma <data>`).
-- **Error Handling**: 
-  - Log errors via `logger.apiError()`.
-  - Show user-friendly toasts/alerts, do not fail silently.
+
+### Error Handling & Logging
+- **Logger**: Use `src/services/logger.js` instead of `console.log`.
+  - `logger.info(msg, context)`: General flow events.
+  - `logger.warn(msg, context)`: Non-critical issues.
+  - `logger.error(msg, error, context)`: Critical failures.
+  - `logger.apiError(request, error)`: API failures.
+- **Boundaries**: Wrap feature roots in `ErrorBoundary` if they are critical.
+- **User Feedback**: Show user-friendly toasts/alerts, do not fail silently.
 
 ### Telegram Integration
 - **Global Object**: Access via `window.Telegram.WebApp`.
 - **Validation**: Ensure `initData` exists before making auth-dependent calls.
 - **Theme**: Respect Telegram theme params (`tg.themeParams`) where possible.
+- **Mocking**: Use `USE_MOCK` flags or mock `window.Telegram.WebApp` for local dev outside Telegram.
+
+### Git Workflow
+- **Branches**: Use `feature/name`, `fix/issue`, `chore/task`.
+- **Commits**: Follow Conventional Commits (`feat:`, `fix:`, `chore:`, `refactor:`).
+- **PRs**: Keep PRs small and focused on a single responsibility.
+
+### Performance & Security
+- **Memoization**: Use `useMemo` and `useCallback` for expensive calculations or stable references.
+- **Secrets**: NEVER commit `.env` files or hardcode API keys.
+- **Validation**: Validate all inputs, especially those from URL params or external sources.
+- **Dependencies**: Audit `package.json` regularly; use `pnpm` for lockfile consistency.
 
 ### Linting & Quality
-- **Strictness**: No unused variables. console.log is allowed for debugging but prefer `logger`.
+- **Strictness**: No unused variables. `console.log` is allowed for debugging but prefer `logger`.
 - **Types**: Use JSDoc if complex logic requires type hinting (project is JS-only).
 - **HMR**: Fast Refresh is enabled; avoid side-effects outside `useEffect`.
 
 ### Development Rules
 1. **Mock Data**: Respect `USE_MOCK` flags in services for offline dev.
 2. **Environment**: Use `import.meta.env.VITE_VAR_NAME` for config.
-3. **Commits**: Follow conventional commits (feat:, fix:, chore:).
-4. **Dependencies**: Use `pnpm add` (not npm/yarn).
+3. **Dependencies**: Use `pnpm add` (not npm/yarn).
+4. **Clean Code**: Remove commented-out code before committing.
 
 ### Deployment
 - **Target**: `dist/` folder via `pnpm build`.
@@ -129,3 +152,4 @@ import styles from './styles.module.css'
 - **Proactive Fixes**: If you see a logical error, fix it, but ask before large refactors.
 - **Safety**: Never commit secrets or `.env` files.
 - **Context**: Read `src/routes/AppRoutes.jsx` to understand navigation flow before adding pages.
+- **Discovery**: Always explore related files before making changes to ensure consistency.
