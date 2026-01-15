@@ -1,10 +1,19 @@
 import { useCallback, useState } from 'react'
 import { userApi } from '../services/api'
 import createAdHandler from 'monetag-tg-sdk'
+import { useSonarAds } from './useSonarAds'
 
 export function useMonetag({ userId, zoneId, onReward, onError }) {
-  const [watchingAds, setWatchingAds] = useState(false)
+  const [monetagWatching, setMonetagWatching] = useState(false)
   const [adReady, setAdReady] = useState(false)
+
+  // Initialize Sonar Ads for fallback
+  const { handleWatchAds: showSonarAds, watchingAds: sonarWatching } =
+    useSonarAds({
+      userId,
+      onReward,
+      onError,
+    })
 
   const adHandler = zoneId ? createAdHandler(zoneId) : null
 
@@ -35,12 +44,14 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
         return false
       }
 
+      // Fallback to Sonar if Monetag handler is missing
       if (!adHandler) {
-        onError?.(new Error('Monetag SDK not available or zoneId not set'))
-        return false
+        console.warn('Monetag handler missing, falling back to Sonar')
+        await showSonarAds(rewardAmount)
+        return true
       }
 
-      setWatchingAds(true)
+      setMonetagWatching(true)
 
       try {
         // Use Rewarded Popup format with type: 'pop'
@@ -49,7 +60,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
         // Popup attempt completed - reward user
         try {
           const currentBalance = await userApi.getUserInfo(userId)
-          const newBalance = (currentBalance?.data?.balance || 0) + rewardAmount
+          // const newBalance = (currentBalance?.data?.balance || 0) + rewardAmount
           await userApi.updateBalance(userId, rewardAmount)
           // alert(`Bạn đã nhận được ${rewardAmount} đ khi xem quảng cáo!`)
           onReward?.()
@@ -62,31 +73,33 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
 
         return true
       } catch (error) {
-        console.error('Monetag popup ad failed:', error)
-        onError?.(error)
-        return false
+        console.error('Monetag popup ad failed, falling back to Sonar:', error)
+        // Fallback to Sonar on error
+        setMonetagWatching(false) // Ensure we reset this before switching
+        await showSonarAds(rewardAmount)
+        return true
       } finally {
-        setWatchingAds(false)
+        setMonetagWatching(false)
       }
     },
-    [userId, onReward, onError, adHandler]
+    [userId, onReward, onError, adHandler, showSonarAds]
   )
 
   const handleWatchAds = useCallback(
     async (rewardAmount) => {
-      if (watchingAds) return false
+      if (monetagWatching || sonarWatching) return false
 
       // Use userId as ymid for tracking, fallback to 'guest-user'
       const ymid = userId?.toString() || 'guest-user'
 
       return await showMonetagAd(ymid, rewardAmount)
     },
-    [userId, watchingAds, showMonetagAd]
+    [userId, monetagWatching, sonarWatching, showMonetagAd]
   )
 
   return {
     handleWatchAds,
-    watchingAds,
+    watchingAds: monetagWatching || sonarWatching,
     adReady,
     preloadAd,
   }

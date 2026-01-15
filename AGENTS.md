@@ -121,6 +121,12 @@ import styles from './styles.module.css'
 - **Theme**: Respect Telegram theme params (`tg.themeParams`) where possible.
 - **Mocking**: Use `USE_MOCK` flags or mock `window.Telegram.WebApp` for local dev outside Telegram.
 
+### Ad Integration
+- **Primary Provider**: Monetag (via `useMonetag`).
+- **Fallback Provider**: Sonar Ads (via `useSonarAds`).
+- **Strategy**: `useMonetag` automatically falls back to `useSonarAds` if the Monetag SDK is missing or if an ad fails to load/show.
+- **Reward Logic**: Both providers trigger the same `onReward` callback and balance update logic.
+
 ### Git Workflow
 - **Branches**: Use `feature/name`, `fix/issue`, `chore/task`.
 - **Commits**: Follow Conventional Commits (`feat:`, `fix:`, `chore:`, `refactor:`).
