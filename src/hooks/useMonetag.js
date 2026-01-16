@@ -4,6 +4,25 @@ import createAdHandler from 'monetag-tg-sdk'
 import { useSonarAds } from './useSonarAds'
 import { UI_TEXT } from '../config/uiText'
 
+// Helper to add timeout to promises
+const withTimeout = (promise, ms = 15000) => {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error('Ad operation timed out'))
+    }, ms)
+
+    promise
+      .then((res) => {
+        clearTimeout(timer)
+        resolve(res)
+      })
+      .catch((err) => {
+        clearTimeout(timer)
+        reject(err)
+      })
+  })
+}
+
 export function useMonetag({ userId, zoneId, onReward, onError }) {
   const [monetagWatching, setMonetagWatching] = useState(false)
   const [adReady, setAdReady] = useState(false)
@@ -49,7 +68,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       }
 
       try {
-        await adHandler({ type: 'preload', ymid })
+        await withTimeout(adHandler({ type: 'preload', ymid }))
         setAdReady(true)
         return true
       } catch (error) {
@@ -91,18 +110,25 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       }
 
       try {
-        // 1. Preload/Check availability
-        try {
-          await adHandler({ type: 'preload', ymid })
-        } catch (preloadError) {
-          await executeFallback(preloadError)
-          return true
+        // 1. Preload/Check availability (only if not already ready)
+        if (!adReady) {
+          try {
+            await withTimeout(adHandler({ type: 'preload', ymid }), 8000) // Shorter timeout for preload check
+            setAdReady(true)
+          } catch (preloadError) {
+            await executeFallback(preloadError)
+            return true
+          }
         }
 
         // 2. Show Ad
         try {
-          await adHandler({ ymid })
+          await withTimeout(adHandler({ ymid }))
+          // Reset ready state after showing
+          setAdReady(false)
         } catch (showError) {
+          // If show fails, it might be because the preloaded ad expired or failed.
+          // We could try to fallback.
           await executeFallback(showError)
           return true
         }
@@ -128,7 +154,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
         setMonetagWatching(false)
       }
     },
-    [userId, onReward, adHandler, showSonarAds, onError]
+    [userId, onReward, adHandler, showSonarAds, onError, adReady]
   )
 
   const handleWatchAds = useCallback(
