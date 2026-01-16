@@ -194,12 +194,13 @@ export const Prediction = () => {
   })
 
   // 3. Monetag Hook (for loto_3)
-  const { handleWatchAds: showMonetag, isLoading: isMonetagLoading } = useMonetag({
-    userId,
-    zoneId: '10456534',
-    onReward: handleAdSuccess,
-    onError: handleAdError,
-  })
+  const { handleWatchAds: showMonetag, isLoading: isMonetagLoading } =
+    useMonetag({
+      userId,
+      zoneId: '10456534',
+      onReward: handleAdSuccess,
+      onError: handleAdError,
+    })
 
   // Ad hooks for time-up (earn money instead of opening modal)
   const showAdsgramForMoney = useAdsgram({
@@ -215,7 +216,10 @@ export const Prediction = () => {
     onError: handleAdError,
   })
 
-  const { handleWatchAds: showMonetagForMoney, isLoading: isMonetagMoneyLoading } = useMonetag({
+  const {
+    handleWatchAds: showMonetagForMoney,
+    isLoading: isMonetagMoneyLoading,
+  } = useMonetag({
     userId,
     zoneId: import.meta.env.VITE_MONETAG_ZONE_ID || '',
     onReward: handleAdSuccessForMoney,
@@ -297,9 +301,9 @@ export const Prediction = () => {
     // loto_3 (4) -> Adsgram (for money)
 
     if (category.id === 1 || category.id === 2) {
-      showSonarForMoney(0)
-    } else if (category.id === 3) {
       showMonetagForMoney(0)
+    } else if (category.id === 3) {
+      showSonarForMoney(0)
     } else if (category.id === 4) {
       showAdsgramForMoney()
     } else {
@@ -313,7 +317,9 @@ export const Prediction = () => {
 
     // Validate length
     if (inputNumber.length !== addModal.maxDigits) {
-      setAddError(UI_TEXT.prediction.inputLabel.replace('{digits}', addModal.maxDigits))
+      setAddError(
+        UI_TEXT.prediction.inputLabel.replace('{digits}', addModal.maxDigits)
+      )
       return
     }
 
@@ -331,7 +337,9 @@ export const Prediction = () => {
         if (err.response.status === 409) {
           setAddError(UI_TEXT.prediction.alreadyPredicted)
         } else if (err.response.status === 400) {
-          setAddError(err.response.data?.error || UI_TEXT.prediction.limitReached)
+          setAddError(
+            err.response.data?.error || UI_TEXT.prediction.limitReached
+          )
         } else {
           setAddError(UI_TEXT.common.error)
         }
@@ -442,7 +450,10 @@ export const Prediction = () => {
         <div className="flex flex-col gap-4">
           <div>
             <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">
-              {UI_TEXT.prediction.inputLabel.replace('{digits}', addModal.maxDigits)}
+              {UI_TEXT.prediction.inputLabel.replace(
+                '{digits}',
+                addModal.maxDigits
+              )}
             </label>
             <input
               type="number"
@@ -513,35 +524,33 @@ export const Prediction = () => {
       >
         <div className="flex flex-col gap-4 text-sm text-slate-600">
           <div className="space-y-2">
-            <h4 className="font-bold text-slate-800">{UI_TEXT.home.rules.timeTitle}</h4>
+            <h4 className="font-bold text-slate-800">
+              {UI_TEXT.home.rules.timeTitle}
+            </h4>
             <p>
-              {UI_TEXT.home.rules.timeContent.replace('{start}', '00:00').replace('{end}', '18:00')}
+              {UI_TEXT.home.rules.timeContent
+                .replace('{start}', '00:00')
+                .replace('{end}', '18:00')}
             </p>
           </div>
 
           <div className="space-y-2">
-            <h4 className="font-bold text-slate-800">{UI_TEXT.home.rules.ruleTitle}</h4>
-            <p>
-              {UI_TEXT.home.rules.ruleContent1}
-            </p>
+            <h4 className="font-bold text-slate-800">
+              {UI_TEXT.home.rules.ruleTitle}
+            </h4>
+            <p>{UI_TEXT.home.rules.ruleContent1}</p>
             <p>{UI_TEXT.home.rules.ruleContent2}</p>
           </div>
 
           <div className="space-y-2">
-            <h4 className="font-bold text-slate-800">{UI_TEXT.home.rules.prizeTitle}</h4>
+            <h4 className="font-bold text-slate-800">
+              {UI_TEXT.home.rules.prizeTitle}
+            </h4>
             <ul className="list-disc pl-5 space-y-1">
-              <li>
-                {UI_TEXT.home.rules.prizeSpecial2}
-              </li>
-              <li>
-                {UI_TEXT.home.rules.prizeLoto2}
-              </li>
-              <li>
-                {UI_TEXT.home.rules.prizeSpecial3}
-              </li>
-              <li>
-                {UI_TEXT.home.rules.prizeLoto3}
-              </li>
+              <li>{UI_TEXT.home.rules.prizeSpecial2}</li>
+              <li>{UI_TEXT.home.rules.prizeLoto2}</li>
+              <li>{UI_TEXT.home.rules.prizeSpecial3}</li>
+              <li>{UI_TEXT.home.rules.prizeLoto3}</li>
             </ul>
           </div>
 
@@ -559,7 +568,9 @@ export const Prediction = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl p-6 flex flex-col items-center gap-4 shadow-xl animate-in fade-in zoom-in duration-200">
             <div className="animate-spin rounded-full h-10 w-10 border-4 border-primary border-t-transparent"></div>
-            <p className="font-bold text-slate-700">{UI_TEXT.home.alerts.adLoading}</p>
+            <p className="font-bold text-slate-700">
+              {UI_TEXT.home.alerts.adLoading}
+            </p>
           </div>
         </div>
       )}
