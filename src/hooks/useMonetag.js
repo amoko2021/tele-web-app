@@ -76,12 +76,17 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
     async (rewardAmount) => {
       if (watchingAds) return false
 
+      if (!adReady) {
+        alert('Hiện tại chưa có quảng cáo')
+        return false
+      }
+
       // Use userId as ymid for tracking, fallback to 'guest-user'
       const ymid = userId?.toString() || 'guest-user'
 
       return await showMonetagAd(ymid, rewardAmount)
     },
-    [userId, watchingAds, showMonetagAd]
+    [userId, watchingAds, adReady, showMonetagAd]
   )
 
   return {
