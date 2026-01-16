@@ -17,10 +17,12 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
 
       try {
         await adHandler({ type: 'preload', ymid })
+        alert('Ad preload ready')
         setAdReady(true)
         return true
       } catch (error) {
         console.error('Monetag preload error:', error)
+        alert('Ad preload not ready')
         setAdReady(false)
         return false
       }
