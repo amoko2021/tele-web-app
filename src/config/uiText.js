@@ -81,6 +81,7 @@ export const UI_TEXT = {
       noUser: "Không tìm thấy thông tin user!",
       predictionRecorded: "Dự đoán của bạn đã được ghi nhận!",
       adUnavailable: "Quảng cáo hiện không khả dụng. Vui lòng đợi hoặc tải lại trang!!!",
+      adLoading: "Đang tải quảng cáo...",
       adError: "Có lỗi khi hiển thị quảng cáo. Vui lòng thử lại!",
       monetagFallback: "Quảng cáo Monetag chưa sẵn sàng, đang chuyển sang nguồn dự phòng...",
       monetagError: "Lỗi khi tải quảng cáo Monetag, đang thử nguồn dự phòng...",

@@ -25,6 +25,7 @@ const withTimeout = (promise, ms = 15000) => {
 
 export function useMonetag({ userId, zoneId, onReward, onError }) {
   const [monetagWatching, setMonetagWatching] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [adReady, setAdReady] = useState(false)
 
   // Initialize Sonar Ads for fallback
@@ -68,6 +69,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       }
 
       try {
+        setIsLoading(true)
         await withTimeout(adHandler({ type: 'preload', ymid }))
         setAdReady(true)
         return true
@@ -75,6 +77,8 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
         console.error('Monetag preload error:', error)
         setAdReady(false)
         return false
+      } finally {
+        setIsLoading(false)
       }
     },
     [adHandler]
@@ -96,15 +100,15 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       }
 
       setMonetagWatching(true)
+      setIsLoading(true)
 
       // Helper for fallback execution
       const executeFallback = async (reason) => {
         console.warn('Monetag ad unavailable/failed, executing fallback. Reason:', reason)
         
         // CRITICAL: Reset Monetag watching state BEFORE starting Sonar
-        // This ensures any Monetag-specific UI (loaders/overlays) are removed
-        // and prevents state conflicts.
         setMonetagWatching(false)
+        setIsLoading(false)
         setAdReady(false) // Ensure we try fresh next time
 
         try {
@@ -130,6 +134,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
 
         // 2. Show Ad
         try {
+          setIsLoading(false) // Stop loading before showing ad
           await withTimeout(adHandler({ ymid }))
           // Reset ready state after showing
           setAdReady(false)
@@ -159,6 +164,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       } finally {
         // Ensure this is reset in case we didn't go through fallback
         setMonetagWatching(false)
+        setIsLoading(false)
       }
     },
     [userId, onReward, adHandler, showSonarAds, onError, adReady]
@@ -177,6 +183,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
   return {
     handleWatchAds,
     watchingAds: monetagWatching || sonarWatching,
+    isLoading, // Export isLoading state
     adReady,
     preloadAd,
   }
