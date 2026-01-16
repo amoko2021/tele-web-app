@@ -87,7 +87,7 @@ export const Prediction = () => {
   const getRewardValue = (id) => {
     switch (id) {
       case 1:
-        return '+15k VND'
+        return '+10k VND'
       case 2:
         return '+3k VND/1số'
       case 3:
