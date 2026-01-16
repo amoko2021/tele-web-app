@@ -6,7 +6,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
   const [watchingAds, setWatchingAds] = useState(false)
   const [adReady, setAdReady] = useState(false)
 
-  const adHandler = zoneId ? createAdHandler(zoneId) : null
+  const adHandler = createAdHandler(zoneId)
 
   const preloadAd = useCallback(
     async (ymid) => {
@@ -37,6 +37,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
 
       if (!adHandler) {
         onError?.(new Error('Monetag SDK not available or zoneId not set'))
+        alert('Monetag SDK not available or zoneId not set')
         return false
       }
 
@@ -48,6 +49,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
           await adHandler({ ymid })
         } catch (error) {
           console.warn('Interstitial failed, trying popup...', error)
+          alert('Interstitial failed, trying popup...')
           // Fallback to Popup if Interstitial fails
           await adHandler({ type: 'pop', ymid })
         }
