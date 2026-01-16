@@ -43,7 +43,10 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
   }, [zoneId])
 
   // Helper to get consistent ymid
-  const getYmid = useCallback(() => userId?.toString() || 'guest-user', [userId])
+  const getYmid = useCallback(() => {
+    const baseId = userId?.toString() || 'guest-user'
+    return `${baseId}-${Date.now()}`
+  }, [userId])
 
   // Auto-preload on mount or when dependencies change
   useEffect(() => {
