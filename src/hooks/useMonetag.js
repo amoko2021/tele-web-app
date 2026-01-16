@@ -1,25 +1,12 @@
-import { useCallback, useState, useMemo } from 'react'
+import { useCallback, useState } from 'react'
 import { userApi } from '../services/api'
 import createAdHandler from 'monetag-tg-sdk'
-import { useSonarAds } from './useSonarAds'
-import { UI_TEXT } from '../config/uiText'
 
 export function useMonetag({ userId, zoneId, onReward, onError }) {
-  const [monetagWatching, setMonetagWatching] = useState(false)
+  const [watchingAds, setWatchingAds] = useState(false)
   const [adReady, setAdReady] = useState(false)
 
-  // Initialize Sonar Ads for fallback
-  const { handleWatchAds: showSonarAds, watchingAds: sonarWatching } =
-    useSonarAds({
-      userId,
-      onReward,
-      onError,
-    })
-
-  const adHandler = useMemo(
-    () => (zoneId ? createAdHandler(zoneId) : null),
-    [zoneId]
-  )
+  const adHandler = zoneId ? createAdHandler(zoneId) : null
 
   const preloadAd = useCallback(
     async (ymid) => {
@@ -44,80 +31,62 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
   const showMonetagAd = useCallback(
     async (ymid, rewardAmount) => {
       if (!userId) {
-        alert(UI_TEXT.home.alerts.noUser)
+        alert('Không tìm thấy thông tin user!')
         return false
       }
 
-      // Fallback to Sonar if Monetag handler is missing
       if (!adHandler) {
-        console.warn('Monetag handler missing, falling back to Sonar')
-        alert(UI_TEXT.home.alerts.monetagFallback)
-        await showSonarAds(rewardAmount)
-        return true
+        onError?.(new Error('Monetag SDK not available or zoneId not set'))
+        return false
       }
 
-      setMonetagWatching(true)
+      setWatchingAds(true)
 
       try {
-        // 1. Attempt to preload (or check availability)
-        // As per docs: show_XXX({ type: 'preload', ... }).then(...).catch(...)
-        try {
-          await adHandler({ type: 'preload', ymid })
-        } catch (preloadError) {
-          console.warn('Monetag preload failed, trying fallback', preloadError)
-          throw preloadError // Re-throw to go to outer catch
-        }
-
-        // 2. Show Rewarded Interstitial ad
+        // Use Rewarded Popup format with type: 'pop'
         await adHandler({ ymid })
 
-        // Ad completed - reward user
+        // Popup attempt completed - reward user
         try {
-          // const currentBalance = await userApi.getUserInfo(userId)
-          // const newBalance = (currentBalance?.data?.balance || 0) + rewardAmount
+          const currentBalance = await userApi.getUserInfo(userId)
+          const newBalance = (currentBalance?.data?.balance || 0) + rewardAmount
           await userApi.updateBalance(userId, rewardAmount)
-          // alert(UI_TEXT.home.alerts.rewardFromAd.replace('{amount}', rewardAmount))
+          // alert(`Bạn đã nhận được ${rewardAmount} đ khi xem quảng cáo!`)
           onReward?.()
         } catch (error) {
           console.error('Error updating balance:', error)
           alert(
-            UI_TEXT.home.alerts.rewardUpdateError.replace(
-              '{amount}',
-              rewardAmount
-            )
+            `Bạn đã nhận được ${rewardAmount} đ nhưng có lỗi khi cập nhật số dư!`
           )
         }
 
         return true
       } catch (error) {
-        console.error('Monetag ad failed, falling back to Sonar:', error)
-        alert(UI_TEXT.home.alerts.monetagError)
-        // Fallback to Sonar on error
-        setMonetagWatching(false) // Ensure we reset this before switching
-        await showSonarAds(rewardAmount)
-        return true
+        console.error('Monetag popup ad failed:', error)
+        onError?.(error)
+        return false
       } finally {
-        setMonetagWatching(false)
+        setWatchingAds(false)
       }
     },
-    [userId, onReward, adHandler, showSonarAds]
+    [userId, onReward, onError, adHandler]
   )
 
   const handleWatchAds = useCallback(
     async (rewardAmount) => {
-      if (monetagWatching || sonarWatching) return false
+      if (watchingAds) return false
 
       // Use userId as ymid for tracking, fallback to 'guest-user'
       const ymid = userId?.toString() || 'guest-user'
 
       return await showMonetagAd(ymid, rewardAmount)
     },
-    [userId, monetagWatching, sonarWatching, showMonetagAd]
+    [userId, watchingAds, showMonetagAd]
   )
 
   return {
     handleWatchAds,
-    watchingAds: monetagWatching || sonarWatching,
+    watchingAds,
     adReady,
     preloadAd,
   }
