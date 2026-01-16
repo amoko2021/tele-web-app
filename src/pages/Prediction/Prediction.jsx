@@ -196,7 +196,7 @@ export const Prediction = () => {
   // 3. Monetag Hook (for loto_3)
   const { handleWatchAds: showMonetag } = useMonetag({
     userId,
-    zoneId: import.meta.env.VITE_MONETAG_ZONE_ID || '',
+    zoneId: '10456534',
     onReward: handleAdSuccess,
     onError: handleAdError,
   })
