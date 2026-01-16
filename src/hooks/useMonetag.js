@@ -43,8 +43,14 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       setWatchingAds(true)
 
       try {
-        // Use Rewarded Popup format with type: 'pop'
-        await adHandler({ ymid })
+        try {
+          // Try default (Interstitial)
+          await adHandler({ ymid })
+        } catch (error) {
+          console.warn('Interstitial failed, trying popup...', error)
+          // Fallback to Popup if Interstitial fails
+          await adHandler({ type: 'pop', ymid })
+        }
 
         // Popup attempt completed - reward user
         try {

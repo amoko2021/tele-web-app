@@ -266,9 +266,9 @@ export const Prediction = () => {
     // db_3 (3) -> Sonar
     // loto_3 (4) -> Monetag
 
-    if (category.id === 1) {
+    if (category.id === 2) {
       showMonetag(0)
-    } else if (category.id === 2 || category.id === 3) {
+    } else if (category.id === 1 || category.id === 3) {
       // Pass 0 or minimal reward since the goal is just gating
       showSonar(0)
     } else if (category.id === 4) {
