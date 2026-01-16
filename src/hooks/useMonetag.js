@@ -100,7 +100,13 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
       // Helper for fallback execution
       const executeFallback = async (reason) => {
         console.warn('Monetag ad unavailable/failed, executing fallback. Reason:', reason)
-        // We don't alert error here to keep it seamless
+        
+        // CRITICAL: Reset Monetag watching state BEFORE starting Sonar
+        // This ensures any Monetag-specific UI (loaders/overlays) are removed
+        // and prevents state conflicts.
+        setMonetagWatching(false)
+        setAdReady(false) // Ensure we try fresh next time
+
         try {
           await showSonarAds(rewardAmount)
         } catch (sonarError) {
@@ -113,7 +119,8 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
         // 1. Preload/Check availability (only if not already ready)
         if (!adReady) {
           try {
-            await withTimeout(adHandler({ type: 'preload', ymid }), 8000) // Shorter timeout for preload check
+            // Reduced timeout to 4s to avoid losing "user interaction" token for fallback
+            await withTimeout(adHandler({ type: 'preload', ymid }), 4000) 
             setAdReady(true)
           } catch (preloadError) {
             await executeFallback(preloadError)
@@ -128,7 +135,6 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
           setAdReady(false)
         } catch (showError) {
           // If show fails, it might be because the preloaded ad expired or failed.
-          // We could try to fallback.
           await executeFallback(showError)
           return true
         }
@@ -151,6 +157,7 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
         await executeFallback(error)
         return true
       } finally {
+        // Ensure this is reset in case we didn't go through fallback
         setMonetagWatching(false)
       }
     },
