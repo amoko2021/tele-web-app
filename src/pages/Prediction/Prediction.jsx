@@ -194,7 +194,7 @@ export const Prediction = () => {
   })
 
   // 3. Monetag Hook (for loto_3)
-  const { handleWatchAds: showMonetag } = useMonetag({
+  const { handleWatchAds: showMonetag, isLoading: isMonetagLoading } = useMonetag({
     userId,
     zoneId: '10456534',
     onReward: handleAdSuccess,
@@ -215,7 +215,7 @@ export const Prediction = () => {
     onError: handleAdError,
   })
 
-  const { handleWatchAds: showMonetagForMoney } = useMonetag({
+  const { handleWatchAds: showMonetagForMoney, isLoading: isMonetagMoneyLoading } = useMonetag({
     userId,
     zoneId: import.meta.env.VITE_MONETAG_ZONE_ID || '',
     onReward: handleAdSuccessForMoney,
@@ -553,6 +553,16 @@ export const Prediction = () => {
           </button>
         </div>
       </Modal>
+
+      {/* Ad Loading Overlay */}
+      {(isMonetagLoading || isMonetagMoneyLoading) && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 flex flex-col items-center gap-4 shadow-xl animate-in fade-in zoom-in duration-200">
+            <div className="animate-spin rounded-full h-10 w-10 border-4 border-primary border-t-transparent"></div>
+            <p className="font-bold text-slate-700">{UI_TEXT.home.alerts.adLoading}</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
