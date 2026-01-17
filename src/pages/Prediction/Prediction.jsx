@@ -160,7 +160,7 @@ export const Prediction = () => {
       // Show success notification
       if (window.Telegram?.WebApp) {
         window.Telegram.WebApp.showAlert(
-          UI_TEXT.home.alerts.rewardFromAd.replace('{amount}', randomAmount)
+          UI_TEXT.home.alerts.rewardFromAd.replace('{amount}', randomAmount),
         )
       }
 
@@ -270,9 +270,9 @@ export const Prediction = () => {
     // db_3 (3) -> Sonar
     // loto_3 (4) -> Monetag
 
-    if (category.id === 2) {
+    if (category.id === 1 || category.id === 2) {
       showMonetag(0)
-    } else if (category.id === 1 || category.id === 3) {
+    } else if (category.id === 3) {
       // Pass 0 or minimal reward since the goal is just gating
       showSonar(0)
     } else if (category.id === 4) {
@@ -318,7 +318,7 @@ export const Prediction = () => {
     // Validate length
     if (inputNumber.length !== addModal.maxDigits) {
       setAddError(
-        UI_TEXT.prediction.inputLabel.replace('{digits}', addModal.maxDigits)
+        UI_TEXT.prediction.inputLabel.replace('{digits}', addModal.maxDigits),
       )
       return
     }
@@ -338,7 +338,7 @@ export const Prediction = () => {
           setAddError(UI_TEXT.prediction.alreadyPredicted)
         } else if (err.response.status === 400) {
           setAddError(
-            err.response.data?.error || UI_TEXT.prediction.limitReached
+            err.response.data?.error || UI_TEXT.prediction.limitReached,
           )
         } else {
           setAddError(UI_TEXT.common.error)
@@ -464,7 +464,7 @@ export const Prediction = () => {
             <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">
               {UI_TEXT.prediction.inputLabel.replace(
                 '{digits}',
-                addModal.maxDigits
+                addModal.maxDigits,
               )}
             </label>
             <input
