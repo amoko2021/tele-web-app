@@ -352,6 +352,18 @@ export const Prediction = () => {
   }
 
   const handleDelete = (predictionId, number) => {
+    // Prevent opening delete modal after prediction time is over
+    if (isTimeUp) {
+      const msg =
+        UI_TEXT.validation?.guessTimeOver || UI_TEXT.prediction.timeOver
+      if (window.Telegram?.WebApp?.showAlert) {
+        window.Telegram.WebApp.showAlert(msg)
+      } else {
+        alert(msg)
+      }
+      return
+    }
+
     setDeleteModal({
       isOpen: true,
       predictionId,
