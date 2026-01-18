@@ -270,12 +270,12 @@ export const Prediction = () => {
     // db_3 (3) -> Sonar
     // loto_3 (4) -> Monetag
 
-    if (category.id === 1 || category.id === 2) {
+    if (category.id === 2) {
       showMonetag(0)
     } else if (category.id === 3) {
       // Pass 0 or minimal reward since the goal is just gating
       showSonar(0)
-    } else if (category.id === 4) {
+    } else if (category.id === 1 || category.id === 4) {
       showAdsgram()
     } else {
       // Fallback for unknown categories, just open modal
@@ -300,11 +300,11 @@ export const Prediction = () => {
     // db_3 (3) -> Sonar (for money)
     // loto_3 (4) -> Adsgram (for money)
 
-    if (category.id === 1 || category.id === 2) {
+    if (category.id === 2) {
       showMonetagForMoney(0)
     } else if (category.id === 3) {
       showSonarForMoney(0)
-    } else if (category.id === 4) {
+    } else if (category.id === 1 || category.id === 4) {
       showAdsgramForMoney()
     } else {
       // Fallback
