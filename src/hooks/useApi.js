@@ -127,3 +127,25 @@ export const useUserInfo = (userId) => {
 
   return { data, loading, error, refetch: fetchUserInfo }
 }
+
+export const useUpdateLanguage = (userId, language) => {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(false)
+
+  const updateLanguage = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    setSuccess(false)
+    try {
+      await userApi.updateLanguage(userId, language)
+      setSuccess(true)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }, [userId, language])
+
+  return { updateLanguage, loading, error, success }
+}

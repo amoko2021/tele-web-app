@@ -20,7 +20,7 @@ import { TaskButton } from './components/TaskButton'
 // import { PredictionButton } from './components/PredictionButton'
 // import { WatchAdsButton } from './components/WatchAdsButton'
 import { UI_TEXT } from '../../config/uiText'
-import { useUserInfo } from '../../hooks/useApi'
+import { useUserInfo, useUpdateLanguage } from '../../hooks/useApi'
 
 export const Home = () => {
   const navigate = useNavigate()
@@ -55,8 +55,14 @@ export const Home = () => {
   // Lấy userId từ Telegram
   const userData = validationData?.data?.user || telegramUser
   const userId = userData?.id
+  const language = userData?.language_code || 'en'
   const { data: userInfo } = useUserInfo(userId)
-
+  const {
+    updateLanguage,
+    loading: updatingLanguage,
+    error: updateLanguageError,
+    success: updateLanguageSuccess,
+  } = useUpdateLanguage(userId, language)
   // Sonar Ads hook
   // const { handleWatchAds: handleSonarAds, watchingAds: watchingSonarAds } =
   //   useSonarAds({ userId })

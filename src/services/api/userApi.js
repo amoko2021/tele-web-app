@@ -101,6 +101,30 @@ export const userApi = {
     }
   },
 
+  updateLanguage: async (userId, language) => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            message: 'Language updated successfully',
+            data: {
+              user_id: userId,
+            },
+          })
+        }, 300)
+      })
+    }
+
+    try {
+      const response = await apiClient.put(`/language/${userId}`, { language })
+      return response
+    } catch (error) {
+      console.error('Error updating language:', error)
+      throw error
+    }
+  },
+
   // Lấy thông tin tài khoản ngân hàng
   getBankAccount: async (userId) => {
     if (USE_MOCK) {
