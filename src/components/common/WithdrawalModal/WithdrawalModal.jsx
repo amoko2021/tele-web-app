@@ -6,7 +6,7 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo, balance }
   const [amount, setAmount] = useState('')
   const [showConfirm, setShowConfirm] = useState(false)
   const [withdrawalType, setWithdrawalType] = useState('bank')
-  const [selectedCrypto, setSelectedCrypto] = useState('')
+  const [selectedCrypto, setSelectedCrypto] = useState('USDT (BEP20)')
   const [walletAddress, setWalletAddress] = useState('')
 
   const cryptoOptions = ['USDT (BEP20)']
@@ -51,7 +51,7 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo, balance }
       // Chỉ close modal khi thành công
       setShowConfirm(false)
       setAmount('')
-      setSelectedCrypto('')
+      setSelectedCrypto('USDT (BEP20)')
       setWalletAddress('')
       setWithdrawalType('bank')
       onClose()
@@ -63,7 +63,7 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo, balance }
 
   const handleClose = () => {
     setAmount('')
-    setSelectedCrypto('')
+    setSelectedCrypto('USDT (BEP20)')
     setWalletAddress('')
     setWithdrawalType('bank')
     setShowConfirm(false)
@@ -206,18 +206,17 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo, balance }
                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                        {UI_TEXT.withdrawal.crypto.selectCrypto}
                      </label>
-                     <select
-                       value={selectedCrypto}
-                       onChange={(e) => setSelectedCrypto(e.target.value)}
-                       className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                     >
-                       <option value="">Chọn loại tiền điện tử</option>
-                       {cryptoOptions.map((crypto) => (
-                         <option key={crypto} value={crypto}>
-                           {crypto}
-                         </option>
-                       ))}
-                     </select>
+                      <select
+                        value={selectedCrypto}
+                        onChange={(e) => setSelectedCrypto(e.target.value)}
+                        className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                      >
+                        {cryptoOptions.map((crypto) => (
+                          <option key={crypto} value={crypto}>
+                            {crypto}
+                          </option>
+                        ))}
+                      </select>
                    </div>
 
                    {/* Wallet Address */}
