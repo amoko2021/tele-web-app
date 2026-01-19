@@ -63,6 +63,7 @@ export const Home = () => {
     error: updateLanguageError,
     success: updateLanguageSuccess,
   } = useUpdateLanguage(userId, language)
+
   // Sonar Ads hook
   // const { handleWatchAds: handleSonarAds, watchingAds: watchingSonarAds } =
   //   useSonarAds({ userId })

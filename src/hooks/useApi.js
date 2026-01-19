@@ -134,6 +134,8 @@ export const useUpdateLanguage = (userId, language) => {
   const [success, setSuccess] = useState(false)
 
   const updateLanguage = useCallback(async () => {
+    if (!userId || !language) return
+
     setLoading(true)
     setError(null)
     setSuccess(false)
@@ -146,6 +148,11 @@ export const useUpdateLanguage = (userId, language) => {
       setLoading(false)
     }
   }, [userId, language])
+
+  // Auto call API when userId and language are available
+  useEffect(() => {
+    updateLanguage()
+  }, [updateLanguage])
 
   return { updateLanguage, loading, error, success }
 }
