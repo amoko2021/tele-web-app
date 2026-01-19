@@ -127,6 +127,10 @@ const VI_TEXT = {
     limitReached: 'Đã đạt giới hạn dự đoán',
     connectionError: 'Lỗi kết nối',
     deleteError: 'Không thể xóa dự đoán',
+    rule_db_2: '2 số cuối giải đặc biệt',
+    rule_loto_2: '2 số cuối các giải',
+    rule_db_3: '3 số cuối giải đặc biệt',
+    rule_loto_3: '3 số cuối các giải'
   },
 
   // Màn hình Tài khoản (Account)
@@ -403,6 +407,10 @@ const EN_TEXT = {
     limitReached: 'Prediction limit reached',
     connectionError: 'Connection error',
     deleteError: 'Cannot delete prediction',
+    rule_db_2: 'match 2 digits of special prize',
+    rule_loto_2: 'match 2 digits of any prizes',
+    rule_db_3: 'match 3 digits of special prize',
+    rule_loto_3: 'match 3 digits of any prizes'
   },
 
   // Account Screen

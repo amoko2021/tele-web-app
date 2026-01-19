@@ -84,6 +84,16 @@ export const Prediction = () => {
 
   const isResultTime = checkIsResultTime()
 
+  const getCategoryKey = (id) => {
+    const map = {
+      1: 'db_2',
+      2: 'loto_2',
+      3: 'db_3',
+      4: 'loto_3',
+    }
+    return map[id]
+  }
+
   const getRewardValue = (id) => {
     switch (id) {
       case 1:
@@ -101,16 +111,6 @@ export const Prediction = () => {
 
   // Helper to open modal
   const openAddModal = useCallback((category) => {
-    const getCategoryKey = (id) => {
-      const map = {
-        1: 'db_2',
-        2: 'loto_2',
-        3: 'db_3',
-        4: 'loto_3',
-      }
-      return map[id]
-    }
-
     const getDigitCount = (id) => {
       return id === 3 || id === 4 ? 3 : 2
     }
@@ -411,7 +411,7 @@ export const Prediction = () => {
               <PredictionCategoryCard
                 key={category.id}
                 title={category.title}
-                subtitle={category.subtitle}
+                subtitle={UI_TEXT.prediction[`rule_${getCategoryKey(category.id)}`] || category.subtitle}
                 count={category.count}
                 maxCount={category.max_count}
                 color={category.color}
