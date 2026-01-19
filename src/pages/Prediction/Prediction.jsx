@@ -97,13 +97,13 @@ export const Prediction = () => {
   const getRewardValue = (id) => {
     switch (id) {
       case 1:
-        return '+10k VND'
+        return '+10k Coins'
       case 2:
-        return '+3k VND/1số'
+        return '+3k Coins/number'
       case 3:
-        return '+50k VND'
+        return '+50k Coins'
       case 4:
-        return '+10kVND/1số'
+        return '+10k Coins/number'
       default:
         return ''
     }
@@ -411,7 +411,10 @@ export const Prediction = () => {
               <PredictionCategoryCard
                 key={category.id}
                 title={category.title}
-                subtitle={UI_TEXT.prediction[`rule_${getCategoryKey(category.id)}`] || category.subtitle}
+                subtitle={
+                  UI_TEXT.prediction[`rule_${getCategoryKey(category.id)}`] ||
+                  category.subtitle
+                }
                 count={category.count}
                 maxCount={category.max_count}
                 color={category.color}

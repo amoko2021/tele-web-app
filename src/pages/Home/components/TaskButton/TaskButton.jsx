@@ -3,7 +3,7 @@ import { UI_TEXT } from '../../../../config/uiText'
 export const TaskButton = ({
   onClick,
   text = UI_TEXT.home.tasks.survey,
-  amount = '+99,000VND',
+  amount = '+99,000 Coins',
   gradientColors = 'from-amber-500 to-orange-600',
 }) => {
   return (

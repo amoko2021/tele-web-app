@@ -19,7 +19,7 @@ const VI_TEXT = {
     close: 'Đóng',
     copy: 'Sao chép',
     copied: 'Đã sao chép!',
-    currency: 'VND',
+    currency: 'Coins',
     delete: 'Xóa',
     today: 'Hôm nay',
     history: 'Lịch sử',
@@ -89,9 +89,9 @@ const VI_TEXT = {
       monetagFallback:
         'Quảng cáo Monetag chưa sẵn sàng, đang chuyển sang nguồn dự phòng...',
       monetagError: 'Lỗi khi tải quảng cáo Monetag, đang thử nguồn dự phòng...',
-      rewardFromAd: 'Bạn đã nhận được {amount}đ khi xem quảng cáo!',
+      rewardFromAd: 'Bạn đã nhận được {amount} Coins khi xem quảng cáo!',
       rewardUpdateError:
-        'Bạn đã nhận được {amount}đ nhưng có lỗi khi cập nhật số dư!',
+        'Bạn đã nhận được {amount} Coins nhưng có lỗi khi cập nhật số dư!',
     },
     rules: {
       title: 'Thể lệ chương trình',
@@ -104,10 +104,10 @@ const VI_TEXT = {
         'Mỗi lượt dự đoán bạn cần xem 1 quảng cáo ngắn để ủng hộ hệ thống.',
       ruleContent2: 'Mỗi hạng mục được phép dự đoán tối đa 10 bộ số.',
       prizeTitle: '3. Cơ cấu giải thưởng',
-      prizeSpecial2: 'Đặc biệt 2 số: +15k',
-      prizeLoto2: 'Lô 2 số: 3k',
-      prizeSpecial3: 'Đặc biệt 3 số: +50K',
-      prizeLoto3: 'Lô 3 số: +10K',
+      prizeSpecial2: 'Đặc biệt 2 số: +15k Coins',
+      prizeLoto2: 'Lô 2 số: +3k Coins',
+      prizeSpecial3: 'Đặc biệt 3 số: +50K Coins',
+      prizeLoto3: 'Lô 3 số: +10K Coins',
       understood: 'Đã hiểu',
     },
   },
@@ -117,7 +117,7 @@ const VI_TEXT = {
     title: 'Dự đoán hôm nay',
     loadingError: 'Không thể tải dữ liệu dự đoán',
     timeOver:
-      'Thời gian dự đoán kết thúc. Nhấn vào biểu tượng quảng cáo để nhận 10-100đ',
+      'Thời gian dự đoán kết thúc. Nhấn vào biểu tượng quảng cáo để nhận 10-100 Coins',
     waitingResults: 'Đang chờ kết quả (18:15)',
     addTitle: 'Thêm {title}',
     inputLabel: 'Nhập số dự đoán ({digits} số)',
@@ -130,7 +130,7 @@ const VI_TEXT = {
     rule_db_2: '2 số cuối giải đặc biệt',
     rule_loto_2: '2 số cuối các giải',
     rule_db_3: '3 số cuối giải đặc biệt',
-    rule_loto_3: '3 số cuối các giải'
+    rule_loto_3: '3 số cuối các giải',
   },
 
   // Màn hình Tài khoản (Account)
@@ -139,7 +139,7 @@ const VI_TEXT = {
     balance: {
       label: 'Số dư Xu',
       points: 'Điểm thưởng',
-      unit: 'đ',
+      unit: 'Coins',
     },
     actions: {
       withdraw: 'Rút tiền',
@@ -305,7 +305,7 @@ const EN_TEXT = {
     close: 'Close',
     copy: 'Copy',
     copied: 'Copied!',
-    currency: 'VND',
+    currency: 'Coins',
     delete: 'Delete',
     today: 'Today',
     history: 'History',
@@ -372,8 +372,9 @@ const EN_TEXT = {
       adError: 'Error showing ads. Please try again!',
       monetagFallback: 'Monetag ads not ready, switching to backup...',
       monetagError: 'Error loading Monetag ads, trying backup...',
-      rewardFromAd: 'You received {amount}đ for watching ads!',
-      rewardUpdateError: 'You received {amount}đ but error updating balance!',
+      rewardFromAd: 'You received {amount} Coins for watching ads!',
+      rewardUpdateError:
+        'You received {amount} Coins but error updating balance!',
     },
     rules: {
       title: 'Program Rules',
@@ -382,13 +383,14 @@ const EN_TEXT = {
       timeTitle: '1. Prediction Time',
       timeContent: 'System opens for prediction from {start} to {end} daily.',
       ruleTitle: '2. Participation Rules',
-      ruleContent1: 'Each prediction requires watching 1 short ad to support the system.',
+      ruleContent1:
+        'Each prediction requires watching 1 short ad to support the system.',
       ruleContent2: 'Max 10 number sets per category.',
       prizeTitle: '3. Prize Structure',
-      prizeSpecial2: 'Special 2 digits: +15k',
-      prizeLoto2: 'Loto 2 digits: 3k',
-      prizeSpecial3: 'Special 3 digits: +50K',
-      prizeLoto3: 'Loto 3 digits: +10K',
+      prizeSpecial2: 'Special 2 digits: +15k Coins',
+      prizeLoto2: 'Loto 2 digits: +3k Coins',
+      prizeSpecial3: 'Special 3 digits: +50K Coins',
+      prizeLoto3: 'Loto 3 digits: +10K Coins',
       understood: 'Understood',
     },
   },
@@ -397,7 +399,7 @@ const EN_TEXT = {
   prediction: {
     title: 'Prediction Today',
     loadingError: 'Cannot load prediction data',
-    timeOver: 'Prediction time over. Click ad icon to receive 10-100đ',
+    timeOver: 'Prediction time over. Click ad icon to receive 10-100 Coins',
     waitingResults: 'Waiting for results (18:15)',
     addTitle: 'Add {title}',
     inputLabel: 'Enter prediction number ({digits} digits)',
@@ -410,7 +412,7 @@ const EN_TEXT = {
     rule_db_2: 'match 2 digits of special prize',
     rule_loto_2: 'match 2 digits of any prizes',
     rule_db_3: 'match 3 digits of special prize',
-    rule_loto_3: 'match 3 digits of any prizes'
+    rule_loto_3: 'match 3 digits of any prizes',
   },
 
   // Account Screen
@@ -419,7 +421,7 @@ const EN_TEXT = {
     balance: {
       label: 'Coin Balance',
       points: 'Reward Points',
-      unit: 'đ',
+      unit: 'Coins',
     },
     actions: {
       withdraw: 'Withdraw',
@@ -485,12 +487,14 @@ const EN_TEXT = {
     },
     warning: {
       noBank: 'Withdrawal Account not set',
-      setupFirst: 'You have not set up a bank account for withdrawal. Please set up before transacting.',
+      setupFirst:
+        'You have not set up a bank account for withdrawal. Please set up before transacting.',
       setupNow: 'Set up now',
     },
     modal: {
       confirmTitle: 'Confirm Withdrawal',
-      confirmMessage: 'Are you sure you want to withdraw this amount to the selected account?',
+      confirmMessage:
+        'Are you sure you want to withdraw this amount to the selected account?',
       fee: 'Transaction Fee',
       free: 'Free',
       realReceived: 'Actual Received',
@@ -512,7 +516,8 @@ const EN_TEXT = {
       title: 'Build your team!',
       subtitle: 'Refer friends and get rewards.',
       cardTitle: 'Invite Friends',
-      description: 'Get 1,000đ for each friend you invite who successfully joins prediction.',
+      description:
+        'Get 1,000đ for each friend you invite who successfully joins prediction.',
       button: 'Invite Friends',
       refLink: 'Your Referral Link',
       shareText: 'Join me now! 🎰',
@@ -550,7 +555,8 @@ const EN_TEXT = {
   // Error Boundary
   errorBoundary: {
     title: 'An error occurred',
-    message: 'The application encountered an unexpected error. Please try again later.',
+    message:
+      'The application encountered an unexpected error. Please try again later.',
     reload: 'Reload Page',
   },
 
@@ -570,12 +576,15 @@ const getLanguage = () => {
   try {
     // 1. Try to get from cached validation data
     const validationData = telegramAuthService.getCachedValidation()
-    const validLang = validationData?.data?.user?.language_code || validationData?.user?.language_code
+    const validLang =
+      validationData?.data?.user?.language_code ||
+      validationData?.user?.language_code
 
     if (validLang) return validLang
 
     // 2. Try to get from unsafe init data (global)
-    const unsafeLang = window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code
+    const unsafeLang =
+      window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code
     if (unsafeLang) return unsafeLang
 
     return 'en' // Default
