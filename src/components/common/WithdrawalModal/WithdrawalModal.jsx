@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { WithdrawalConfirmModal } from '../WithdrawalConfirmModal'
 import { UI_TEXT } from '../../../config/uiText'
 
-export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
+export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo, balance }) => {
   const [amount, setAmount] = useState('')
   const [showConfirm, setShowConfirm] = useState(false)
   const [withdrawalType, setWithdrawalType] = useState('bank')
@@ -17,6 +17,10 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
     const amountNum = parseInt(amount.replace(/\D/g, ''))
     if (!amountNum || amountNum < 50000) {
       alert(UI_TEXT.validation.minAmount.replace('{amount}', '50.000'))
+      return
+    }
+    if (amountNum > balance) {
+      alert(UI_TEXT.validation.maxAmount)
       return
     }
     if (withdrawalType === 'crypto') {

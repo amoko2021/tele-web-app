@@ -174,6 +174,7 @@ export const Account = () => {
         onClose={() => setIsWithdrawalModalOpen(false)}
         onSubmit={handleWithdrawalSubmit}
         bankInfo={bankAccount}
+        balance={userInfo?.data?.balance || 0}
       />
     </div>
   )
