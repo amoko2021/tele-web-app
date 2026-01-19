@@ -44,6 +44,21 @@ export const Prediction = () => {
   // Rules Modal State
   const [rulesModalOpen, setRulesModalOpen] = useState(false)
 
+  // Ad Cooldown State
+  const [adCooldown, setAdCooldown] = useState(0)
+
+  useEffect(() => {
+    let timer
+    if (adCooldown > 0) {
+      timer = setInterval(() => {
+        setAdCooldown((prev) => prev - 1)
+      }, 1000)
+    }
+    return () => {
+      if (timer) clearInterval(timer)
+    }
+  }, [adCooldown])
+
   // Helper function to check if time is up (18:00 VN time)
   const checkIsTimeUp = () => {
     const nowVN = new Date().toLocaleString('en-US', {
@@ -128,6 +143,7 @@ export const Prediction = () => {
 
   // Common Ad Success Handler
   const handleAdSuccess = useCallback(() => {
+    setAdCooldown(30)
     const category = pendingCategoryRef.current
     if (category) {
       openAddModal(category)
@@ -137,6 +153,7 @@ export const Prediction = () => {
 
   // Ad Success Handler for time-up ads (earn random money instead of opening modal)
   const handleAdSuccessForMoney = useCallback(async () => {
+    setAdCooldown(30)
     try {
       // Random amount between 10-100 with 90% chance for 10-20, 10% chance for 21-100
       const rand = Math.random()
@@ -262,6 +279,15 @@ export const Prediction = () => {
       return
     }
 
+    if (adCooldown > 0) {
+      if (window.Telegram?.WebApp?.showAlert) {
+        window.Telegram.WebApp.showAlert(
+          UI_TEXT.home.alerts.adCooldown.replace('{seconds}', adCooldown),
+        )
+      }
+      return
+    }
+
     // Store category in ref for callback access
     pendingCategoryRef.current = category
 
@@ -292,6 +318,15 @@ export const Prediction = () => {
 
   // Handle ad click for time-up slots (earn money instead of prediction)
   const handleAdClick = (category) => {
+    if (adCooldown > 0) {
+      if (window.Telegram?.WebApp?.showAlert) {
+        window.Telegram.WebApp.showAlert(
+          UI_TEXT.home.alerts.adCooldown.replace('{seconds}', adCooldown),
+        )
+      }
+      return
+    }
+
     // Store category in ref for callback access
     pendingCategoryRef.current = category
 
@@ -429,6 +464,7 @@ export const Prediction = () => {
                 isTimeUp={isTimeUp}
                 onAdClick={() => handleAdClick(category)}
                 reward={getRewardValue(category.id)}
+                adCooldown={adCooldown}
               />
             ))
           )}

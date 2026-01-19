@@ -15,6 +15,7 @@ export const PredictionCategoryCard = ({
   isTimeUp = false, // New prop to indicate if prediction time is over
   onAdClick, // New prop for handling ad click when time is up
   reward,
+  adCooldown = 0,
 }) => {
   const colorClasses = {
     red: {
@@ -111,22 +112,40 @@ export const PredictionCategoryCard = ({
         elements.push(
           <button
             key={`ad-${i}`}
-            className={`flex aspect-square items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 text-slate-300 ${theme.hoverBorder} ${theme.hoverText} transition-colors cursor-pointer`}
+            className={`flex aspect-square items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 text-slate-300 ${
+              adCooldown > 0
+                ? 'cursor-not-allowed opacity-50'
+                : `${theme.hoverBorder} ${theme.hoverText} cursor-pointer`
+            } transition-colors`}
             onClick={onAdClick}
+            disabled={adCooldown > 0}
           >
-            <span className="material-symbols-outlined">ads_click</span>
-          </button>
+            {adCooldown > 0 ? (
+              <span className="text-xs font-bold">{adCooldown}s</span>
+            ) : (
+              <span className="material-symbols-outlined">ads_click</span>
+            )}
+          </button>,
         )
       } else {
         // Render add button (+ icon)
         elements.push(
           <button
             key={`add-${i}`}
-            className={`flex aspect-square items-center justify-center rounded-xl border-2 border-dashed border-slate-100 text-slate-300 ${theme.hoverBorder} ${theme.hoverText} transition-colors`}
+            className={`flex aspect-square items-center justify-center rounded-xl border-2 border-dashed border-slate-100 text-slate-300 ${
+              adCooldown > 0
+                ? 'cursor-not-allowed opacity-50'
+                : `${theme.hoverBorder} ${theme.hoverText}`
+            } transition-colors`}
             onClick={onAdd}
+            disabled={adCooldown > 0}
           >
-            <span className="material-symbols-outlined">add</span>
-          </button>
+            {adCooldown > 0 ? (
+              <span className="text-xs font-bold">{adCooldown}s</span>
+            ) : (
+              <span className="material-symbols-outlined">add</span>
+            )}
+          </button>,
         )
       }
     }

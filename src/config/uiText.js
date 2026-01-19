@@ -92,6 +92,7 @@ const VI_TEXT = {
       rewardFromAd: 'Bạn đã nhận được {amount} Coins khi xem quảng cáo!',
       rewardUpdateError:
         'Bạn đã nhận được {amount} Coins nhưng có lỗi khi cập nhật số dư!',
+      adCooldown: 'Vui lòng đợi {seconds}s để xem quảng cáo tiếp theo',
     },
     rules: {
       title: 'Thể lệ chương trình',
@@ -375,6 +376,7 @@ const EN_TEXT = {
       rewardFromAd: 'You received {amount} Coins for watching ads!',
       rewardUpdateError:
         'You received {amount} Coins but error updating balance!',
+      adCooldown: 'Please wait {seconds}s to watch the next ad',
     },
     rules: {
       title: 'Program Rules',
