@@ -28,6 +28,9 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
         alert('Vui lòng nhập địa chỉ ví.')
         return
       }
+    } else if (withdrawalType === 'bank' && !bankInfo) {
+      alert(UI_TEXT.withdrawal.warning.noBank)
+      return
     }
     setShowConfirm(true)
   }
@@ -48,7 +51,7 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
       setWalletAddress('')
       setWithdrawalType('bank')
       onClose()
-    } catch (error) {
+    } catch {
       // Nếu lỗi, giữ modal mở để user có thể thử lại
       setShowConfirm(false)
     }

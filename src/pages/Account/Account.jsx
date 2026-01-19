@@ -28,19 +28,19 @@ export const Account = () => {
 
   // Load bank account khi có userId
   useEffect(() => {
+    const loadBankAccount = async () => {
+      try {
+        const data = await userApi.getBankAccount(userId)
+        setBankAccount(data?.data)
+      } catch (error) {
+        console.error('Error loading bank account:', error)
+      }
+    }
+
     if (userId) {
       loadBankAccount()
     }
   }, [userId])
-
-  const loadBankAccount = async () => {
-    try {
-      const data = await userApi.getBankAccount(userId)
-      setBankAccount(data?.data)
-    } catch (error) {
-      console.error('Error loading bank account:', error)
-    }
-  }
 
   const handleSaveBankAccount = async (data) => {
     if (!userId) {
@@ -48,13 +48,9 @@ export const Account = () => {
       return
     }
 
-    try {
-      const result = await userApi.updateBankAccount(userId, data)
-      setBankAccount(result.data)
-      alert(result.message || UI_TEXT.account.messages.updateSuccess)
-    } catch (error) {
-      throw error
-    }
+    const result = await userApi.updateBankAccount(userId, data)
+    setBankAccount(result.data)
+    alert(result.message || UI_TEXT.account.messages.updateSuccess)
   }
 
   const handleDeposit = () => {
@@ -62,24 +58,28 @@ export const Account = () => {
   }
 
   const handleWithdraw = () => {
-    if (!bankAccount) {
-      setIsBankWarningOpen(true)
-      return
-    }
+    // Allow opening modal even without bank account to support crypto withdrawal
+    // if (!bankAccount) {
+    //   setIsBankWarningOpen(true)
+    //   return
+    // }
     setIsWithdrawalModalOpen(true)
   }
 
-  const handleSetupBank = () => {
-    setIsBankWarningOpen(false)
-    setIsBankModalOpen(true)
-  }
+  const handleWithdrawalSubmit = async (data) => {
+    // Handle both old format (amount only) and new format (object)
+    const amount = typeof data === 'object' ? data.amount : data
+    const type = typeof data === 'object' ? data.type : 'bank'
+    const cryptoInfo = typeof data === 'object' ? data.cryptoInfo : null
 
-  const handleWithdrawalSubmit = async (amount) => {
     try {
-      const result = await userApi.requestWithdrawal(userId, {
+      const requestData = {
         amount,
-        bankAccount,
-      })
+        type,
+        ...(type === 'bank' ? { bankAccount } : { cryptoInfo })
+      }
+
+      const result = await userApi.requestWithdrawal(userId, requestData)
 
       // Cập nhật balance sau khi rút tiền thành công
       if (result.success) {
@@ -96,6 +96,10 @@ export const Account = () => {
     } catch (error) {
       alert(error.message || UI_TEXT.common.error)
     }
+  }
+  const handleSetupBank = () => {
+    setIsBankWarningOpen(false)
+    setIsBankModalOpen(true)
   }
 
   const handleHistory = () => {

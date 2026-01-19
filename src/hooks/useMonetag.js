@@ -1,7 +1,7 @@
-import { useCallback, useState, useMemo, useEffect } from 'react'
+import { useCallback, useState, useMemo, useEffect, useRef } from 'react'
 import { userApi } from '../services/api'
 import createAdHandler from 'monetag-tg-sdk'
-import { useSonarAds } from './useSonarAds'
+import { useAdsgram } from './useAdsgram'
 import { UI_TEXT } from '../config/uiText'
 
 // Helper to add timeout to promises
@@ -25,16 +25,51 @@ const withTimeout = (promise, ms = 15000) => {
 
 export function useMonetag({ userId, zoneId, onReward, onError }) {
   const [monetagWatching, setMonetagWatching] = useState(false)
+  const [adsgramWatching, setAdsgramWatching] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [adReady, setAdReady] = useState(false)
+  const rewardAmountRef = useRef(0)
 
-  // Initialize Sonar Ads for fallback
-  const { handleWatchAds: showSonarAds, watchingAds: sonarWatching } =
-    useSonarAds({
-      userId,
-      onReward,
-      onError,
-    })
+  // Handler for Adsgram reward
+  const handleAdsgramReward = useCallback(async () => {
+    const rewardAmount = rewardAmountRef.current
+    if (rewardAmount > 0 && userId) {
+      try {
+        await userApi.updateBalance(userId, rewardAmount)
+      } catch (error) {
+        console.error('Error updating balance:', error)
+        alert(
+          UI_TEXT.home.alerts.rewardUpdateError.replace(
+            '{amount}',
+            rewardAmount
+          )
+        )
+      }
+    }
+    onReward?.()
+  }, [userId, onReward])
+
+  // Initialize Adsgram for fallback
+  const showAdsgram = useAdsgram({
+    blockId: '20539',
+    fallbackBlockId: '20540',
+    onReward: handleAdsgramReward,
+    onError: (err) => {
+      console.error('Adsgram fallback failed', err)
+      onError?.(err)
+    },
+  })
+
+  // Wrapper to track Adsgram watching state
+  const showAdsgramWrapped = useCallback(async () => {
+    if (adsgramWatching) return
+    setAdsgramWatching(true)
+    try {
+      await showAdsgram()
+    } finally {
+      setAdsgramWatching(false)
+    }
+  }, [showAdsgram, adsgramWatching])
 
   // Memoize the ad handler to avoid recreation on every render
   const adHandler = useMemo(() => {
@@ -94,11 +129,14 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
         return false
       }
 
-      // Fallback to Sonar if Monetag handler is missing
+      // Store reward amount for fallback
+      rewardAmountRef.current = rewardAmount
+
+      // Fallback to Adsgram if Monetag handler is missing
       if (!adHandler) {
-        console.warn('Monetag handler missing, falling back to Sonar')
+        console.warn('Monetag handler missing, falling back to Adsgram')
         alert(UI_TEXT.home.alerts.monetagFallback)
-        await showSonarAds(rewardAmount)
+        await showAdsgramWrapped()
         return true
       }
 
@@ -107,18 +145,21 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
 
       // Helper for fallback execution
       const executeFallback = async (reason) => {
-        console.warn('Monetag ad unavailable/failed, executing fallback. Reason:', reason)
-        
-        // CRITICAL: Reset Monetag watching state BEFORE starting Sonar
+        console.warn(
+          'Monetag ad unavailable/failed, executing fallback. Reason:',
+          reason
+        )
+
+        // CRITICAL: Reset Monetag watching state BEFORE starting Adsgram
         setMonetagWatching(false)
         setIsLoading(false)
         setAdReady(false) // Ensure we try fresh next time
 
         try {
-          await showSonarAds(rewardAmount)
-        } catch (sonarError) {
-          console.error('Sonar fallback also failed', sonarError)
-          if (onError) onError(sonarError)
+          await showAdsgramWrapped()
+        } catch (adsgramError) {
+          console.error('Adsgram fallback also failed', adsgramError)
+          if (onError) onError(adsgramError)
         }
       }
 
@@ -170,22 +211,22 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
         setIsLoading(false)
       }
     },
-    [userId, onReward, adHandler, showSonarAds, onError, adReady]
+    [userId, onReward, adHandler, showAdsgramWrapped, onError, adReady]
   )
 
   const handleWatchAds = useCallback(
     async (rewardAmount) => {
-      if (monetagWatching || sonarWatching) return false
+      if (monetagWatching || adsgramWatching) return false
 
       const ymid = getYmid()
       return await showMonetagAd(ymid, rewardAmount)
     },
-    [monetagWatching, sonarWatching, showMonetagAd, getYmid]
+    [monetagWatching, adsgramWatching, showMonetagAd, getYmid]
   )
 
   return {
     handleWatchAds,
-    watchingAds: monetagWatching || sonarWatching,
+    watchingAds: monetagWatching || adsgramWatching,
     isLoading, // Export isLoading state
     adReady,
     preloadAd,
