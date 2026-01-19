@@ -2,8 +2,9 @@
  * Cấu hình toàn bộ văn bản hiển thị trên UI (User Interface).
  * Giúp quản lý tập trung, dễ dàng chỉnh sửa hoặc dịch thuật sau này.
  */
+import { telegramAuthService } from '../services/telegram/telegramAuthService'
 
-export const UI_TEXT = {
+const VI_TEXT = {
   // Các văn bản dùng chung toàn app
   common: {
     appName: 'XSMB Mini App',
@@ -284,5 +285,298 @@ export const UI_TEXT = {
     alreadyGuessed: 'Bạn đã dự đoán hôm nay rồi.',
   },
 }
+
+const EN_TEXT = {
+  // Common texts
+  common: {
+    appName: 'XSMB Mini App',
+    loading: 'Loading data...',
+    error: 'An error occurred, please try again.',
+    success: 'Success!',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+    back: 'Back',
+    save: 'Save changes',
+    continue: 'Continue',
+    close: 'Close',
+    copy: 'Copy',
+    copied: 'Copied!',
+    currency: 'VND',
+    delete: 'Delete',
+    today: 'Today',
+    history: 'History',
+  },
+
+  // Home Screen
+  home: {
+    title: 'XSMB Prediction',
+    lotteryName: 'Northern Lottery',
+    predictionInput: {
+      label: 'Enter your prediction (00-99)',
+      placeholder: 'Ex: 68',
+      button: 'Submit Prediction',
+      helperText: 'Results available at 18:30 daily.',
+    },
+    prediction: {
+      title: 'Result Prediction',
+      history: 'Prediction History Today',
+      inputLabel: 'Enter prediction number',
+      placeholder: '00',
+      sendButton: 'Submit Prediction Now',
+      sending: 'Sending...',
+      outOfTurns: 'Used {max} predictions today',
+      remaining: 'Remaining {count}',
+      predicted: 'Predicted {count}/{max}',
+      resultTime: 'Results announced at 18:15 daily',
+      addNew: 'Add New Prediction',
+      check: 'Checking...',
+      join: 'Join Prediction',
+      predict: 'Predict',
+      view: 'View',
+      selectPrize: 'Select Prize Type',
+    },
+    prizeSection: {
+      title: 'Prizes',
+      specialPrize: 'Special Prize',
+      lotoPrize: 'Loto Prize',
+      specialPrizeShort: 'Special',
+      lotoPrizeShort: 'Loto',
+    },
+    results: {
+      updateTime: 'Results updated live at 18:15 daily',
+      prize: 'Prize',
+      result: 'Result',
+      updating: 'Updating',
+    },
+    tasks: {
+      title: 'Daily Tasks',
+      checkIn: 'Daily Check-in',
+      joinChannel: 'Join Notification Channel',
+      survey: 'Earn Money Survey',
+      join: 'Join',
+      watchAds: 'Watch Ads {adType}',
+    },
+    alerts: {
+      rewardReceived: 'You received a reward!',
+      taskError: 'Error performing task. Please try again!',
+      noTask: 'No tasks available. Please try again later!',
+      sessionTimeout: 'Session timeout. Please restart the app!',
+      noUser: 'User info not found!',
+      predictionRecorded: 'Your prediction has been recorded!',
+      adUnavailable: 'Ads currently unavailable. Please wait or reload!!!',
+      adLoading: 'Loading ads...',
+      adError: 'Error showing ads. Please try again!',
+      monetagFallback: 'Monetag ads not ready, switching to backup...',
+      monetagError: 'Error loading Monetag ads, trying backup...',
+      rewardFromAd: 'You received {amount}đ for watching ads!',
+      rewardUpdateError: 'You received {amount}đ but error updating balance!',
+    },
+    rules: {
+      title: 'Program Rules',
+      limit: 'Max 10 number sets per category.',
+      view: 'View Program Rules',
+      timeTitle: '1. Prediction Time',
+      timeContent: 'System opens for prediction from {start} to {end} daily.',
+      ruleTitle: '2. Participation Rules',
+      ruleContent1: 'Each prediction requires watching 1 short ad to support the system.',
+      ruleContent2: 'Max 10 number sets per category.',
+      prizeTitle: '3. Prize Structure',
+      prizeSpecial2: 'Special 2 digits: +15k',
+      prizeLoto2: 'Loto 2 digits: 3k',
+      prizeSpecial3: 'Special 3 digits: +50K',
+      prizeLoto3: 'Loto 3 digits: +10K',
+      understood: 'Understood',
+    },
+  },
+
+  // Prediction Screen
+  prediction: {
+    title: 'Prediction Today',
+    loadingError: 'Cannot load prediction data',
+    timeOver: 'Prediction time over. Click ad icon to receive 10-100đ',
+    waitingResults: 'Waiting for results (18:15)',
+    addTitle: 'Add {title}',
+    inputLabel: 'Enter prediction number ({digits} digits)',
+    confirmDelete: 'Are you sure you want to delete this number?',
+    deleteTitle: 'Delete Prediction',
+    alreadyPredicted: 'This number has already been predicted',
+    limitReached: 'Prediction limit reached',
+    connectionError: 'Connection error',
+    deleteError: 'Cannot delete prediction',
+  },
+
+  // Account Screen
+  account: {
+    title: 'Account',
+    balance: {
+      label: 'Coin Balance',
+      points: 'Reward Points',
+      unit: 'đ',
+    },
+    actions: {
+      withdraw: 'Withdraw',
+      history: 'History',
+      settings: 'Settings',
+      deposit: 'Deposit Coins',
+    },
+    profile: {
+      uid: 'ID',
+      joinDate: 'Join Date',
+    },
+    messages: {
+      featureDev: 'Deposit feature is under development',
+      contactSupport: 'Contact: @crush_xx',
+      updateSuccess: 'Update successful!',
+    },
+    settings: {
+      general: 'General Settings',
+      bankAccount: 'Bank Account',
+      bankDesc: 'Link to withdraw money',
+      support: 'Customer Support',
+    },
+  },
+
+  // Withdrawal Screen
+  withdrawal: {
+    title: 'Withdrawal Request',
+    amountInput: {
+      label: 'Amount to withdraw',
+      placeholder: 'Minimum 50,000đ',
+    },
+    bankInfo: {
+      title: 'Recipient Info',
+      bankName: 'Bank',
+      accountNumber: 'Account Number',
+      accountName: 'Account Holder Name',
+      note: 'Please check info carefully before confirming.',
+    },
+    crypto: {
+      title: 'Withdraw Crypto',
+      selectCrypto: 'Select Cryptocurrency',
+      walletAddress: 'Wallet Address',
+      placeholderAddress: 'Enter your wallet address',
+      amount: 'Withdrawal Amount',
+      confirm: 'Confirm Crypto Withdrawal',
+      note: 'Please check wallet address carefully before confirming.',
+      cryptoType: 'Cryptocurrency Type',
+      walletAddressLabel: 'Recipient Wallet Address',
+    },
+    history: {
+      title: 'Withdrawal History',
+      empty: 'No transactions yet.',
+      showing: 'Showing {count}/{total} transactions',
+      withdrawTo: 'Withdraw to {bank}',
+      status: {
+        pending: 'Pending',
+        approved: 'Success',
+        paid: 'Success',
+        success: 'Success',
+        rejected: 'Cancelled/Rejected',
+        canceled: 'Cancelled',
+      },
+    },
+    warning: {
+      noBank: 'Withdrawal Account not set',
+      setupFirst: 'You have not set up a bank account for withdrawal. Please set up before transacting.',
+      setupNow: 'Set up now',
+    },
+    modal: {
+      confirmTitle: 'Confirm Withdrawal',
+      confirmMessage: 'Are you sure you want to withdraw this amount to the selected account?',
+      fee: 'Transaction Fee',
+      free: 'Free',
+      realReceived: 'Actual Received',
+      note: 'Your request will be processed in 5-15 minutes. Please check recipient account info carefully before confirming.',
+    },
+    messages: {
+      requestSent: 'Withdrawal request sent!',
+    },
+  },
+
+  // Settings & Referral Screen
+  settings: {
+    title: 'Settings & Referral',
+    header: {
+      title: 'Build your team!',
+      subtitle: 'Refer friends and get rewards.',
+    },
+    invite: {
+      title: 'Build your team!',
+      subtitle: 'Refer friends and get rewards.',
+      cardTitle: 'Invite Friends',
+      description: 'Get 1,000đ for each friend you invite who successfully joins prediction.',
+      button: 'Invite Friends',
+      refLink: 'Your Referral Link',
+      shareText: 'Join me now! 🎰',
+      statsTitle: 'Referral Statistics',
+      totalRef: 'Total Referrals',
+      estimatedEarnings: 'Estimated Earnings',
+      pending: 'Pending',
+    },
+
+    friends: {
+      title: 'Friends',
+      total: '{count} people',
+      loading: 'Loading list...',
+      empty: 'No one has joined yet.',
+      joined: 'Joined {date}',
+      name: 'Name',
+      statusLabel: 'Status',
+      income: 'Income',
+      noMore: 'No more referrals to show.',
+      status: {
+        rewarded: 'Rewarded',
+        pending: 'Pending',
+      },
+    },
+  },
+
+  // Navigation
+  navigation: {
+    home: 'Home',
+    account: 'Account',
+    invite: 'Invite',
+    ariaLabel: 'Main Navigation',
+  },
+
+  // Error Boundary
+  errorBoundary: {
+    title: 'An error occurred',
+    message: 'The application encountered an unexpected error. Please try again later.',
+    reload: 'Reload Page',
+  },
+
+  // Validation/Errors
+  validation: {
+    required: 'Please do not leave empty.',
+    invalidNumber: 'Please enter a valid number.',
+    minAmount: 'Minimum withdrawal amount is {amount}',
+    maxAmount: 'Insufficient balance.',
+    invalidBank: 'Invalid bank information.',
+    guessTimeOver: 'Prediction time is over (after 18:00).',
+    alreadyGuessed: 'You have already predicted today.',
+  },
+}
+
+const getLanguage = () => {
+  try {
+    // 1. Try to get from cached validation data
+    const validationData = telegramAuthService.getCachedValidation()
+    const validLang = validationData?.data?.user?.language_code || validationData?.user?.language_code
+
+    if (validLang) return validLang
+
+    // 2. Try to get from unsafe init data (global)
+    const unsafeLang = window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code
+    if (unsafeLang) return unsafeLang
+
+    return 'en' // Default
+  } catch {
+    return 'en'
+  }
+}
+
+const lang = getLanguage()
+export const UI_TEXT = lang === 'vi' ? VI_TEXT : EN_TEXT
 
 export default UI_TEXT
