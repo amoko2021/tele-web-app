@@ -173,6 +173,17 @@ export const UI_TEXT = {
       accountName: 'Tên chủ tài khoản',
       note: 'Vui lòng kiểm tra kỹ thông tin trước khi xác nhận.',
     },
+    crypto: {
+      title: 'Rút tiền Crypto',
+      selectCrypto: 'Chọn loại tiền điện tử',
+      walletAddress: 'Địa chỉ ví',
+      placeholderAddress: 'Nhập địa chỉ ví của bạn',
+      amount: 'Số tiền rút',
+      confirm: 'Xác nhận rút tiền Crypto',
+      note: 'Vui lòng kiểm tra kỹ địa chỉ ví trước khi xác nhận.',
+      cryptoType: 'Loại tiền điện tử',
+      walletAddressLabel: 'Địa chỉ ví nhận',
+    },
     history: {
       title: 'Lịch sử Rút tiền',
       empty: 'Chưa có giao dịch nào.',

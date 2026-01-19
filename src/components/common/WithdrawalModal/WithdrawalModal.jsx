@@ -5,6 +5,11 @@ import { UI_TEXT } from '../../../config/uiText'
 export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
   const [amount, setAmount] = useState('')
   const [showConfirm, setShowConfirm] = useState(false)
+  const [withdrawalType, setWithdrawalType] = useState('bank')
+  const [selectedCrypto, setSelectedCrypto] = useState('')
+  const [walletAddress, setWalletAddress] = useState('')
+
+  const cryptoOptions = ['BTC', 'ETH', 'USDT']
 
   if (!isOpen) return null
 
@@ -14,16 +19,34 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
       alert(UI_TEXT.validation.minAmount.replace('{amount}', '50.000'))
       return
     }
+    if (withdrawalType === 'crypto') {
+      if (!selectedCrypto) {
+        alert('Vui lòng chọn loại tiền điện tử.')
+        return
+      }
+      if (!walletAddress.trim()) {
+        alert('Vui lòng nhập địa chỉ ví.')
+        return
+      }
+    }
     setShowConfirm(true)
   }
 
   const handleConfirm = async () => {
     const amountNum = parseInt(amount.replace(/\D/g, ''))
+    const data = {
+      amount: amountNum,
+      type: withdrawalType,
+      ...(withdrawalType === 'crypto' && { cryptoInfo: { crypto: selectedCrypto, address: walletAddress } })
+    }
     try {
-      await onSubmit(amountNum)
+      await onSubmit(data)
       // Chỉ close modal khi thành công
       setShowConfirm(false)
       setAmount('')
+      setSelectedCrypto('')
+      setWalletAddress('')
+      setWithdrawalType('bank')
       onClose()
     } catch (error) {
       // Nếu lỗi, giữ modal mở để user có thể thử lại
@@ -33,6 +56,9 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
 
   const handleClose = () => {
     setAmount('')
+    setSelectedCrypto('')
+    setWalletAddress('')
+    setWithdrawalType('bank')
     setShowConfirm(false)
     onClose()
   }
@@ -66,6 +92,30 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
               </button>
             </div>
 
+            {/* Tabs */}
+            <div className="flex border-b border-slate-100 dark:border-slate-700">
+              <button
+                className={`flex-1 py-3 text-sm font-medium transition-colors ${
+                  withdrawalType === 'bank'
+                    ? 'text-primary border-b-2 border-primary'
+                    : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                }`}
+                onClick={() => setWithdrawalType('bank')}
+              >
+                Bank
+              </button>
+              <button
+                className={`flex-1 py-3 text-sm font-medium transition-colors ${
+                  withdrawalType === 'crypto'
+                    ? 'text-primary border-b-2 border-primary'
+                    : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                }`}
+                onClick={() => setWithdrawalType('crypto')}
+              >
+                Crypto
+              </button>
+            </div>
+
             {/* Body */}
             <div className="p-5 space-y-5">
               {/* Amount Input */}
@@ -90,27 +140,64 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
                 </p>
               </div>
 
-              {/* Bank Info */}
-              {bankInfo && (
-                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 border border-slate-100 dark:border-slate-700">
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
-                    {UI_TEXT.withdrawal.bankInfo.title}
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-xs text-white font-bold">
-                      {bankInfo.bankCode}
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-semibold text-slate-900 dark:text-white text-sm">
-                        {bankInfo.bankName}
-                      </p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">
-                        **** {bankInfo.accountNumber?.slice(-4)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
+               {/* Bank Info or Crypto Info */}
+               {withdrawalType === 'bank' && bankInfo && (
+                 <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 border border-slate-100 dark:border-slate-700">
+                   <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+                     {UI_TEXT.withdrawal.bankInfo.title}
+                   </p>
+                   <div className="flex items-center gap-3">
+                     <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-xs text-white font-bold">
+                       {bankInfo.bankCode}
+                     </div>
+                     <div className="flex-1">
+                       <p className="font-semibold text-slate-900 dark:text-white text-sm">
+                         {bankInfo.bankName}
+                       </p>
+                       <p className="text-xs text-slate-500 dark:text-slate-400">
+                         **** {bankInfo.accountNumber?.slice(-4)}
+                       </p>
+                     </div>
+                   </div>
+                 </div>
+               )}
+
+               {withdrawalType === 'crypto' && (
+                 <div className="space-y-4">
+                   {/* Select Crypto */}
+                   <div>
+                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                       {UI_TEXT.withdrawal.crypto.selectCrypto}
+                     </label>
+                     <select
+                       value={selectedCrypto}
+                       onChange={(e) => setSelectedCrypto(e.target.value)}
+                       className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                     >
+                       <option value="">Chọn loại tiền điện tử</option>
+                       {cryptoOptions.map((crypto) => (
+                         <option key={crypto} value={crypto}>
+                           {crypto}
+                         </option>
+                       ))}
+                     </select>
+                   </div>
+
+                   {/* Wallet Address */}
+                   <div>
+                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                       {UI_TEXT.withdrawal.crypto.walletAddress}
+                     </label>
+                     <input
+                       type="text"
+                       value={walletAddress}
+                       onChange={(e) => setWalletAddress(e.target.value)}
+                       placeholder={UI_TEXT.withdrawal.crypto.placeholderAddress}
+                       className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                     />
+                   </div>
+                 </div>
+               )}
             </div>
 
             {/* Footer */}
@@ -133,7 +220,9 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
         onClose={() => setShowConfirm(false)}
         onConfirm={handleConfirm}
         amount={parseInt(amount.replace(/\D/g, '')) || 0}
+        withdrawalType={withdrawalType}
         bankInfo={bankInfo}
+        cryptoInfo={withdrawalType === 'crypto' ? { crypto: selectedCrypto, address: walletAddress } : null}
       />
     </>
   )

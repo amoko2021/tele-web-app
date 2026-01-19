@@ -5,7 +5,9 @@ export const WithdrawalConfirmModal = ({
   onClose,
   onConfirm,
   amount,
+  withdrawalType,
   bankInfo,
+  cryptoInfo,
 }) => {
   if (!isOpen) return null
 
@@ -50,34 +52,60 @@ export const WithdrawalConfirmModal = ({
 
           {/* Transaction Details Card */}
           <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 border border-slate-100 dark:border-slate-700/50 space-y-3">
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-slate-500 dark:text-slate-400">
-                {UI_TEXT.withdrawal.bankInfo.bankName}
-              </span>
-              <div className="flex items-center">
-                <span className="text-slate-900 dark:text-white font-semibold">
-                  {bankInfo?.bankName || 'N/A'}
-                </span>
-              </div>
-            </div>
+            {withdrawalType === 'bank' && (
+              <>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-slate-500 dark:text-slate-400">
+                    {UI_TEXT.withdrawal.bankInfo.bankName}
+                  </span>
+                  <div className="flex items-center">
+                    <span className="text-slate-900 dark:text-white font-semibold">
+                      {bankInfo?.bankName || 'N/A'}
+                    </span>
+                  </div>
+                </div>
 
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-slate-500 dark:text-slate-400">
-                {UI_TEXT.withdrawal.bankInfo.accountNumber}
-              </span>
-              <span className="text-slate-900 dark:text-white font-mono font-medium tracking-wide">
-                **** {bankInfo?.accountNumber?.slice(-4) || '0000'}
-              </span>
-            </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-slate-500 dark:text-slate-400">
+                    {UI_TEXT.withdrawal.bankInfo.accountNumber}
+                  </span>
+                  <span className="text-slate-900 dark:text-white font-mono font-medium tracking-wide">
+                    **** {bankInfo?.accountNumber?.slice(-4) || '0000'}
+                  </span>
+                </div>
 
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-slate-500 dark:text-slate-400">
-                {UI_TEXT.withdrawal.bankInfo.accountName}
-              </span>
-              <span className="text-slate-900 dark:text-white font-medium uppercase">
-                {bankInfo?.accountName || 'N/A'}
-              </span>
-            </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-slate-500 dark:text-slate-400">
+                    {UI_TEXT.withdrawal.bankInfo.accountName}
+                  </span>
+                  <span className="text-slate-900 dark:text-white font-medium uppercase">
+                    {bankInfo?.accountName || 'N/A'}
+                  </span>
+                </div>
+              </>
+            )}
+
+            {withdrawalType === 'crypto' && (
+              <>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-slate-500 dark:text-slate-400">
+                    {UI_TEXT.withdrawal.crypto.cryptoType}
+                  </span>
+                  <span className="text-slate-900 dark:text-white font-semibold">
+                    {cryptoInfo?.crypto || 'N/A'}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-slate-500 dark:text-slate-400">
+                    {UI_TEXT.withdrawal.crypto.walletAddressLabel}
+                  </span>
+                  <span className="text-slate-900 dark:text-white font-mono font-medium tracking-wide text-xs break-all">
+                    {cryptoInfo?.address || 'N/A'}
+                  </span>
+                </div>
+              </>
+            )}
 
             <div className="h-px w-full bg-slate-200 dark:bg-slate-700 my-2"></div>
 
@@ -106,7 +134,7 @@ export const WithdrawalConfirmModal = ({
               info
             </span>
             <div className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              {UI_TEXT.withdrawal.modal.note}
+              {withdrawalType === 'crypto' ? UI_TEXT.withdrawal.crypto.note : UI_TEXT.withdrawal.modal.note}
             </div>
           </div>
         </div>
