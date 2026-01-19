@@ -9,7 +9,7 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
   const [selectedCrypto, setSelectedCrypto] = useState('')
   const [walletAddress, setWalletAddress] = useState('')
 
-  const cryptoOptions = ['BTC', 'ETH', 'USDT']
+  const cryptoOptions = ['USDT (BEP20)']
 
   if (!isOpen) return null
 
@@ -126,21 +126,51 @@ export const WithdrawalModal = ({ isOpen, onClose, onSubmit, bankInfo }) => {
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   {UI_TEXT.withdrawal.amountInput.label}
                 </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={formatNumber(amount)}
-                    onChange={(e) => setAmount(e.target.value)}
-                    placeholder="0"
-                    className="w-full px-4 py-3 text-2xl font-bold text-center border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 text-lg">
-                    {UI_TEXT.common.currency}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-                  {UI_TEXT.withdrawal.amountInput.placeholder}
-                </p>
+                
+                {withdrawalType === 'bank' ? (
+                  <>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={formatNumber(amount)}
+                        onChange={(e) => setAmount(e.target.value)}
+                        placeholder="0"
+                        className="w-full px-4 py-3 text-2xl font-bold text-center border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 text-lg">
+                        {UI_TEXT.common.currency}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                      {UI_TEXT.withdrawal.amountInput.placeholder}
+                    </p>
+                  </>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => setAmount('2600000')}
+                      className={`py-3 px-2 rounded-lg border-2 font-semibold text-sm transition-all ${
+                        amount === '2600000'
+                          ? 'border-primary bg-primary/5 text-primary'
+                          : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-primary/50'
+                      }`}
+                    >
+                      100 USDT
+                      <div className="text-xs font-normal opacity-70 mt-1">2.600.000đ</div>
+                    </button>
+                    <button
+                      onClick={() => setAmount('5200000')}
+                      className={`py-3 px-2 rounded-lg border-2 font-semibold text-sm transition-all ${
+                        amount === '5200000'
+                          ? 'border-primary bg-primary/5 text-primary'
+                          : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-primary/50'
+                      }`}
+                    >
+                      200 USDT
+                      <div className="text-xs font-normal opacity-70 mt-1">5.200.000đ</div>
+                    </button>
+                  </div>
+                )}
               </div>
 
                {/* Bank Info or Crypto Info */}
