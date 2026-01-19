@@ -319,7 +319,7 @@ export const Home = () => {
         /> */}
         <TaskButton
           onClick={() => navigate('prediction')}
-          text="Tham gia dự đoán"
+          text={UI_TEXT.home.prediction.join}
           amount="+999,000VND"
           gradientColors="from-blue-500 to-sky-600"
         />
