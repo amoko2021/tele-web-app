@@ -20,6 +20,7 @@ import { TaskButton } from './components/TaskButton'
 // import { PredictionButton } from './components/PredictionButton'
 // import { WatchAdsButton } from './components/WatchAdsButton'
 import { UI_TEXT } from '../../config/uiText'
+import { useUserInfo } from '../../hooks/useApi'
 
 export const Home = () => {
   const navigate = useNavigate()
@@ -36,6 +37,7 @@ export const Home = () => {
     formatDate,
     isToday,
   } = useLotteryHistory()
+
   // const [isModalOpen, setIsModalOpen] = useState(false)
   // const [isTimeUpModalOpen, setIsTimeUpModalOpen] = useState(false)
   // const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
@@ -53,6 +55,7 @@ export const Home = () => {
   // Lấy userId từ Telegram
   const userData = validationData?.data?.user || telegramUser
   const userId = userData?.id
+  const { data: userInfo } = useUserInfo(userId)
 
   // Sonar Ads hook
   // const { handleWatchAds: handleSonarAds, watchingAds: watchingSonarAds } =
@@ -318,7 +321,7 @@ export const Home = () => {
           onClick={() => navigate('prediction')}
           text="Tham gia dự đoán"
           amount="+999,000VND"
-          gradientColors='from-blue-500 to-sky-600'
+          gradientColors="from-blue-500 to-sky-600"
         />
 
         {/* Task Button */}
