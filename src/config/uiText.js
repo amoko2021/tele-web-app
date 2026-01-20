@@ -142,7 +142,8 @@ const VI_TEXT = {
     noTicket: 'Bạn không đủ vé để thực hiện dự đoán này.',
     ticketError: 'Lỗi khi sử dụng vé. Vui lòng thử lại.',
     freeTab: 'Dự đoán miễn phí',
-    ticketTab: 'Dự đoán bằng vé'
+    ticketTab: 'Dự đoán bằng vé',
+    totalPredictions: 'Tổng số dự đoán hệ thống: {total}'
   },
 
   // Màn hình Tài khoản (Account)
@@ -436,7 +437,8 @@ const EN_TEXT = {
     noTicket: 'You do not have enough tickets for this prediction.',
     ticketError: 'Error using ticket. Please try again.',
     freeTab: 'Free Prediction',
-    ticketTab: 'Ticket Prediction'
+    ticketTab: 'Ticket Prediction',
+    totalPredictions: 'Total system predictions: {total}'
   },
 
   // Account Screen

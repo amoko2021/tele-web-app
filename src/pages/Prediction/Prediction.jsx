@@ -19,6 +19,7 @@ export const Prediction = () => {
   const { data: userInfo, refetch: refetchUserInfo } = useUserInfo(userId)
 
   const [categories, setCategories] = useState([])
+  const [totalPredictions, setTotalPredictions] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [usingTicket, setUsingTicket] = useState(false)
@@ -281,15 +282,21 @@ export const Prediction = () => {
   const fetchPredictions = useCallback(async () => {
     try {
       setLoading(true)
-      let response
-      if (isResultTime) {
-        response = await lotteryApi.getMyPredictionResults(usingTicket)
-      } else {
-        response = await lotteryApi.getMyPredictions(usingTicket)
-      }
+      
+      // Fetch categories and total predictions in parallel
+      const [response, totalRes] = await Promise.all([
+        isResultTime 
+          ? lotteryApi.getMyPredictionResults(usingTicket)
+          : lotteryApi.getMyPredictions(usingTicket),
+        lotteryApi.getTotalPredictions()
+      ])
 
       if (response && response.data && response.data.categories) {
         setCategories(response.data.categories)
+      }
+      
+      if (totalRes && totalRes.data && typeof totalRes.data.total === 'number') {
+        setTotalPredictions(totalRes.data.total)
       }
     } catch (err) {
       console.error('Failed to fetch predictions', err)
@@ -521,13 +528,23 @@ export const Prediction = () => {
             </button>
           </div>
 
-          <div className="flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-2 text-amber-700 border border-amber-100">
-            <span className="material-symbols-outlined text-lg">schedule</span>
-            <span className="text-xs font-bold uppercase tracking-wider">
-              {isAfter1830
-                ? UI_TEXT.prediction.timeOver
-                : UI_TEXT.prediction.waitingResults}
-            </span>
+          <div className="flex items-center justify-between gap-2 rounded-lg bg-amber-50 px-3 py-2 text-amber-700 border border-amber-100">
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-lg">schedule</span>
+              <span className="text-xs font-bold uppercase tracking-wider">
+                {isAfter1830
+                  ? UI_TEXT.prediction.timeOver
+                  : UI_TEXT.prediction.waitingResults}
+              </span>
+            </div>
+            {totalPredictions > 0 && (
+              <div className="flex items-center gap-1 bg-amber-100/50 px-2 py-0.5 rounded-md">
+                <span className="material-symbols-outlined text-sm">groups</span>
+                <span className="text-[10px] font-bold">
+                  {UI_TEXT.prediction.totalPredictions.replace('{total}', totalPredictions.toLocaleString())}
+                </span>
+              </div>
+            )}
           </div>
 
           {loading ? (

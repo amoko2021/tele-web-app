@@ -489,6 +489,32 @@ export const lotteryApi = {
       throw error
     }
   },
+
+  // Lấy tổng số dự đoán của toàn bộ hệ thống
+  getTotalPredictions: async () => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            message: null,
+            data: {
+              total: 281,
+            },
+            total: null,
+          })
+        }, 300)
+      })
+    }
+
+    try {
+      const response = await apiClient.get('/total-predictions')
+      return response
+    } catch (error) {
+      console.error('Error fetching total predictions:', error)
+      throw error
+    }
+  },
 }
 
 export default lotteryApi
