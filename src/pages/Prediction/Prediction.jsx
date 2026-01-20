@@ -114,6 +114,21 @@ export const Prediction = () => {
   }
 
   const getRewardValue = (id) => {
+    if (usingTicket) {
+      switch (id) {
+        case 1:
+          return '+2,000,000 Coins'
+        case 2:
+          return '+78,000 Coins'
+        case 3:
+          return '+20,000,000 Coins'
+        case 4:
+          return '+500,000 Coins'
+        default:
+          return ''
+      }
+    }
+
     switch (id) {
       case 1:
         return '+10k Coins'
