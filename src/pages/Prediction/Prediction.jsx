@@ -337,6 +337,11 @@ export const Prediction = () => {
 
   // Handle ad click for time-up slots (earn money instead of prediction)
   const handleAdClick = (category) => {
+    if (usingTicket) {
+      // No ads for money in ticket tab either
+      return
+    }
+
     if (adCooldown > 0) {
       if (window.Telegram?.WebApp?.showAlert) {
         window.Telegram.WebApp.showAlert(
