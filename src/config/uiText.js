@@ -104,6 +104,9 @@ const VI_TEXT = {
       ruleContent1:
         'Mỗi lượt dự đoán bạn cần xem 1 quảng cáo ngắn để ủng hộ hệ thống.',
       ruleContent2: 'Mỗi hạng mục được phép dự đoán tối đa 10 bộ số.',
+      ruleContent3: 'Bạn sẽ nhận được phần thưởng nếu dự đoán của bạn trùng khớp với giải thưởng hôm nay.',
+      ruleContent4: 'Ví dụ: trong trò chơi "Đặc biệt 2 chữ số", nếu bạn đoán là 25, bạn sẽ nhận được phần thưởng khi giải thưởng đặc biệt hôm nay có 2 chữ số cuối là 25 (Giải thưởng đặc biệt: xxx25)',
+      ruleContent5: 'Trong hạng mục xổ số Loto, nếu bạn đoán đúng số 25, bạn sẽ nhận được phần thưởng nếu hai chữ số cuối cùng của các giải thưởng hôm nay trùng khớp với dự đoán của bạn.',
       prizeTitle: '3. Cơ cấu giải thưởng',
       prizeSpecial2: 'Đặc biệt 2 số: +15k Coins',
       prizeLoto2: 'Lô 2 số: +3k Coins',
@@ -132,6 +135,10 @@ const VI_TEXT = {
     rule_loto_2: '2 số cuối các giải',
     rule_db_3: '3 số cuối giải đặc biệt',
     rule_loto_3: '3 số cuối các giải',
+    title_db_2: 'ĐB 2 SỐ',
+    title_loto_2: 'LÔ TÔ 2 SỐ',
+    title_db_3: 'ĐB 3 SỐ',
+    title_loto_3: 'LÔ TÔ 3 SỐ'
   },
 
   // Màn hình Tài khoản (Account)
@@ -388,6 +395,9 @@ const EN_TEXT = {
       ruleContent1:
         'Each prediction requires watching 1 short ad to support the system.',
       ruleContent2: 'Max 10 number sets per category.',
+      ruleContent3: 'You will rewarded if your prediction same as today prizes.',
+      ruleContent4: 'For example: in Special 2 digits, if you have guess 25, you will rewarded when special prize today have 25 in 2 last digits (Special prize : xxx25)',
+      ruleContent5: 'In Loto category, if you guess number 25, you will rewarded if any last 2 digits prizes of today have match with your predict',
       prizeTitle: '3. Prize Structure',
       prizeSpecial2: 'Special 2 digits: +15k Coins',
       prizeLoto2: 'Loto 2 digits: +3k Coins',
@@ -415,6 +425,10 @@ const EN_TEXT = {
     rule_loto_2: 'match 2 digits of any prizes',
     rule_db_3: 'match 3 digits of special prize',
     rule_loto_3: 'match 3 digits of any prizes',
+    title_db_2: 'SPECIAL LAST 2 DIGITS',
+    title_loto_2: 'LOTO LAST 2 DIGITS',
+    title_db_3: 'SPECIAL LAST 3 DIGITS',
+    title_loto_3: 'LOTO LAST 3 DIGITS'
   },
 
   // Account Screen

@@ -124,6 +124,21 @@ export const Prediction = () => {
     }
   }
 
+  const getCategoryTitle = (id) => {
+    switch (id) {
+      case 1:
+        return UI_TEXT.prediction.title_db_2
+      case 2:
+        return UI_TEXT.prediction.title_loto_2
+      case 3:
+        return UI_TEXT.prediction.title_db_3
+      case 4:
+        return UI_TEXT.prediction.title_loto_3
+      default:
+        return ''
+    }
+  }
+
   // Helper to open modal
   const openAddModal = useCallback((category) => {
     const getDigitCount = (id) => {
@@ -439,7 +454,7 @@ export const Prediction = () => {
             categories.map((category) => (
               <PredictionCategoryCard
                 key={category.id}
-                title={category.title}
+                title={getCategoryTitle(category.id)}
                 subtitle={
                   UI_TEXT.prediction[`rule_${getCategoryKey(category.id)}`] ||
                   category.subtitle
@@ -585,6 +600,9 @@ export const Prediction = () => {
             </h4>
             <p>{UI_TEXT.home.rules.ruleContent1}</p>
             <p>{UI_TEXT.home.rules.ruleContent2}</p>
+            <p>{UI_TEXT.home.rules.ruleContent3}</p>
+            <p>{UI_TEXT.home.rules.ruleContent4}</p>
+            <p>{UI_TEXT.home.rules.ruleContent5}</p>
           </div>
 
           <div className="space-y-2">
