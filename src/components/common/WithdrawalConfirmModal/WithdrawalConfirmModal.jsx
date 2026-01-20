@@ -123,7 +123,13 @@ export const WithdrawalConfirmModal = ({
                 {UI_TEXT.withdrawal.modal.realReceived}
               </span>
               <span className="text-slate-900 dark:text-white font-bold text-base">
-                {amount?.toLocaleString()} {UI_TEXT.common.currency}
+                {withdrawalType === 'crypto'
+                  ? amount === 2600000
+                    ? '100 USDT'
+                    : amount === 5200000
+                    ? '200 USDT'
+                    : `${amount?.toLocaleString()} ${UI_TEXT.common.currency}`
+                  : `${amount?.toLocaleString()} ${UI_TEXT.common.currency}`}
               </span>
             </div>
           </div>
