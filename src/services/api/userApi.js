@@ -294,6 +294,30 @@ export const userApi = {
       throw error
     }
   },
+
+  // Trừ ticket khi dự đoán
+  deductTicket: async (userId) => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            message: 'Ticket deducted successfully',
+          })
+        }, 500)
+      })
+    }
+
+    try {
+      const response = await apiClient.post(`/ticket/add/${userId}`, {
+        ticket: 0,
+      })
+      return response
+    } catch (error) {
+      console.error('Error deducting ticket:', error)
+      throw error
+    }
+  },
 }
 
 export default userApi

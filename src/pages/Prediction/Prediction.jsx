@@ -3,6 +3,7 @@ import { DateDisplay } from './components/DateDisplay'
 import { PredictionCategoryCard } from './components/PredictionCategoryCard'
 import lotteryApi from '../../services/api/lotteryApi'
 import userApi from '../../services/api/userApi'
+import { useUserInfo } from '../../hooks/useApi'
 import { Modal } from '../../components/common/Modal/Modal'
 import { useTelegram } from '../../hooks/useTelegram'
 import { useAdsgram } from '../../hooks/useAdsgram'
@@ -15,9 +16,12 @@ export const Prediction = () => {
   const { user } = useTelegram()
   const userId = user?.id
 
+  const { data: userInfo, refetch: refetchUserInfo } = useUserInfo(userId)
+
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [usingTicket, setUsingTicket] = useState(false)
 
   // Use a ref to store the pending category for ad callbacks to access latest value
   const pendingCategoryRef = useRef(null)
@@ -264,9 +268,9 @@ export const Prediction = () => {
       setLoading(true)
       let response
       if (isResultTime) {
-        response = await lotteryApi.getMyPredictionResults()
+        response = await lotteryApi.getMyPredictionResults(usingTicket)
       } else {
-        response = await lotteryApi.getMyPredictions()
+        response = await lotteryApi.getMyPredictions(usingTicket)
       }
 
       if (response && response.data && response.data.categories) {
@@ -278,7 +282,7 @@ export const Prediction = () => {
     } finally {
       setLoading(false)
     }
-  }, [isResultTime])
+  }, [isResultTime, usingTicket])
 
   useEffect(() => {
     fetchPredictions()
@@ -291,6 +295,12 @@ export const Prediction = () => {
   const handleAdd = (category) => {
     // Check time first
     if (isTimeUp) {
+      return
+    }
+
+    // If using ticket, skip ads and open modal directly
+    if (usingTicket) {
+      openAddModal(category)
       return
     }
 
@@ -370,6 +380,33 @@ export const Prediction = () => {
     try {
       setIsSubmitting(true)
       setAddError('')
+
+      // If using ticket, deduct ticket first
+      if (usingTicket) {
+        // Check if user has enough tickets
+        const currentTickets = userInfo?.data?.ticket || 0
+        if (currentTickets <= 0) {
+          setAddError('Bạn không đủ vé để thực hiện dự đoán này.')
+          setIsSubmitting(false)
+          return
+        }
+
+        try {
+          await userApi.deductTicket(userId)
+          refetchUserInfo() // Refresh ticket count
+        } catch (ticketErr) {
+          console.error('Failed to deduct ticket:', ticketErr)
+          // If backend returns 400/403 for no tickets, show specific error
+          if (ticketErr.response?.status === 400 || ticketErr.response?.status === 403) {
+            setAddError('Bạn không đủ vé để thực hiện dự đoán này.')
+          } else {
+            setAddError('Lỗi khi sử dụng vé. Vui lòng thử lại.')
+          }
+          setIsSubmitting(false)
+          return
+        }
+      }
+
       await lotteryApi.addPrediction(addModal.categoryKey, inputNumber)
 
       // Success
@@ -435,6 +472,35 @@ export const Prediction = () => {
         <DateDisplay />
 
         <div className="px-4 py-4 space-y-6">
+          {/* Tab Switcher */}
+          <div className="flex p-1 bg-slate-200 rounded-xl">
+            <button
+              onClick={() => setUsingTicket(false)}
+              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${
+                !usingTicket
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              Dự đoán miễn phí
+            </button>
+            <button
+              onClick={() => setUsingTicket(true)}
+              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${
+                usingTicket
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              Dự đoán bằng vé
+              {userInfo?.data?.ticket !== undefined && (
+                <span className="bg-primary/10 text-primary text-[10px] px-1.5 py-0.5 rounded-full">
+                  {userInfo.data.ticket}
+                </span>
+              )}
+            </button>
+          </div>
+
           <div className="flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-2 text-amber-700 border border-amber-100">
             <span className="material-symbols-outlined text-lg">schedule</span>
             <span className="text-xs font-bold uppercase tracking-wider">
