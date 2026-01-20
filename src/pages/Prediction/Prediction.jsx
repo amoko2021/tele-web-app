@@ -391,7 +391,7 @@ export const Prediction = () => {
         // Check if user has enough tickets
         const currentTickets = userInfo?.data?.ticket || 0
         if (currentTickets <= 0) {
-          setAddError('Bạn không đủ vé để thực hiện dự đoán này.')
+          setAddError(UI_TEXT.prediction.noTicket)
           setIsSubmitting(false)
           return
         }
@@ -403,9 +403,9 @@ export const Prediction = () => {
           console.error('Failed to deduct ticket:', ticketErr)
           // If backend returns 400/403 for no tickets, show specific error
           if (ticketErr.response?.status === 400 || ticketErr.response?.status === 403) {
-            setAddError('Bạn không đủ vé để thực hiện dự đoán này.')
+            setAddError(UI_TEXT.prediction.noTicket)
           } else {
-            setAddError('Lỗi khi sử dụng vé. Vui lòng thử lại.')
+            setAddError(UI_TEXT.prediction.ticketError)
           }
           setIsSubmitting(false)
           return
@@ -487,7 +487,7 @@ export const Prediction = () => {
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
-              Dự đoán miễn phí
+              {UI_TEXT.prediction.freeTab}
             </button>
             <button
               onClick={() => setUsingTicket(true)}
@@ -497,7 +497,7 @@ export const Prediction = () => {
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
-              Dự đoán bằng vé
+              {UI_TEXT.prediction.ticketTab}
               {userInfo?.data?.ticket !== undefined && (
                 <span className="bg-primary/10 text-primary text-[10px] px-1.5 py-0.5 rounded-full">
                   {userInfo.data.ticket}

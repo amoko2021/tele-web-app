@@ -138,7 +138,11 @@ const VI_TEXT = {
     title_db_2: 'ĐB 2 SỐ',
     title_loto_2: 'LÔ TÔ 2 SỐ',
     title_db_3: 'ĐB 3 SỐ',
-    title_loto_3: 'LÔ TÔ 3 SỐ'
+    title_loto_3: 'LÔ TÔ 3 SỐ',
+    noTicket: 'Bạn không đủ vé để thực hiện dự đoán này.',
+    ticketError: 'Lỗi khi sử dụng vé. Vui lòng thử lại.',
+    freeTab: 'Dự đoán miễn phí',
+    ticketTab: 'Dự đoán bằng vé'
   },
 
   // Màn hình Tài khoản (Account)
@@ -428,7 +432,11 @@ const EN_TEXT = {
     title_db_2: 'SPECIAL LAST 2 DIGITS',
     title_loto_2: 'LOTO LAST 2 DIGITS',
     title_db_3: 'SPECIAL LAST 3 DIGITS',
-    title_loto_3: 'LOTO LAST 3 DIGITS'
+    title_loto_3: 'LOTO LAST 3 DIGITS',
+    noTicket: 'You do not have enough tickets for this prediction.',
+    ticketError: 'Error using ticket. Please try again.',
+    freeTab: 'Free Prediction',
+    ticketTab: 'Ticket Prediction'
   },
 
   // Account Screen
