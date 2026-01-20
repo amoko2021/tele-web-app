@@ -134,7 +134,7 @@ export const Account = () => {
 
         {/* Stats / Balance */}
         <div className="px-4 mb-6">
-          <BalanceStats balance={userInfo?.data?.balance || 0} points={340} />
+          <BalanceStats balance={userInfo?.data?.balance || 0} points={userInfo?.data?.ticket || 0} />
 
           {/* Primary Actions */}
           <ActionButtons
