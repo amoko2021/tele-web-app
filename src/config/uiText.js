@@ -146,7 +146,7 @@ const VI_TEXT = {
     title: 'Tài Khoản',
     balance: {
       label: 'Số dư Xu',
-      points: 'Điểm thưởng',
+      points: 'Vé',
       unit: 'Coins',
     },
     actions: {
@@ -436,7 +436,7 @@ const EN_TEXT = {
     title: 'Account',
     balance: {
       label: 'Coin Balance',
-      points: 'Reward Points',
+      points: 'Tickets',
       unit: 'Coins',
     },
     actions: {

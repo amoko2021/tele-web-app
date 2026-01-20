@@ -22,7 +22,7 @@ export const BalanceStats = ({ balance = 0, points = 340 }) => {
       <div className="flex flex-col gap-1 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
         <div className="flex items-center gap-2 mb-1">
           <span className="material-symbols-outlined text-orange-500 text-[20px]">
-            stars
+            local_activity
           </span>
           <span className="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">
             {UI_TEXT.account.balance.points}
