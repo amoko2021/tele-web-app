@@ -412,7 +412,7 @@ export const Prediction = () => {
         }
       }
 
-      await lotteryApi.addPrediction(addModal.categoryKey, inputNumber)
+      await lotteryApi.addPrediction(addModal.categoryKey, inputNumber, usingTicket)
 
       // Success
       setAddModal((prev) => ({ ...prev, isOpen: false }))

@@ -421,7 +421,7 @@ export const lotteryApi = {
   },
 
   // Thêm dự đoán mới
-  addPrediction: async (category, number) => {
+  addPrediction: async (category, number, using_ticket = false) => {
     if (USE_MOCK) {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -456,6 +456,7 @@ export const lotteryApi = {
       const response = await apiClient.post('/my-predictions', {
         category,
         number,
+        using_ticket,
       })
       return response
     } catch (error) {
