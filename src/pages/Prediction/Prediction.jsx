@@ -143,7 +143,7 @@ export const Prediction = () => {
 
   // Common Ad Success Handler
   const handleAdSuccess = useCallback(() => {
-    setAdCooldown(30)
+    setAdCooldown(15)
     const category = pendingCategoryRef.current
     if (category) {
       openAddModal(category)
@@ -153,7 +153,7 @@ export const Prediction = () => {
 
   // Ad Success Handler for time-up ads (earn random money instead of opening modal)
   const handleAdSuccessForMoney = useCallback(async () => {
-    setAdCooldown(30)
+    setAdCooldown(15)
     try {
       // Random amount between 10-100 with 90% chance for 10-20, 10% chance for 21-100
       const rand = Math.random()
@@ -307,12 +307,6 @@ export const Prediction = () => {
       // Fallback for unknown categories, just open modal
       openAddModal(category)
       pendingCategoryRef.current = null
-    }
-  }
-
-  const handleFloatingAdd = () => {
-    if (categories.length > 0 && !isTimeUp) {
-      handleAdd(categories[0])
     }
   }
 
@@ -486,9 +480,9 @@ export const Prediction = () => {
       {!isTimeUp && (
         <button
           className="fixed bottom-28 right-4 lg:right-[calc(50%-220px)] z-20 flex size-14 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-blue-500/40 hover:scale-105 active:scale-95 transition-all"
-          onClick={handleFloatingAdd}
+          onClick={() => setRulesModalOpen(true)}
         >
-          <span className="material-symbols-outlined text-2xl">add</span>
+          <span className="material-symbols-outlined text-2xl">menu_book</span>
         </button>
       )}
 
