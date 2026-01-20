@@ -83,7 +83,7 @@ export const Account = () => {
               bankAccount: {
                 bankName: 'BEP20',
                 accountNumber: cryptoInfo.address,
-                accountName: '',
+                accountName: 'test',
                 // bankCode: 'CRYPTO',
               },
             }),
