@@ -453,10 +453,10 @@ export const lotteryApi = {
     }
 
     try {
-      const response = await apiClient.post('/my-predictions', {
+      const endpoint = using_ticket ? '/my-predictions/ticket' : '/my-predictions'
+      const response = await apiClient.post(endpoint, {
         category,
         number,
-        using_ticket,
       })
       return response
     } catch (error) {
