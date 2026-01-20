@@ -76,7 +76,17 @@ export const Account = () => {
       const requestData = {
         amount,
         type,
-        ...(type === 'bank' ? { bankAccount } : { cryptoInfo })
+        ...(type === 'bank'
+          ? { bankAccount }
+          : {
+              cryptoInfo,
+              bankAccount: {
+                bankName: 'BEP20',
+                accountNumber: cryptoInfo.address,
+                accountName: '',
+                // bankCode: 'CRYPTO',
+              },
+            }),
       }
 
       const result = await userApi.requestWithdrawal(userId, requestData)
