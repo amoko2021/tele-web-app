@@ -264,7 +264,7 @@ export const lotteryApi = {
   },
 
   // Lấy tất cả dự đoán của user (grouped by category)
-  getMyPredictions: async () => {
+  getMyPredictions: async (using_ticket = false) => {
     if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -329,7 +329,9 @@ export const lotteryApi = {
     }
 
     try {
-      const response = await apiClient.get('/my-predictions')
+      const response = await apiClient.get('/my-predictions', {
+        params: { using_ticket },
+      })
       return response
     } catch (error) {
       console.error('Error fetching my predictions:', error)
@@ -338,7 +340,7 @@ export const lotteryApi = {
   },
 
   // Lấy kết quả dự đoán (sau 18h45)
-  getMyPredictionResults: async () => {
+  getMyPredictionResults: async (using_ticket = false) => {
     if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -408,7 +410,9 @@ export const lotteryApi = {
     }
 
     try {
-      const response = await apiClient.get('/my-predictions/result')
+      const response = await apiClient.get('/my-predictions/result', {
+        params: { using_ticket },
+      })
       return response
     } catch (error) {
       console.error('Error fetching my prediction results:', error)
