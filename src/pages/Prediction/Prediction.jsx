@@ -539,7 +539,7 @@ export const Prediction = () => {
                 isTimeUp={isTimeUp}
                 onAdClick={() => handleAdClick(category)}
                 reward={getRewardValue(category.id)}
-                adCooldown={adCooldown}
+                adCooldown={usingTicket ? 0 : adCooldown}
               />
             ))
           )}
