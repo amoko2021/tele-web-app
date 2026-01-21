@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { TadsWidget } from 'react-tads-widget'
+import { TadsWidget, renderTadsWidget } from 'react-tads-widget'
 import { DateDisplay } from './components/DateDisplay'
 import { PredictionCategoryCard } from './components/PredictionCategoryCard'
 import lotteryApi from '../../services/api/lotteryApi'
@@ -10,7 +10,7 @@ import { useTelegram } from '../../hooks/useTelegram'
 import { useAdsgram } from '../../hooks/useAdsgram'
 import { useSonarAds } from '../../hooks/useSonarAds'
 import { useMonetag } from '../../hooks/useMonetag'
-import { useTads } from '../../hooks/useTads'
+
 import { UI_TEXT } from '../../config/uiText'
 // import { HeaderSection } from './components/HeaderSection'
 
@@ -307,13 +307,7 @@ export const Prediction = () => {
       onError: handleAdError,
     })
 
-  // 4. Tads Hook (for db_2)
-  const { showFullScreen: showTads } = useTads({
-    userId,
-    widgetId: '9228',
-    onReward: handleAdSuccess,
-    onError: handleAdError,
-  })
+
 
   // Ad hooks for time-up (earn money instead of opening modal)
   const showAdsgramForMoney = useAdsgram({
@@ -339,13 +333,7 @@ export const Prediction = () => {
     onError: handleAdError,
   })
 
-  const { showFullScreen: showTadsForMoney } =
-    useTads({
-      userId,
-      widgetId: '9228',
-      onReward: handleAdSuccessForMoney,
-      onError: handleAdError,
-    })
+
 
   // Fetch predictions
   const fetchPredictions = useCallback(async () => {
@@ -420,7 +408,7 @@ export const Prediction = () => {
     } else if (category.id === 1) {
       showMonetag(0)
     } else if (category.id === 4) {
-      showAdsgram()
+      renderTadsWidget({ id: '9228', type: 'fullscreen' })
     } else {
       // Fallback for unknown categories, just open modal
       openAddModal(category)
@@ -688,6 +676,15 @@ export const Prediction = () => {
                     reward={getRewardValue(category.id)}
                     adCooldown={usingTicket ? 0 : adCooldown}
                   />
+                  {category.id === 4 && (
+                    <TadsWidget
+                      id="9228"
+                      type="fullscreen"
+                      debug={false}
+                      onAdsNotFound={onAdsNotFound}
+                      onShowReward={handleAdSuccess}
+                    />
+                  )}
                   {/* Chèn Widget Ads sau card thứ 2 */}
                   {index === 1 && (
                     <div className="my-4 overflow-hidden rounded-xl bg-white shadow-sm border border-slate-100">
