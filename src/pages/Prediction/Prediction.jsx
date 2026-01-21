@@ -342,7 +342,7 @@ export const Prediction = () => {
   const { showFullScreen: showTadsForMoney, isWatching: isTadsMoneyWatching } =
     useTads({
       userId,
-      widgetId: 'unique-widget-id',
+      widgetId: '9228',
       onReward: handleAdSuccessForMoney,
       onError: handleAdError,
     })
