@@ -456,7 +456,7 @@ const EN_TEXT = {
   account: {
     title: 'Account',
     balance: {
-      label: 'Coin Balance',
+      label: 'Coins',
       points: 'Tickets',
       unit: 'Coins',
     },
