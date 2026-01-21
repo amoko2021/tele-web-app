@@ -308,7 +308,7 @@ export const Prediction = () => {
     })
 
   // 4. Tads Hook (for db_2)
-  const { showFullScreen: showTads, isWatching: isTadsWatching } = useTads({
+  const { showFullScreen: showTads } = useTads({
     userId,
     widgetId: '9228',
     onReward: handleAdSuccess,
@@ -339,7 +339,7 @@ export const Prediction = () => {
     onError: handleAdError,
   })
 
-  const { showFullScreen: showTadsForMoney, isWatching: isTadsMoneyWatching } =
+  const { showFullScreen: showTadsForMoney } =
     useTads({
       userId,
       widgetId: '9228',
@@ -862,10 +862,7 @@ export const Prediction = () => {
       </Modal>
 
       {/* Ad Loading Overlay */}
-      {(isMonetagLoading ||
-        isMonetagMoneyLoading ||
-        isTadsWatching ||
-        isTadsMoneyWatching) && (
+      {(isMonetagLoading || isMonetagMoneyLoading) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl p-6 flex flex-col items-center gap-4 shadow-xl animate-in fade-in zoom-in duration-200">
             <div className="animate-spin rounded-full h-10 w-10 border-4 border-primary border-t-transparent"></div>

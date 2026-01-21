@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { renderTadsWidget } from 'react-tads-widget'
 import { userApi } from '../services/api'
 import { UI_TEXT } from '../config/uiText'
@@ -14,6 +14,22 @@ import { logger } from '../services/logger'
  */
 export function useTads({ userId, widgetId, onReward, onError }) {
   const [isWatching, setIsWatching] = useState(false)
+
+  // Safety timeout to reset watching state if ad hangs
+  useEffect(() => {
+    let timeoutId
+    if (isWatching) {
+      timeoutId = setTimeout(() => {
+        if (isWatching) {
+          logger.warn('Tads ad timeout - resetting state', { userId, widgetId })
+          setIsWatching(false)
+        }
+      }, 60000) // 60 seconds timeout
+    }
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId)
+    }
+  }, [isWatching, userId, widgetId])
 
   const rewardUser = useCallback(
     async (amount) => {
