@@ -591,20 +591,20 @@ export const Prediction = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => setIsConvertModalOpen(true)}
                   disabled={isConverting}
-                  className="px-4 py-2 bg-emerald-500 text-white text-sm font-bold rounded-lg hover:bg-emerald-600 transition-colors flex items-center gap-2 disabled:opacity-50"
+                  className="px-2.5 py-1.5 bg-emerald-500 text-white text-[11px] font-bold rounded-lg hover:bg-emerald-600 transition-colors flex items-center gap-1 disabled:opacity-50"
                 >
-                  <span className="material-symbols-outlined text-lg">sync</span>
+                  <span className="material-symbols-outlined text-[16px]">sync</span>
                   {isConverting ? '...' : UI_TEXT.account.topUp.convertButton}
                 </button>
                 <button
                   onClick={() => setIsTopUpOpen(true)}
-                  className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-hover transition-colors flex items-center gap-2"
+                  className="px-2.5 py-1.5 bg-primary text-white text-[11px] font-bold rounded-lg hover:bg-primary-hover transition-colors flex items-center gap-1"
                 >
-                  <span className="material-symbols-outlined text-lg">add_circle</span>
+                  <span className="material-symbols-outlined text-[16px]">add_circle</span>
                   {UI_TEXT.account.topUp.topUpButton}
                 </button>
               </div>
