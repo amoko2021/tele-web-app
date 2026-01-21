@@ -171,6 +171,10 @@ const VI_TEXT = {
       cryptoWallet: 'Ví Crypto (TON)',
       cryptoAddress: 'UQBquk4W9IKNUjF-8WSFarra_er2nfyuUnJ0qlj64WQAtRHf',
       topUpButton: 'Nạp thêm',
+      convertButton: 'Đổi vé',
+      convertConfirm: 'Xác nhận đổi {coins} Coins lấy 1 vé?',
+      convertSuccess: 'Đổi vé thành công!',
+      insufficientCoins: 'Số dư không đủ để đổi vé (Cần {coins} Coins)',
     },
     profile: {
       uid: 'ID',
@@ -478,6 +482,10 @@ const EN_TEXT = {
       cryptoWallet: 'Crypto Wallet (TON)',
       cryptoAddress: 'UQBquk4W9IKNUjF-8WSFarra_er2nfyuUnJ0qlj64WQAtRHf',
       topUpButton: 'Top up',
+      convertButton: 'Convert',
+      convertConfirm: 'Confirm converting {coins} Coins for 1 ticket?',
+      convertSuccess: 'Conversion successful!',
+      insufficientCoins: 'Insufficient balance (Need {coins} Coins)',
     },
     profile: {
       uid: 'ID',

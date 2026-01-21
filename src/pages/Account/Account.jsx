@@ -144,7 +144,11 @@ export const Account = () => {
 
         {/* Stats / Balance */}
         <div className="px-4 mb-6">
-          <BalanceStats balance={userInfo?.data?.balance || 0} points={userInfo?.data?.ticket || 0} />
+          <BalanceStats 
+            balance={userInfo?.data?.balance || 0} 
+            points={userInfo?.data?.ticket || 0} 
+            onUpdate={refetch}
+          />
 
           {/* Primary Actions */}
           <ActionButtons

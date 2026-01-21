@@ -318,6 +318,30 @@ export const userApi = {
       throw error
     }
   },
+
+  // Thêm ticket (chuyển đổi từ coins)
+  addTicket: async (userId, ticketCount) => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            message: 'Ticket added successfully',
+          })
+        }, 500)
+      })
+    }
+
+    try {
+      const response = await apiClient.post(`/ticket/add/${userId}`, {
+        ticket: ticketCount,
+      })
+      return response
+    } catch (error) {
+      console.error('Error adding ticket:', error)
+      throw error
+    }
+  },
 }
 
 export default userApi
