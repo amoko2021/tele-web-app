@@ -12,6 +12,8 @@ import { useMonetag } from '../../hooks/useMonetag'
 import { UI_TEXT } from '../../config/uiText'
 // import { HeaderSection } from './components/HeaderSection'
 
+import { TicketTopUpModal } from '../Account/components/TicketTopUpModal'
+
 export const Prediction = () => {
   const { user } = useTelegram()
   const userId = user?.id
@@ -23,6 +25,7 @@ export const Prediction = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [usingTicket, setUsingTicket] = useState(false)
+  const [isTopUpOpen, setIsTopUpOpen] = useState(false)
 
   // Use a ref to store the pending category for ad callbacks to access latest value
   const pendingCategoryRef = useRef(null)
@@ -415,6 +418,7 @@ export const Prediction = () => {
         if (currentTickets <= 0) {
           setAddError(UI_TEXT.prediction.noTicket)
           setIsSubmitting(false)
+          setIsTopUpOpen(true)
           return
         }
 
@@ -527,6 +531,31 @@ export const Prediction = () => {
               )}
             </button>
           </div>
+
+          {usingTicket && (
+            <div className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm border border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="size-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500">
+                  <span className="material-symbols-outlined">local_activity</span>
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    {UI_TEXT.account.balance.points}
+                  </p>
+                  <p className="text-lg font-bold text-slate-900">
+                    {userInfo?.data?.ticket || 0}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsTopUpOpen(true)}
+                className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-hover transition-colors flex items-center gap-2"
+              >
+                <span className="material-symbols-outlined text-lg">add_circle</span>
+                {UI_TEXT.account.topUp.topUpButton}
+              </button>
+            </div>
+          )}
 
           <div className="flex items-center justify-between gap-2 rounded-lg bg-amber-50 px-3 py-2 text-amber-700 border border-amber-100">
             <div className="flex items-center gap-2">
@@ -740,6 +769,12 @@ export const Prediction = () => {
           </div>
         </div>
       )}
+
+      <TicketTopUpModal
+        isOpen={isTopUpOpen}
+        onClose={() => setIsTopUpOpen(false)}
+        userId={userId}
+      />
     </div>
   )
 }
