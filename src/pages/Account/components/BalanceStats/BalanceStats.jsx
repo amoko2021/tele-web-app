@@ -33,9 +33,8 @@ export const BalanceStats = ({ balance = 0, points = 340, onUpdate }) => {
       // 1. Add tickets
       await userApi.addTicket(user.id, ticketAmount)
       
-      // 2. Deduct coins
-      const newBalance = 0 - totalCost
-      await userApi.updateBalance(user.id, newBalance)
+      // 2. Deduct coins (API updateBalance cộng thêm, nên truyền giá trị âm để trừ)
+      await userApi.updateBalance(user.id, -totalCost)
       
       alert(UI_TEXT.account.topUp.convertSuccess)
       if (onUpdate) onUpdate()

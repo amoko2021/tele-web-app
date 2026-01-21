@@ -93,8 +93,9 @@ export const Account = () => {
 
       // Cập nhật balance sau khi rút tiền thành công
       if (result.success) {
-        const newBalance = (userInfo?.balance || 0) - amount
-        await userApi.updateBalance(userId, newBalance)
+        // API updateBalance thực chất là cộng thêm vào balance
+        // Vì vậy để trừ tiền, ta truyền giá trị âm
+        await userApi.updateBalance(userId, -amount)
 
         // Refresh user info để hiển thị số dư mới
         if (refetch) {
