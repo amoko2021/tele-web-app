@@ -75,7 +75,7 @@ export const userApi = {
     }
   },
 
-  // Cập nhật số dư (sau khi rút tiền, nạp tiền)
+  // Cập nhật số dư (Cộng thêm vào balance hiện tại)
   updateBalance: async (userId, amount) => {
     if (USE_MOCK) {
       return new Promise((resolve) => {
@@ -93,6 +93,7 @@ export const userApi = {
     }
 
     try {
+      // API này thực chất là cộng thêm (increment) vào balance hiện tại
       const response = await apiClient.put(`/balance/${userId}`, { amount })
       return response
     } catch (error) {

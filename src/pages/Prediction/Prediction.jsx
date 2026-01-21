@@ -54,8 +54,8 @@ export const Prediction = () => {
       setIsConvertModalOpen(false)
       
       await userApi.addTicket(userId, ticketAmount)
-      const newBalance = balance - totalCost
-      await userApi.updateBalance(userId, newBalance)
+      // API updateBalance cộng thêm, nên truyền giá trị âm để trừ
+      await userApi.updateBalance(userId, -totalCost)
       
       if (window.Telegram?.WebApp?.showAlert) {
         window.Telegram.WebApp.showAlert(UI_TEXT.account.topUp.convertSuccess)
