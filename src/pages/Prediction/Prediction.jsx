@@ -643,30 +643,42 @@ export const Prediction = () => {
             <div className="text-center text-red-500 py-10">{error}</div>
           ) : (
             <>
-              {categories.map((category) => (
-                <PredictionCategoryCard
-                  key={category.id}
-                  title={getCategoryTitle(category.id)}
-                  subtitle={
-                    UI_TEXT.prediction[`rule_${getCategoryKey(category.id)}`] ||
-                    category.subtitle
-                  }
-                  count={category.count}
-                  maxCount={category.max_count}
-                  color={category.color}
-                  icon={category.icon}
-                  numbers={category.numbers}
-                  predictionIds={category.prediction_ids}
-                  isWin={category.is_win}
-                  updateTime={category.update_time}
-                  onManage={() => handleManage(category.id)}
-                  onAdd={() => handleAdd(category)}
-                  onDelete={handleDelete}
-                  isTimeUp={isTimeUp}
-                  onAdClick={() => handleAdClick(category)}
-                  reward={getRewardValue(category.id)}
-                  adCooldown={usingTicket ? 0 : adCooldown}
-                />
+              {categories.map((category, index) => (
+                <div key={category.id}>
+                  <PredictionCategoryCard
+                    title={getCategoryTitle(category.id)}
+                    subtitle={
+                      UI_TEXT.prediction[`rule_${getCategoryKey(category.id)}`] ||
+                      category.subtitle
+                    }
+                    count={category.count}
+                    maxCount={category.max_count}
+                    color={category.color}
+                    icon={category.icon}
+                    numbers={category.numbers}
+                    predictionIds={category.prediction_ids}
+                    isWin={category.is_win}
+                    updateTime={category.update_time}
+                    onManage={() => handleManage(category.id)}
+                    onAdd={() => handleAdd(category)}
+                    onDelete={handleDelete}
+                    isTimeUp={isTimeUp}
+                    onAdClick={() => handleAdClick(category)}
+                    reward={getRewardValue(category.id)}
+                    adCooldown={usingTicket ? 0 : adCooldown}
+                  />
+                  {/* Chèn Widget Ads sau card thứ 2 */}
+                  {index === 1 && (
+                    <div className="my-4 overflow-hidden rounded-xl bg-white shadow-sm border border-slate-100">
+                      <TadsWidget
+                        id="unique-widget-id-mid"
+                        type="static"
+                        debug={false}
+                        onAdsNotFound={onAdsNotFound}
+                      />
+                    </div>
+                  )}
+                </div>
               ))}
 
               <div className="mt-4 overflow-hidden rounded-xl bg-white shadow-sm border border-slate-100">
