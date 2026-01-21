@@ -418,7 +418,7 @@ export const Prediction = () => {
       // Pass 0 or minimal reward since the goal is just gating
       showSonar(0)
     } else if (category.id === 1) {
-      showTads()
+      showMonetag(0)
     } else if (category.id === 4) {
       showAdsgram()
     } else {
@@ -457,7 +457,7 @@ export const Prediction = () => {
     } else if (category.id === 3) {
       showSonarForMoney(0)
     } else if (category.id === 1) {
-      showTadsForMoney()
+      showMonetagForMoney(0)
     } else if (category.id === 4) {
       showAdsgramForMoney()
     } else {
