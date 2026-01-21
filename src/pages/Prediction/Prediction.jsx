@@ -13,6 +13,7 @@ import { UI_TEXT } from '../../config/uiText'
 // import { HeaderSection } from './components/HeaderSection'
 
 import { TicketTopUpModal } from '../Account/components/TicketTopUpModal'
+import { TicketConvertModal } from '../Account/components/TicketConvertModal'
 
 export const Prediction = () => {
   const { user } = useTelegram()
@@ -26,6 +27,49 @@ export const Prediction = () => {
   const [error, setError] = useState(null)
   const [usingTicket, setUsingTicket] = useState(false)
   const [isTopUpOpen, setIsTopUpOpen] = useState(false)
+  const [isConvertModalOpen, setIsConvertModalOpen] = useState(false)
+  const [isConverting, setIsConverting] = useState(false)
+
+  const CONVERSION_RATE = 26000
+
+  const handleConvert = async (ticketAmount) => {
+    const totalCost = ticketAmount * CONVERSION_RATE
+    const balance = userInfo?.data?.balance || 0
+    
+    if (balance < totalCost) {
+      if (window.Telegram?.WebApp?.showAlert) {
+        window.Telegram.WebApp.showAlert(UI_TEXT.account.topUp.insufficientCoins.replace('{coins}', totalCost.toLocaleString()))
+      }
+      return
+    }
+
+    const confirmMsg = UI_TEXT.account.topUp.convertConfirm
+      .replace('{coins}', totalCost.toLocaleString())
+      .replace('{tickets}', ticketAmount)
+      
+    if (!window.confirm(confirmMsg)) return
+
+    try {
+      setIsConverting(true)
+      setIsConvertModalOpen(false)
+      
+      await userApi.addTicket(userId, ticketAmount)
+      const newBalance = balance - totalCost
+      await userApi.updateBalance(userId, newBalance)
+      
+      if (window.Telegram?.WebApp?.showAlert) {
+        window.Telegram.WebApp.showAlert(UI_TEXT.account.topUp.convertSuccess)
+      }
+      refetchUserInfo()
+    } catch (error) {
+      console.error('Conversion failed:', error)
+      if (window.Telegram?.WebApp?.showAlert) {
+        window.Telegram.WebApp.showAlert(UI_TEXT.common.error)
+      }
+    } finally {
+      setIsConverting(false)
+    }
+  }
 
   // Use a ref to store the pending category for ad callbacks to access latest value
   const pendingCategoryRef = useRef(null)
@@ -547,13 +591,23 @@ export const Prediction = () => {
                   </p>
                 </div>
               </div>
-              <button
-                onClick={() => setIsTopUpOpen(true)}
-                className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-hover transition-colors flex items-center gap-2"
-              >
-                <span className="material-symbols-outlined text-lg">add_circle</span>
-                {UI_TEXT.account.topUp.topUpButton}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsConvertModalOpen(true)}
+                  disabled={isConverting}
+                  className="px-4 py-2 bg-emerald-500 text-white text-sm font-bold rounded-lg hover:bg-emerald-600 transition-colors flex items-center gap-2 disabled:opacity-50"
+                >
+                  <span className="material-symbols-outlined text-lg">sync</span>
+                  {isConverting ? '...' : UI_TEXT.account.topUp.convertButton}
+                </button>
+                <button
+                  onClick={() => setIsTopUpOpen(true)}
+                  className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-hover transition-colors flex items-center gap-2"
+                >
+                  <span className="material-symbols-outlined text-lg">add_circle</span>
+                  {UI_TEXT.account.topUp.topUpButton}
+                </button>
+              </div>
             </div>
           )}
 
@@ -774,6 +828,14 @@ export const Prediction = () => {
         isOpen={isTopUpOpen}
         onClose={() => setIsTopUpOpen(false)}
         userId={userId}
+      />
+
+      <TicketConvertModal
+        isOpen={isConvertModalOpen}
+        onClose={() => setIsConvertModalOpen(false)}
+        onConvert={handleConvert}
+        balance={userInfo?.data?.balance || 0}
+        rate={CONVERSION_RATE}
       />
     </div>
   )

@@ -26,10 +26,10 @@ export const TicketConvertModal = ({ isOpen, onClose, onConvert, balance, rate }
             {UI_TEXT.account.topUp.convertLabel}
           </label>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => setAmount(Math.max(1, amount - 1))}
-              className="size-10 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xl font-bold"
+              className="size-10 shrink-0 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xl font-bold"
             >
               -
             </button>
@@ -37,11 +37,11 @@ export const TicketConvertModal = ({ isOpen, onClose, onConvert, balance, rate }
               type="number"
               value={amount}
               onChange={(e) => setAmount(Math.max(1, parseInt(e.target.value) || 0))}
-              className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg py-2 text-center text-lg font-bold outline-none focus:border-primary"
+              className="w-full min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg py-2 text-center text-lg font-bold outline-none focus:border-primary"
             />
             <button
               onClick={() => setAmount(amount + 1)}
-              className="size-10 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xl font-bold"
+              className="size-10 shrink-0 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xl font-bold"
             >
               +
             </button>
