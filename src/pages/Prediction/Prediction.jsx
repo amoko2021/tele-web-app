@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { TadsWidget } from 'react-tads-widget'
 import { DateDisplay } from './components/DateDisplay'
 import { PredictionCategoryCard } from './components/PredictionCategoryCard'
 import lotteryApi from '../../services/api/lotteryApi'
@@ -275,6 +276,10 @@ export const Prediction = () => {
   const handleAdError = useCallback((err) => {
     console.error('Ad failed', err)
     pendingCategoryRef.current = null
+  }, [])
+
+  const onAdsNotFound = useCallback(() => {
+    console.log('No widget ads found for this user')
   }, [])
 
   // 1. Adsgram Hook (for db_2, loto_2)
@@ -637,31 +642,42 @@ export const Prediction = () => {
           ) : error ? (
             <div className="text-center text-red-500 py-10">{error}</div>
           ) : (
-            categories.map((category) => (
-              <PredictionCategoryCard
-                key={category.id}
-                title={getCategoryTitle(category.id)}
-                subtitle={
-                  UI_TEXT.prediction[`rule_${getCategoryKey(category.id)}`] ||
-                  category.subtitle
-                }
-                count={category.count}
-                maxCount={category.max_count}
-                color={category.color}
-                icon={category.icon}
-                numbers={category.numbers}
-                predictionIds={category.prediction_ids}
-                isWin={category.is_win}
-                updateTime={category.update_time}
-                onManage={() => handleManage(category.id)}
-                onAdd={() => handleAdd(category)}
-                onDelete={handleDelete}
-                isTimeUp={isTimeUp}
-                onAdClick={() => handleAdClick(category)}
-                reward={getRewardValue(category.id)}
-                adCooldown={usingTicket ? 0 : adCooldown}
-              />
-            ))
+            <>
+              {categories.map((category) => (
+                <PredictionCategoryCard
+                  key={category.id}
+                  title={getCategoryTitle(category.id)}
+                  subtitle={
+                    UI_TEXT.prediction[`rule_${getCategoryKey(category.id)}`] ||
+                    category.subtitle
+                  }
+                  count={category.count}
+                  maxCount={category.max_count}
+                  color={category.color}
+                  icon={category.icon}
+                  numbers={category.numbers}
+                  predictionIds={category.prediction_ids}
+                  isWin={category.is_win}
+                  updateTime={category.update_time}
+                  onManage={() => handleManage(category.id)}
+                  onAdd={() => handleAdd(category)}
+                  onDelete={handleDelete}
+                  isTimeUp={isTimeUp}
+                  onAdClick={() => handleAdClick(category)}
+                  reward={getRewardValue(category.id)}
+                  adCooldown={usingTicket ? 0 : adCooldown}
+                />
+              ))}
+
+              <div className="mt-4 overflow-hidden rounded-xl bg-white shadow-sm border border-slate-100">
+                <TadsWidget
+                  id="9225"
+                  type="static"
+                  debug={false}
+                  onAdsNotFound={onAdsNotFound}
+                />
+              </div>
+            </>
           )}
 
           <div className="rounded-xl border-2 border-dashed border-slate-200 p-6 text-center">

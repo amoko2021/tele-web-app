@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { TadsWidgetProvider } from 'react-tads-widget'
 import './index.css'
 import App from './App.jsx'
 import { ErrorBoundary } from './components/common/ErrorBoundary'
@@ -10,7 +11,9 @@ logger.appInit('started', { timestamp: new Date().toISOString() })
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ErrorBoundary>
-      <App />
+      <TadsWidgetProvider>
+        <App />
+      </TadsWidgetProvider>
     </ErrorBoundary>
   </StrictMode>
 )
