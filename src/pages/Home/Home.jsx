@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { TadsWidget } from 'react-tads-widget'
 import { useXSMB } from '../../hooks/useApi'
 import { useTelegram } from '../../hooks/useTelegram'
 // import { useAdsgram } from '../../hooks/useAdsgram'
@@ -63,6 +64,10 @@ export const Home = () => {
     error: updateLanguageError,
     success: updateLanguageSuccess,
   } = useUpdateLanguage(userId, language)
+
+  const onAdsNotFound = useCallback(() => {
+    console.log('No widget ads found for this user')
+  }, [])
 
   // Sonar Ads hook
   // const { handleWatchAds: handleSonarAds, watchingAds: watchingSonarAds } =
@@ -361,6 +366,16 @@ export const Home = () => {
         <SpecialPrize
           number={displayData?.results?.ĐB?.[0] || displayData?.special}
         />
+
+        {/* TadsWidget Ads */}
+        <div className="px-4 my-4 overflow-hidden rounded-xl bg-white shadow-sm border border-slate-100">
+          <TadsWidget
+            id="9227"
+            type="static"
+            debug={false}
+            onAdsNotFound={onAdsNotFound}
+          />
+        </div>
 
         {/* Results Table */}
         <ResultsTable results={displayData?.results || displayData} />

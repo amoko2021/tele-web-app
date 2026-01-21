@@ -671,7 +671,7 @@ export const Prediction = () => {
                   {index === 1 && (
                     <div className="my-4 overflow-hidden rounded-xl bg-white shadow-sm border border-slate-100">
                       <TadsWidget
-                        id="unique-widget-id-mid"
+                        id="9226"
                         type="static"
                         debug={false}
                         onAdsNotFound={onAdsNotFound}
