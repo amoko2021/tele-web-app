@@ -2,29 +2,39 @@ import { useState } from 'react'
 import { UI_TEXT } from '../../../../config/uiText'
 import { useTelegram } from '../../../../hooks/useTelegram'
 import { TicketTopUpModal } from '../TicketTopUpModal'
+import { TicketConvertModal } from '../TicketConvertModal'
 import { userApi } from '../../../../services/api'
 
 export const BalanceStats = ({ balance = 0, points = 340, onUpdate }) => {
   const [isTopUpOpen, setIsTopUpOpen] = useState(false)
+  const [isConvertModalOpen, setIsConvertModalOpen] = useState(false)
   const [isConverting, setIsConverting] = useState(false)
   const { user } = useTelegram()
   const CONVERSION_RATE = 26000
 
-  const handleConvert = async () => {
-    if (balance < CONVERSION_RATE) {
-      alert(UI_TEXT.account.topUp.insufficientCoins.replace('{coins}', CONVERSION_RATE.toLocaleString()))
+  const handleConvert = async (ticketAmount) => {
+    const totalCost = ticketAmount * CONVERSION_RATE
+    
+    if (balance < totalCost) {
+      alert(UI_TEXT.account.topUp.insufficientCoins.replace('{coins}', totalCost.toLocaleString()))
       return
     }
 
-    const confirmMsg = UI_TEXT.account.topUp.convertConfirm.replace('{coins}', CONVERSION_RATE.toLocaleString())
+    const confirmMsg = UI_TEXT.account.topUp.convertConfirm
+      .replace('{coins}', totalCost.toLocaleString())
+      .replace('{tickets}', ticketAmount)
+      
     if (!window.confirm(confirmMsg)) return
 
     try {
       setIsConverting(true)
-      // 1. Add ticket
-      await userApi.addTicket(user.id, 1)
+      setIsConvertModalOpen(false)
+      
+      // 1. Add tickets
+      await userApi.addTicket(user.id, ticketAmount)
+      
       // 2. Deduct coins
-      const newBalance = balance - CONVERSION_RATE
+      const newBalance = 0 - totalCost
       await userApi.updateBalance(user.id, newBalance)
       
       alert(UI_TEXT.account.topUp.convertSuccess)
@@ -52,7 +62,7 @@ export const BalanceStats = ({ balance = 0, points = 340, onUpdate }) => {
               </span>
             </div>
             <button 
-              onClick={handleConvert}
+              onClick={() => setIsConvertModalOpen(true)}
               disabled={isConverting}
               className="text-[10px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-0.5 rounded-full hover:bg-emerald-100 transition-colors disabled:opacity-50"
             >
@@ -92,6 +102,14 @@ export const BalanceStats = ({ balance = 0, points = 340, onUpdate }) => {
         isOpen={isTopUpOpen} 
         onClose={() => setIsTopUpOpen(false)} 
         userId={user?.id}
+      />
+
+      <TicketConvertModal
+        isOpen={isConvertModalOpen}
+        onClose={() => setIsConvertModalOpen(false)}
+        onConvert={handleConvert}
+        balance={balance}
+        rate={CONVERSION_RATE}
       />
     </>
   )
