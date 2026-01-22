@@ -368,14 +368,14 @@ export const Home = () => {
         />
 
         {/* TadsWidget Ads */}
-        <div className="px-4 my-4 overflow-hidden rounded-xl bg-white shadow-sm border border-slate-100">
+        {/* <div className="px-4 my-4 overflow-hidden rounded-xl bg-white shadow-sm border border-slate-100">
           <TadsWidget
             id="9227"
             type="static"
             debug={false}
             onAdsNotFound={onAdsNotFound}
           />
-        </div>
+        </div> */}
 
         {/* Results Table */}
         <ResultsTable results={displayData?.results || displayData} />
