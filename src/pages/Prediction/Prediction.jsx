@@ -305,6 +305,7 @@ export const Prediction = () => {
       zoneId: '10456534',
       onReward: handleAdSuccess,
       onError: handleAdError,
+      isPrediction: true,
     })
 
   // 3.1 Monetag Hook (for db_2 - pop)
@@ -315,6 +316,7 @@ export const Prediction = () => {
       onReward: handleAdSuccess,
       onError: handleAdError,
       type: 'pop',
+      isPrediction: true,
     })
 
   // 4. Tads Hook (for db_2)

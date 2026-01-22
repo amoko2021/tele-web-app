@@ -23,7 +23,14 @@ const withTimeout = (promise, ms = 15000) => {
   })
 }
 
-export function useMonetag({ userId, zoneId, onReward, onError, type }) {
+export function useMonetag({
+  userId,
+  zoneId,
+  onReward,
+  onError,
+  type,
+  isPrediction,
+}) {
   const [monetagWatching, setMonetagWatching] = useState(false)
   const [adsgramWatching, setAdsgramWatching] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -191,6 +198,15 @@ export function useMonetag({ userId, zoneId, onReward, onError, type }) {
         // 3. Success - Reward User
         try {
           await userApi.updateBalance(userId, rewardAmount)
+
+          if (isPrediction) {
+            if (window.Telegram?.WebApp?.showAlert) {
+              window.Telegram.WebApp.showAlert(UI_TEXT.home.alerts.rewardPrediction)
+            } else {
+              alert(UI_TEXT.home.alerts.rewardPrediction)
+            }
+          }
+
           onReward?.()
         } catch (rewardError) {
           console.error('Error updating balance:', rewardError)

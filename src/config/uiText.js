@@ -86,6 +86,7 @@ const VI_TEXT = {
         'Quảng cáo Monetag chưa sẵn sàng, đang chuyển sang nguồn dự phòng...',
       monetagError: 'Lỗi khi tải quảng cáo Monetag, đang thử nguồn dự phòng...',
       rewardFromAd: 'Bạn đã nhận được {amount} Coins khi xem quảng cáo!',
+      rewardPrediction: 'Bạn nhận được 1 lần dự đoán',
       rewardUpdateError:
         'Bạn đã nhận được {amount} Coins nhưng có lỗi khi cập nhật số dư!',
       adCooldown: 'Vui lòng đợi {seconds}s để xem quảng cáo tiếp theo',
@@ -397,6 +398,7 @@ const EN_TEXT = {
       monetagFallback: 'Monetag ads not ready, switching to backup...',
       monetagError: 'Error loading Monetag ads, trying backup...',
       rewardFromAd: 'You received {amount} Coins for watching ads!',
+      rewardPrediction: 'You received 1 prediction turn',
       rewardUpdateError:
         'You received {amount} Coins but error updating balance!',
       adCooldown: 'Please wait {seconds}s to watch the next ad',
