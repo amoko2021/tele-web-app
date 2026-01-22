@@ -5,6 +5,7 @@ import { ReferralHeader } from './components/ReferralHeader'
 import { ReferralLinkSection } from './components/ReferralLinkSection'
 import { ReferralStats } from './components/ReferralStats'
 import { FriendsTable } from './components/FriendsTable'
+import { AdsgramTask } from '../Home/components/AdsgramTask'
 import { UI_TEXT } from '../../config/uiText'
 
 export const Invite = () => {
@@ -58,6 +59,16 @@ export const Invite = () => {
     tg?.openTelegramLink(shareUrl)
   }
 
+  const handleTaskReward = useCallback((detail) => {
+    console.log('Task reward received:', detail)
+    // TODO: Implement reward logic (e.g. update user balance)
+    // alert('Chúc mừng! Bạn đã nhận được phần thưởng.')
+  }, [])
+
+  const handleTaskError = useCallback((detail) => {
+    console.error('Task error:', detail)
+  }, [])
+
   return (
     <div className="bg-background-light dark:bg-background-dark min-h-screen text-text-light dark:text-text-dark flex flex-col items-center justify-start p-4 transition-colors duration-300 relative overflow-hidden">
         {/* Background Blobs */}
@@ -69,6 +80,16 @@ export const Invite = () => {
         <main className="w-full max-w-2xl mx-auto space-y-8 pt-6 pb-28 z-10 relative">
             <ReferralHeader />
             <ReferralLinkSection referralLink={referralLink} onShare={handleShare} />
+            
+            <div className="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-soft border border-border-light dark:border-border-dark space-y-4">
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-text-dark">Nhiệm vụ</h2>
+              <AdsgramTask 
+                blockId="task-20664" 
+                onReward={handleTaskReward}
+                onError={handleTaskError}
+              />
+            </div>
+
             <ReferralStats stats={stats} />
             <FriendsTable friends={friends} loading={loading} />
         </main>
