@@ -307,6 +307,16 @@ export const Prediction = () => {
       onError: handleAdError,
     })
 
+  // 3.1 Monetag Hook (for db_2 - pop)
+  const { handleWatchAds: showMonetagPop, isLoading: isMonetagPopLoading } =
+    useMonetag({
+      userId,
+      zoneId: '10456534',
+      onReward: handleAdSuccess,
+      onError: handleAdError,
+      type: 'pop',
+    })
+
   // 4. Tads Hook (for db_2)
   const { showFullScreen: showTads } = useTads({
     userId,
@@ -337,6 +347,17 @@ export const Prediction = () => {
     zoneId: import.meta.env.VITE_MONETAG_ZONE_ID || '',
     onReward: handleAdSuccessForMoney,
     onError: handleAdError,
+  })
+
+  const {
+    handleWatchAds: showMonetagPopForMoney,
+    isLoading: isMonetagPopMoneyLoading,
+  } = useMonetag({
+    userId,
+    zoneId: import.meta.env.VITE_MONETAG_ZONE_ID || '',
+    onReward: handleAdSuccessForMoney,
+    onError: handleAdError,
+    type: 'pop',
   })
 
   const { showFullScreen: showTadsForMoney } =
@@ -418,7 +439,7 @@ export const Prediction = () => {
       // Pass 0 or minimal reward since the goal is just gating
       showSonar(0)
     } else if (category.id === 1) {
-      showMonetag(0)
+      showMonetagPop(0)
     } else if (category.id === 4) {
       showAdsgram()
     } else {
@@ -457,7 +478,7 @@ export const Prediction = () => {
     } else if (category.id === 3) {
       showSonarForMoney(0)
     } else if (category.id === 1) {
-      showMonetagForMoney(0)
+      showMonetagPopForMoney(0)
     } else if (category.id === 4) {
       showAdsgramForMoney()
     } else {
@@ -862,7 +883,10 @@ export const Prediction = () => {
       </Modal>
 
       {/* Ad Loading Overlay */}
-      {(isMonetagLoading || isMonetagMoneyLoading) && (
+      {(isMonetagLoading ||
+        isMonetagMoneyLoading ||
+        isMonetagPopLoading ||
+        isMonetagPopMoneyLoading) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl p-6 flex flex-col items-center gap-4 shadow-xl animate-in fade-in zoom-in duration-200">
             <div className="animate-spin rounded-full h-10 w-10 border-4 border-primary border-t-transparent"></div>

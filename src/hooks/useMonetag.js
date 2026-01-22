@@ -23,7 +23,7 @@ const withTimeout = (promise, ms = 15000) => {
   })
 }
 
-export function useMonetag({ userId, zoneId, onReward, onError }) {
+export function useMonetag({ userId, zoneId, onReward, onError, type }) {
   const [monetagWatching, setMonetagWatching] = useState(false)
   const [adsgramWatching, setAdsgramWatching] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -176,10 +176,10 @@ export function useMonetag({ userId, zoneId, onReward, onError }) {
           }
         }
 
-        // 2. Show Ad
+          // 2. Show Ad
         try {
           setIsLoading(false) // Stop loading before showing ad
-          await withTimeout(adHandler({ ymid }))
+          await withTimeout(adHandler({ ymid, ...(type ? { type } : {}) }))
           // Reset ready state after showing
           setAdReady(false)
         } catch (showError) {
