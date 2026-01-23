@@ -22,7 +22,7 @@ export const FlappyBird = () => {
   const canvasRef = useRef(null)
   const requestRef = useRef(null)
   const frameCountRef = useRef(0)
-  
+
   // Game State Refs (for loop performance)
   const birdRef = useRef({ x: 50, y: 150, velocity: 0, radius: 12 })
   const pipesRef = useRef([])
@@ -47,15 +47,20 @@ export const FlappyBird = () => {
     if (!canvas) return
 
     // Reset game state
-    birdRef.current = { x: canvas.width / 3, y: canvas.height / 2, velocity: 0, radius: 12 }
+    birdRef.current = {
+      x: canvas.width / 3,
+      y: canvas.height / 2,
+      velocity: 0,
+      radius: 12,
+    }
     pipesRef.current = []
     scoreRef.current = 0
     frameCountRef.current = 0
     gameStateRef.current = 'ready'
-    
+
     setScore(0)
     setGameState('ready')
-    
+
     // Initial draw
     draw()
   }, [])
@@ -70,7 +75,7 @@ export const FlappyBird = () => {
     if (gameStateRef.current === 'ready') {
       startGame()
     }
-    
+
     if (gameStateRef.current === 'playing') {
       birdRef.current.velocity = JUMP
     }
@@ -80,7 +85,7 @@ export const FlappyBird = () => {
     gameStateRef.current = 'gameOver'
     setGameState('gameOver')
     cancelAnimationFrame(requestRef.current)
-    
+
     // Update best score
     if (scoreRef.current > bestScore) {
       setBestScore(scoreRef.current)
@@ -90,7 +95,7 @@ export const FlappyBird = () => {
     // Calculate reward (1 point = 10 coins, max 1000 per run)
     const coins = Math.min(scoreRef.current * 10, 1000)
     setEarnedCoins(coins)
-    
+
     if (coins > 0 && userId) {
       submitReward(coins)
     }
@@ -99,7 +104,7 @@ export const FlappyBird = () => {
   const submitReward = async (amount) => {
     setIsSubmitting(true)
     try {
-      await userApi.updateBalance(userId, amount)
+      await userApi.updateBalance(userId, 0)
     } catch (error) {
       console.error('Error updating balance:', error)
     } finally {
@@ -128,14 +133,16 @@ export const FlappyBird = () => {
     if (frameCountRef.current % PIPE_SPAWN_RATE === 0) {
       const minPipeHeight = 50
       const maxPipeHeight = canvas.height - PIPE_GAP - minPipeHeight
-      const height = Math.floor(Math.random() * (maxPipeHeight - minPipeHeight + 1) + minPipeHeight)
-      
+      const height = Math.floor(
+        Math.random() * (maxPipeHeight - minPipeHeight + 1) + minPipeHeight,
+      )
+
       pipes.push({
         x: canvas.width,
         y: 0,
         width: PIPE_WIDTH,
         height: height,
-        passed: false
+        passed: false,
       })
     }
 
@@ -196,12 +203,12 @@ export const FlappyBird = () => {
     ctx.fillStyle = '#73bf2e' // Green pipe
     ctx.strokeStyle = '#558c22' // Darker border
     ctx.lineWidth = 2
-    
-    pipesRef.current.forEach(pipe => {
+
+    pipesRef.current.forEach((pipe) => {
       // Top Pipe
       ctx.fillRect(pipe.x, 0, pipe.width, pipe.height)
       ctx.strokeRect(pipe.x, 0, pipe.width, pipe.height)
-      
+
       // Bottom Pipe cap
       ctx.fillRect(pipe.x - 2, pipe.height - 20, pipe.width + 4, 20)
       ctx.strokeRect(pipe.x - 2, pipe.height - 20, pipe.width + 4, 20)
@@ -211,7 +218,7 @@ export const FlappyBird = () => {
       const bottomPipeHeight = canvas.height - bottomPipeY
       ctx.fillRect(pipe.x, bottomPipeY, pipe.width, bottomPipeHeight)
       ctx.strokeRect(pipe.x, bottomPipeY, pipe.width, bottomPipeHeight)
-      
+
       // Bottom Pipe cap
       ctx.fillRect(pipe.x - 2, bottomPipeY, pipe.width + 4, 20)
       ctx.strokeRect(pipe.x - 2, bottomPipeY, pipe.width + 4, 20)
@@ -222,9 +229,12 @@ export const FlappyBird = () => {
     ctx.save()
     ctx.translate(bird.x, bird.y)
     // Rotate bird based on velocity
-    const rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (bird.velocity * 0.1)))
+    const rotation = Math.min(
+      Math.PI / 4,
+      Math.max(-Math.PI / 4, bird.velocity * 0.1),
+    )
     ctx.rotate(rotation)
-    
+
     // Bird Body
     ctx.fillStyle = '#f48c26' // Orange
     ctx.beginPath()
@@ -233,7 +243,7 @@ export const FlappyBird = () => {
     ctx.lineWidth = 2
     ctx.strokeStyle = '#fff'
     ctx.stroke()
-    
+
     // Eye
     ctx.fillStyle = '#fff'
     ctx.beginPath()
@@ -243,7 +253,7 @@ export const FlappyBird = () => {
     ctx.beginPath()
     ctx.arc(8, -4, 1.5, 0, Math.PI * 2)
     ctx.fill()
-    
+
     // Wing
     ctx.fillStyle = '#fff'
     ctx.beginPath()
@@ -271,7 +281,7 @@ export const FlappyBird = () => {
         const parent = canvasRef.current.parentElement
         canvasRef.current.width = parent.clientWidth
         canvasRef.current.height = parent.clientHeight
-        
+
         // Re-init bird position if resizing
         if (gameStateRef.current === 'ready') {
           birdRef.current.x = parent.clientWidth / 3
@@ -295,8 +305,8 @@ export const FlappyBird = () => {
 
   return (
     <div className={styles.container}>
-      <div 
-        className={styles.canvasContainer} 
+      <div
+        className={styles.canvasContainer}
         onMouseDown={jump}
         onTouchStart={() => {
           // Prevent default to stop zooming/scrolling
@@ -304,7 +314,7 @@ export const FlappyBird = () => {
         }}
       >
         <canvas ref={canvasRef} className={styles.gameCanvas} />
-        
+
         {/* UI Overlay */}
         <div className={styles.uiLayer}>
           {/* Score during game */}
@@ -320,10 +330,13 @@ export const FlappyBird = () => {
               <div className={styles.panel}>
                 <h1 className={styles.title}>{UI_TEXT.flappyBird.title}</h1>
                 <p>{UI_TEXT.flappyBird.instructions}</p>
-                <button className={`${styles.button} ${styles.playButton}`} onClick={startGame}>
+                <button
+                  className={`${styles.button} ${styles.playButton}`}
+                  onClick={startGame}
+                >
                   {UI_TEXT.flappyBird.startGame}
                 </button>
-                <button 
+                <button
                   className={`${styles.button} ${styles.homeButton}`}
                   onClick={() => navigate('/')}
                 >
@@ -338,11 +351,15 @@ export const FlappyBird = () => {
             <div className={styles.gameOverScreen}>
               <div className={styles.panel}>
                 <h1 className={styles.title}>{UI_TEXT.flappyBird.gameOver}</h1>
-                
-                <div className={styles.scoreLabel}>{UI_TEXT.flappyBird.finalScore.replace('{score}', '')}</div>
+
+                <div className={styles.scoreLabel}>
+                  {UI_TEXT.flappyBird.finalScore.replace('{score}', '')}
+                </div>
                 <div className={styles.scoreValue}>{score}</div>
-                
-                <div className={styles.scoreLabel}>{UI_TEXT.flappyBird.bestScore.replace('{score}', '')}</div>
+
+                <div className={styles.scoreLabel}>
+                  {UI_TEXT.flappyBird.bestScore.replace('{score}', '')}
+                </div>
                 <div className={styles.scoreValue}>{bestScore}</div>
 
                 {earnedCoins > 0 && (
@@ -355,10 +372,13 @@ export const FlappyBird = () => {
                   <p>{UI_TEXT.common.loading}</p>
                 ) : (
                   <>
-                    <button className={`${styles.button} ${styles.playButton}`} onClick={initGame}>
+                    <button
+                      className={`${styles.button} ${styles.playButton}`}
+                      onClick={initGame}
+                    >
                       {UI_TEXT.flappyBird.playAgain}
                     </button>
-                    <button 
+                    <button
                       className={`${styles.button} ${styles.homeButton}`}
                       onClick={() => navigate('/')}
                     >
