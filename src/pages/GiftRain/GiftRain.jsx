@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTelegram } from '../../hooks/useTelegram'
 import { userApi } from '../../services/api/userApi'
 import { UI_TEXT } from '../../config/uiText'
+import { Gift } from './components/Gift'
 import styles from './GiftRain.module.css'
 
 const GAME_DURATION = 60 // seconds
@@ -107,36 +108,30 @@ export const GiftRain = () => {
     })
   }
 
-  const handleGiftClick = (e, gift) => {
-    e.stopPropagation()
-    
+  const handleCollect = useCallback((id, value, x, y) => {
     // Add score
-    setScore((prev) => prev + gift.value)
+    setScore((prev) => prev + value)
     
     // Show floating text
-    const id = Date.now()
+    const textId = Date.now()
     setFloatingTexts((prev) => [
       ...prev,
       {
-        id,
-        value: gift.value,
-        x: e.clientX,
-        y: e.clientY
+        id: textId,
+        value: value,
+        x: x,
+        y: y
       }
     ])
 
     // Remove floating text after animation
     setTimeout(() => {
-      setFloatingTexts((prev) => prev.filter(item => item.id !== id))
+      setFloatingTexts((prev) => prev.filter(item => item.id !== textId))
     }, 800)
 
     // Remove gift
-    setGifts((prev) => prev.filter((g) => g.id !== gift.id))
-  }
-
-  // Remove gifts that have fallen out of view (handled by CSS animation mostly, 
-  // but we clean up state periodically or just let React handle it via key updates)
-  // For simplicity in this version, we rely on the click to remove or the array slicing in spawnGift
+    setGifts((prev) => prev.filter((g) => g.id !== id))
+  }, [])
 
   return (
     <div className={styles.container}>
@@ -153,18 +148,11 @@ export const GiftRain = () => {
       {/* Game Area */}
       <div className={styles.gameArea} ref={gameAreaRef}>
         {gameState === 'playing' && gifts.map((gift) => (
-          <div
+          <Gift
             key={gift.id}
-            className={styles.gift}
-            style={{
-              left: gift.left,
-              animationDuration: gift.animationDuration
-            }}
-            onMouseDown={(e) => handleGiftClick(e, gift)}
-            onTouchStart={(e) => handleGiftClick(e, gift)}
-          >
-            {gift.emoji}
-          </div>
+            {...gift}
+            onCollect={handleCollect}
+          />
         ))}
 
         {/* Floating Texts */}
