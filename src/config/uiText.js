@@ -308,7 +308,7 @@ const VI_TEXT = {
   },
 
   // Các thông báo lỗi (Validation/Errors)
-  validation: {
+    validation: {
     required: 'Vui lòng không bỏ trống.',
     invalidNumber: 'Vui lòng nhập số hợp lệ.',
     minAmount: 'Số tiền rút tối thiểu là {amount}',
@@ -316,6 +316,21 @@ const VI_TEXT = {
     invalidBank: 'Thông tin ngân hàng không hợp lệ.',
     guessTimeOver: 'Đã hết thời gian dự đoán (sau 11:00 UTC).',
     alreadyGuessed: 'Bạn đã dự đoán hôm nay rồi.',
+  },
+
+  // Gift Rain Game
+  giftRain: {
+    title: 'Mưa Quà Tặng',
+    startGame: 'Bắt đầu chơi',
+    timeLeft: 'Thời gian: {time}s',
+    score: 'Điểm: {score}',
+    gameOver: 'Hết giờ!',
+    finalScore: 'Bạn nhận được: {score} Coins',
+    playAgain: 'Chơi lại',
+    backHome: 'Về trang chủ',
+    instructions: 'Nhấn vào các hộp quà đang rơi để nhận Coins!',
+    loading: 'Đang chuẩn bị...',
+    error: 'Có lỗi xảy ra, vui lòng thử lại!',
   },
 }
 
@@ -628,6 +643,21 @@ const EN_TEXT = {
     invalidBank: 'Invalid bank information.',
     guessTimeOver: 'Prediction time is over (after 11:00 UTC).',
     alreadyGuessed: 'You have already predicted today.',
+  },
+
+  // Gift Rain Game
+  giftRain: {
+    title: 'Gift Rain',
+    startGame: 'Start Game',
+    timeLeft: 'Time: {time}s',
+    score: 'Score: {score}',
+    gameOver: 'Time Up!',
+    finalScore: 'You earned: {score} Coins',
+    playAgain: 'Play Again',
+    backHome: 'Back to Home',
+    instructions: 'Tap on falling gifts to collect Coins!',
+    loading: 'Preparing...',
+    error: 'An error occurred, please try again!',
   },
 }
 

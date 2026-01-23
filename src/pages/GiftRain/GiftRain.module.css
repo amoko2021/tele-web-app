@@ -1,0 +1,161 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(180deg, #1a237e 0%, #4a148c 100%);
+  position: relative;
+  overflow: hidden;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  backdrop-filter: blur(5px);
+}
+
+.scoreBoard {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.timer {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.gameArea {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.gift {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  user-select: none;
+  animation: fall linear forwards;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+  transition: transform 0.1s;
+}
+
+.gift:active {
+  transform: scale(0.9);
+}
+
+.startScreen, .gameOverScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 20;
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+}
+
+.instructions {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: #e0e0e0;
+  max-width: 80%;
+}
+
+.finalScore {
+  font-size: 1.5rem;
+  color: #ffd700;
+  margin-bottom: 2rem;
+}
+
+.button {
+  padding: 12px 32px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin: 8px;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.secondaryButton {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+}
+
+.secondaryButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes fall {
+  from {
+    top: -60px;
+    transform: rotate(0deg);
+  }
+  to {
+    top: 110vh;
+    transform: rotate(360deg);
+  }
+}
+
+.plusScore {
+  position: absolute;
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 1.2rem;
+  pointer-events: none;
+  animation: floatUp 0.8s ease-out forwards;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50px) scale(1.5);
+  }
+}

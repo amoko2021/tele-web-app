@@ -5,6 +5,7 @@ import { Invite } from '../pages/Invite'
 import { WithdrawalHistory } from '../pages/WithdrawalHistory'
 import { Test } from '../pages/Test'
 import { Prediction } from '../pages/Prediction'
+import { GiftRain } from '../pages/GiftRain'
 
 export const AppRoutes = () => {
   return (
@@ -14,6 +15,7 @@ export const AppRoutes = () => {
       <Route path="/invite" element={<Invite />} />
       <Route path="/withdrawal-history" element={<WithdrawalHistory />} />
       <Route path="/prediction" element={<Prediction />} />
+      <Route path="/gift-rain" element={<GiftRain />} />
       <Route path="/test" element={<Test />} />
     </Routes>
   )
