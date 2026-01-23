@@ -6,6 +6,7 @@ import { WithdrawalHistory } from '../pages/WithdrawalHistory'
 import { Test } from '../pages/Test'
 import { Prediction } from '../pages/Prediction'
 import { GiftRain } from '../pages/GiftRain'
+import { FlappyBird } from '../pages/FlappyBird'
 
 export const AppRoutes = () => {
   return (
@@ -16,6 +17,7 @@ export const AppRoutes = () => {
       <Route path="/withdrawal-history" element={<WithdrawalHistory />} />
       <Route path="/prediction" element={<Prediction />} />
       <Route path="/gift-rain" element={<GiftRain />} />
+      <Route path="/flappy-bird" element={<FlappyBird />} />
       <Route path="/test" element={<Test />} />
     </Routes>
   )

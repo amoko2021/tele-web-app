@@ -332,6 +332,21 @@ const VI_TEXT = {
     loading: 'Đang chuẩn bị...',
     error: 'Có lỗi xảy ra, vui lòng thử lại!',
   },
+
+  // Flappy Bird Game
+  flappyBird: {
+    title: 'Flappy Bird',
+    startGame: 'Chạm để chơi',
+    score: 'Điểm: {score}',
+    bestScore: 'Cao nhất: {score}',
+    gameOver: 'Thua rồi!',
+    finalScore: 'Điểm của bạn: {score}',
+    reward: 'Nhận được: {coins} Coins',
+    playAgain: 'Chơi lại',
+    backHome: 'Về trang chủ',
+    instructions: 'Chạm vào màn hình để bay lên. Tránh các ống nước!',
+    loading: 'Đang tải...',
+  },
 }
 
 const EN_TEXT = {
@@ -658,6 +673,21 @@ const EN_TEXT = {
     instructions: 'Tap on falling gifts to collect Coins!',
     loading: 'Preparing...',
     error: 'An error occurred, please try again!',
+  },
+
+  // Flappy Bird Game
+  flappyBird: {
+    title: 'Flappy Bird',
+    startGame: 'Tap to Play',
+    score: 'Score: {score}',
+    bestScore: 'Best: {score}',
+    gameOver: 'Game Over!',
+    finalScore: 'Your Score: {score}',
+    reward: 'Earned: {coins} Coins',
+    playAgain: 'Play Again',
+    backHome: 'Back to Home',
+    instructions: 'Tap screen to fly. Avoid pipes!',
+    loading: 'Loading...',
   },
 }
 
