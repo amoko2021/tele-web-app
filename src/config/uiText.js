@@ -78,8 +78,7 @@ const VI_TEXT = {
         'Phiên làm việc quá lâu. Vui lòng khởi động lại ứng dụng!',
       noUser: 'Không tìm thấy thông tin user!',
       predictionRecorded: 'Dự đoán của bạn đã được ghi nhận!',
-      adUnavailable:
-        'Quảng cáo hiện không khả dụng. Vui lòng đợi hoặc tải lại trang!!!',
+      adUnavailable: 'Quảng cáo không khả dụng, vui lòng thử lại sau',
       adLoading: 'Đang tải quảng cáo...',
       adError: 'Có lỗi khi hiển thị quảng cáo. Vui lòng thử lại!',
       monetagFallback:
@@ -422,7 +421,7 @@ const EN_TEXT = {
       sessionTimeout: 'Session timeout. Please restart the app!',
       noUser: 'User info not found!',
       predictionRecorded: 'Your prediction has been recorded!',
-      adUnavailable: 'Ads currently unavailable. Please wait or reload!!!',
+      adUnavailable: 'Ads not available, please try again later',
       adLoading: 'Loading ads...',
       adError: 'Error showing ads. Please try again!',
       monetagFallback: 'Monetag ads not ready, switching to backup...',
