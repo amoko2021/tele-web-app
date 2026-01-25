@@ -331,7 +331,7 @@ export const Home = () => {
         /> */}
         <TaskButton
           onClick={() => navigate('prediction')}
-          text={UI_TEXT.home.prediction.join}
+          text={UI_TEXT.home.prediction.title}
           amount="+999,000 Coins"
           gradientColors="from-blue-500 to-sky-600"
         />
