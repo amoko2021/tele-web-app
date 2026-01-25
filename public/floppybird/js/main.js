@@ -40,6 +40,10 @@ var AdsgramController = null
 var adsgramRetries = 0
 
 function initAdsgram() {
+  if (window.adsgramLoadError) {
+    console.warn('Adsgram script failed to load (likely AdBlock). Ads disabled.')
+    return
+  }
   if (window.Adsgram) {
     console.log('Adsgram found, initializing...')
     AdsgramController = window.Adsgram.init({ blockId: '20540' })
