@@ -263,18 +263,70 @@ $(document).ready(function() {
 });
 
 function showAdsWithFallback(callback) {
-   // Try Monetag first
-   if (typeof show_10456534 === 'function') {
-      show_10456534().then(() => {
+   // Notify parent that we are attempting to show ads
+   if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'FLAPPY_BIRD_AD_REQUEST' }, '*');
+   }
+
+   // Set up a one-time listener for ad completion
+   var adListener = function(event) {
+      if (event.data?.type === 'AD_COMPLETED') {
+         window.removeEventListener('message', adListener);
          callback();
-      }).catch((err) => {
-         console.warn("Monetag failed, trying Adsgram:", err);
-         tryAdsgram(callback);
-      });
-   } else {
-      tryAdsgram(callback);
+      }
+   };
+   window.addEventListener('message', adListener);
+   
+   // Backup: If no message received in 30s, start anyway
+   setTimeout(function() {
+      window.removeEventListener('message', adListener);
+      callback();
+   }, 30000);
+}
+
+function screenClick()
+{
+   if(currentstate == states.GameScreen)
+   {
+      playerJump();
+   }
+   else if(currentstate == states.SplashScreen)
+   {
+      showAdsWithFallback(startGame);
    }
 }
+
+// Global listener for manual start trigger from React
+window.addEventListener('message', function(event) {
+   if (event.data?.type === 'TRIGGER_START') {
+      if (currentstate == states.SplashScreen) {
+         showAdsWithFallback(startGame);
+      }
+   }
+});
+
+
+   // Keep the internal callback to start the game after ads
+   window.adCallback = callback;
+   
+   // Try Monetag first (internal bridge)
+   if (typeof show_10456534 === 'function') {
+      show_10456534().then(() => {
+         if (window.adCallback) {
+            window.adCallback();
+            window.adCallback = null;
+         }
+      }).catch((err) => {
+         console.warn("Monetag failed, trying Adsgram:", err);
+         tryAdsgram(window.adCallback);
+         window.adCallback = null;
+      });
+   } else {
+      tryAdsgram(window.adCallback);
+      window.adCallback = null;
+   }
+}
+
 
 function tryAdsgram(callback) {
    if (AdsgramController) {
