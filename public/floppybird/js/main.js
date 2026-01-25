@@ -242,6 +242,7 @@ $(document).ready(function () {
 
 function showAdsWithFallback(callback) {
   // Try Monetag first
+  console.log('Trying Monetag ad...')
   if (typeof show_10456534 === 'function') {
     show_10456534()
       .then(() => {
