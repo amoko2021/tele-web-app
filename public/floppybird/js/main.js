@@ -254,9 +254,27 @@ else $(document).on('mousedown', screenClick)
 
 
 function showAdsWithFallback(callback) {
-  // Try Adsgram directly
-  console.log('Trying Adsgram ad...')
-  tryAdsgram(callback)
+  // Try Monetag first
+  console.log('Trying Monetag ad...')
+  tryMonetag(callback)
+}
+
+function tryMonetag(callback) {
+  if (typeof show_10456534 === 'function') {
+    show_10456534()
+      .then(() => {
+        console.log('Monetag ad shown successfully.')
+        alert('You have seen an ad!')
+        callback()
+      })
+      .catch((error) => {
+        console.warn('Monetag failed, trying Adsgram:', error)
+        tryAdsgram(callback)
+      })
+  } else {
+    console.warn('Monetag function not found, trying Adsgram')
+    tryAdsgram(callback)
+  }
 }
 
 function tryAdsgram(callback) {
