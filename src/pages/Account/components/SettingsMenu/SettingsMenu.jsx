@@ -17,13 +17,13 @@ export const SettingsMenu = ({ onBankAccount, onSupport }) => {
         onClick={onBankAccount}
       />
 
-      <MenuItem
+      {/* <MenuItem
         icon="headset_mic"
         title={UI_TEXT.account.settings.support}
         iconBgColor="bg-slate-100 dark:bg-slate-800"
         iconTextColor="text-slate-500 dark:text-slate-400"
         onClick={onSupport}
-      />
+      /> */}
     </div>
   )
 }
