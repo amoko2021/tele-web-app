@@ -43,9 +43,9 @@ function initAdsgram() {
   if (window.Adsgram) {
     console.log('Adsgram found, initializing...')
     AdsgramController = window.Adsgram.init({ blockId: '20540' })
-  } else if (adsgramRetries < 5) {
+  } else if (adsgramRetries < 10) {
     adsgramRetries++
-    console.log('Adsgram not found, retrying (' + adsgramRetries + '/5)...')
+    console.log('Adsgram not found, retrying (' + adsgramRetries + '/10)...')
     setTimeout(initAdsgram, 1000)
   } else {
     console.warn('Adsgram failed to load after retries.')
