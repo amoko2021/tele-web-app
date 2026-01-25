@@ -36,6 +36,7 @@ buzz.all().setVolume(volume)
 //loops
 var loopGameloop
 var loopPipeloop
+var AdsgramController = null
 
 $(document).ready(function () {
   if (window.location.search == '?debug') debugmode = true
@@ -50,7 +51,10 @@ $(document).ready(function () {
 
   // Initialize Adsgram
   if (window.Adsgram) {
+    console.log('Adsgram found, initializing...')
     AdsgramController = window.Adsgram.init({ blockId: '20540' })
+  } else {
+    console.warn('Adsgram not found in window')
   }
 })
 
@@ -229,16 +233,7 @@ $(document).keydown(function (e) {
 if ('ontouchstart' in window) $(document).on('touchstart', screenClick)
 else $(document).on('mousedown', screenClick)
 
-var AdsgramController = null
 
-$(document).ready(function () {
-  // ... existing code ...
-
-  // Initialize Adsgram
-  if (window.Adsgram) {
-    AdsgramController = window.Adsgram.init({ blockId: '20540' })
-  }
-})
 
 function showAdsWithFallback(callback) {
   // Try Adsgram directly
@@ -257,6 +252,7 @@ function tryAdsgram(callback) {
         callback()
       })
   } else {
+    console.warn('AdsgramController is null, skipping ad')
     callback()
   }
 }
