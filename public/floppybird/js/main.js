@@ -41,7 +41,9 @@ var adsgramRetries = 0
 
 function initAdsgram() {
   if (window.adsgramLoadError) {
-    console.warn('Adsgram script failed to load (likely AdBlock). Ads disabled.')
+    console.warn(
+      'Adsgram script failed to load (likely AdBlock). Ads disabled.',
+    )
     return
   }
   if (window.Adsgram) {
@@ -251,12 +253,17 @@ $(document).keydown(function (e) {
 if ('ontouchstart' in window) $(document).on('touchstart', screenClick)
 else $(document).on('mousedown', screenClick)
 
-
-
 function showAdsWithFallback(callback) {
-  // Try Monetag first
-  console.log('Trying Monetag ad...')
-  tryMonetag(callback)
+  // 30% chance to show ads
+  if (Math.random() <= 0.2) {
+    console.log('Showing ads (30% chance triggered)...')
+    // Try Monetag first
+    console.log('Trying Monetag ad...')
+    tryMonetag(callback)
+  } else {
+    console.log('Skipping ads (70% chance triggered)...')
+    callback()
+  }
 }
 
 function tryMonetag(callback) {
