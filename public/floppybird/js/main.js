@@ -251,6 +251,44 @@ if("ontouchstart" in window)
 else
    $(document).on("mousedown", screenClick);
 
+var AdsgramController = null;
+
+$(document).ready(function() {
+   // ... existing code ...
+   
+   // Initialize Adsgram
+   if (window.Adsgram) {
+      AdsgramController = window.Adsgram.init({ blockId: "20540" });
+   }
+});
+
+function showAdsWithFallback(callback) {
+   // Try Monetag first
+   if (typeof show_10456534 === 'function') {
+      show_10456534().then(() => {
+         callback();
+      }).catch((err) => {
+         console.warn("Monetag failed, trying Adsgram:", err);
+         tryAdsgram(callback);
+      });
+   } else {
+      tryAdsgram(callback);
+   }
+}
+
+function tryAdsgram(callback) {
+   if (AdsgramController) {
+      AdsgramController.show().then((result) => {
+         callback();
+      }).catch((result) => {
+         console.warn("Adsgram failed, starting anyway:", result);
+         callback();
+      });
+   } else {
+      callback();
+   }
+}
+
 function screenClick()
 {
    if(currentstate == states.GameScreen)
@@ -259,7 +297,7 @@ function screenClick()
    }
    else if(currentstate == states.SplashScreen)
    {
-      startGame();
+      showAdsWithFallback(startGame);
    }
 }
 
@@ -428,6 +466,12 @@ $("#replay").click(function() {
    soundSwoosh.stop();
    soundSwoosh.play();
 
+   // Show Ads with fallback before replay
+   showAdsWithFallback(restartGame);
+});
+
+function restartGame()
+{
    //fade out the scoreboard
    $("#scoreboard").transition({ y: '-40px', opacity: 0}, 1000, 'ease', function() {
       //when that's done, display us back to nothing
@@ -436,7 +480,7 @@ $("#replay").click(function() {
       //start the game over!
       showSplash();
    });
-});
+}
 
 function playerScore()
 {
