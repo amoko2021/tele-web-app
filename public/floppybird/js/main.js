@@ -241,20 +241,9 @@ $(document).ready(function () {
 })
 
 function showAdsWithFallback(callback) {
-  // Try Monetag first
-  console.log('Trying Monetag ad...')
-  if (typeof show_10456534 === 'function') {
-    show_10456534()
-      .then(() => {
-        callback()
-      })
-      .catch((err) => {
-        console.warn('Monetag failed, trying Adsgram:', err)
-        tryAdsgram(callback)
-      })
-  } else {
-    tryAdsgram(callback)
-  }
+  // Try Adsgram directly
+  console.log('Trying Adsgram ad...')
+  tryAdsgram(callback)
 }
 
 function tryAdsgram(callback) {
