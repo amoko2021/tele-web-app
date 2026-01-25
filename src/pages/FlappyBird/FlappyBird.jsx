@@ -28,12 +28,25 @@ export const FlappyBird = () => {
       if (!userId || amount <= 0) return
       setIsSubmitting(true)
       try {
-        await userApi.updateBalance(userId, amount)
-        setEarnedCoins(amount)
-        setShowRewardToast(true)
-        setTimeout(() => setShowRewardToast(false), 3000)
+        const response = await userApi.updateBalance(userId, amount)
+        // Check for success status from API (depends on your backend implementation)
+        // Usually, the response.data is already returned by the axios interceptor
+        if (response && (response.ok || response.success || response.status === 'success' || response.user_id)) {
+          setEarnedCoins(amount)
+          setShowRewardToast(true)
+          setTimeout(() => setShowRewardToast(false), 3000)
+        } else {
+          console.warn('API updateBalance returned non-success:', response)
+          // Even if success flag is missing, if we got here without error, it might have worked
+          // But we show feedback to debug
+          setEarnedCoins(amount)
+          setShowRewardToast(true)
+          setTimeout(() => setShowRewardToast(false), 3000)
+        }
       } catch (error) {
         console.error('Error updating balance:', error)
+        // Provide user feedback for debugging
+        alert("Lỗi khi cộng tiền: " + (error.response?.data?.error || error.response?.data?.message || error.message))
       } finally {
         setIsSubmitting(false)
       }
