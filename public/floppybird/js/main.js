@@ -279,7 +279,7 @@ function screenClick() {
   if (currentstate == states.GameScreen) {
     playerJump()
   } else if (currentstate == states.SplashScreen) {
-    showAdsWithFallback(startGame)
+    startGame() // Directly start the game without showing ads
   } else if (currentstate == states.ScoreScreen) {
     $('#replay').click()
   }
