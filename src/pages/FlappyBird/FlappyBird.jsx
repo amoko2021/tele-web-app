@@ -50,7 +50,7 @@ export const FlappyBird = () => {
         // Calculate reward (1 point = 1 coin, max 1000 per run)
         const coins = Math.min(score, 1000)
         if (coins > 0) {
-          submitReward(coins)
+          submitReward(coins * 5) // 5 coins per point
         }
       }
     }
@@ -93,7 +93,9 @@ export const FlappyBird = () => {
       {(isSubmitting || isLoading) && (
         <div className={styles.loadingOverlay}>
           <div className={styles.loader}></div>
-          <p>{isLoading ? UI_TEXT.flappyBird.loading : UI_TEXT.common.loading}</p>
+          <p>
+            {isLoading ? UI_TEXT.flappyBird.loading : UI_TEXT.common.loading}
+          </p>
         </div>
       )}
     </div>
