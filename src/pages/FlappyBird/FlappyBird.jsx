@@ -47,8 +47,8 @@ export const FlappyBird = () => {
       // In production, you might want to check event.origin
       if (event.data?.type === 'FLAPPY_BIRD_SCORE') {
         const score = event.data.score
-        // Calculate reward (1 point = 10 coins, max 1000 per run)
-        const coins = Math.min(score * 10, 1000)
+        // Calculate reward (1 point = 1 coin, max 1000 per run)
+        const coins = Math.min(score, 1000)
         if (coins > 0) {
           submitReward(coins)
         }
