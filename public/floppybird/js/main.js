@@ -50,6 +50,11 @@ $(document).ready(function() {
 
    //start with the splash screen
    showSplash();
+
+   // Initialize Adsgram
+   if (window.Adsgram) {
+      AdsgramController = window.Adsgram.init({ blockId: "20540" });
+   }
 });
 
 function getCookie(cname)
@@ -298,6 +303,10 @@ function screenClick()
    else if(currentstate == states.SplashScreen)
    {
       showAdsWithFallback(startGame);
+   }
+   else if(currentstate == states.ScoreScreen)
+   {
+      $("#replay").click();
    }
 }
 
