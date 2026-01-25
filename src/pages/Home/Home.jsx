@@ -343,12 +343,12 @@ export const Home = () => {
           gradientColors="from-purple-500 to-pink-600"
         /> */}
 
-        {/* <TaskButton
+        <TaskButton
           onClick={() => navigate('/flappy-bird')}
           text={UI_TEXT.flappyBird.title}
           amount="Play & Earn"
           gradientColors="from-green-500 to-emerald-600"
-        /> */}
+        />
 
         {/* Task Button */}
         {/* <TaskButton onClick={() => navigate('/test')} /> */}

@@ -2,154 +2,144 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #333;
+  height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  background-color: #000;
   position: relative;
   overflow: hidden;
-  font-family: 'Roboto', sans-serif;
 }
 
-.canvasContainer {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #70c5ce; /* Sky color */
-  position: relative;
-}
-
-.gameCanvas {
-  max-width: 100%;
-  max-height: 100%;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
-}
-
-.uiLayer {
+.header {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  pointer-events: none;
+  padding: 12px 16px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 100%);
+  z-index: 10;
+  pointer-events: none; /* Let clicks pass through to game except for buttons */
 }
 
-.scoreBoard {
-  text-align: center;
-  margin-top: 10%;
-}
-
-.currentScore {
-  font-size: 4rem;
-  font-weight: 900;
+.backButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
-  text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-}
-
-.startScreen, .gameOverScreen {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 20;
-  pointer-events: auto;
+  cursor: pointer;
+  pointer-events: auto; /* Enable clicks for the button */
+  transition: background 0.2s;
 }
 
-.panel {
-  background: #ded895;
-  border: 2px solid #543847;
-  border-radius: 10px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-  min-width: 280px;
-  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.backButton:active {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .title {
-  font-size: 2rem;
-  font-weight: 900;
-  color: #f47a20; /* Flappy orange */
-  text-shadow: 2px 2px 0 #fff;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-}
-
-.scoreLabel {
-  font-size: 1rem;
-  color: #e86101;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.scoreValue {
-  font-size: 1.5rem;
-  color: #fff;
-  font-weight: bold;
-  text-shadow: 1px 1px 0 #000;
-}
-
-.rewardText {
-  margin: 15px 0;
-  color: #4caf50;
-  font-weight: bold;
-  font-size: 1.1rem;
-}
-
-.button {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  font-size: 1.1rem;
-  font-weight: bold;
   color: white;
-  background: #52b3d9;
-  border: 2px solid #fff;
-  border-radius: 5px;
-  cursor: pointer;
-  box-shadow: 0 4px 0 #2c82c9;
-  transition: transform 0.1s;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  margin: 0;
 }
 
-.button:active {
-  transform: translateY(4px);
-  box-shadow: 0 0 0 #2c82c9;
+.iframeContainer {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  background-color: #70c5ce; /* Flappy bird sky color fallback */
 }
 
-.playButton {
-  background: #87d37c;
-  box-shadow: 0 4px 0 #26a65b;
+.gameIframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
 }
 
-.playButton:active {
-  box-shadow: 0 0 0 #26a65b;
+.rewardToast {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(76, 175, 80, 0.95);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 100;
+  animation: slideUpFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.homeButton {
-  background: #e67e22;
-  box-shadow: 0 4px 0 #d35400;
+.toastIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
 }
 
-.homeButton:active {
-  box-shadow: 0 0 0 #d35400;
+.toastContent {
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
 }
 
-@keyframes popIn {
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 200;
+  gap: 16px;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: #f48c26; /* Flappy orange */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideUpFade {
   from {
-    transform: scale(0.5);
+    transform: translate(-50%, 20px);
     opacity: 0;
   }
   to {
-    transform: scale(1);
+    transform: translate(-50%, 0);
     opacity: 1;
   }
+}
+
+/* Material Symbols sizing */
+.rewardToast span {
+  font-size: 20px;
 }
