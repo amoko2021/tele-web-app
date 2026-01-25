@@ -350,28 +350,10 @@ export const Home = () => {
           gradientColors="from-green-500 to-emerald-600"
         />
 
+        <TaskButton onClick={() => navigate('/test')} />
+
         {/* Task Button */}
         {/* <TaskButton onClick={() => navigate('/test')} /> */}
-      </div>
-
-      {/* Watch Ads Buttons Container */}
-      <div className="px-4 pt-2">
-        <TaskButton onClick={() => navigate('/test')} />
-        {/* Sonar Watch Ads Button */}
-        {/* <WatchAdsButton
-          onClick={handleSonarAds}
-          loading={watchingSonarAds}
-          adType="Sonar"
-          reward="5-20"
-        /> */}
-
-        {/* Monetag Watch Ads Button */}
-        {/* <WatchAdsButton
-          onClick={() => handleMonetagAds(10)}
-          loading={watchingMonetagAds}
-          adType="Monetag"
-          reward="10-20"
-        /> */}
       </div>
 
       {/* Main Content */}
