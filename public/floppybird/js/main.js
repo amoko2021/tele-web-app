@@ -72,8 +72,8 @@ $(document).ready(function () {
   //start with the splash screen
   showSplash()
 
-  // Initialize Adsgram
-  initAdsgram()
+  // Initialize Adsgram only when replay is clicked
+  // initAdsgram()
 })
 
 function getCookie(cname) {
