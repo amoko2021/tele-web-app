@@ -37,6 +37,25 @@ buzz.all().setVolume(volume)
 var loopGameloop
 var loopPipeloop
 var AdsgramController = null
+var adsgramRetries = 0
+
+function initAdsgram() {
+  if (window.Adsgram) {
+    console.log('Adsgram found, initializing...')
+    AdsgramController = window.Adsgram.init({ blockId: '20540' })
+  } else if (adsgramRetries < 5) {
+    adsgramRetries++
+    console.log('Adsgram not found, retrying (' + adsgramRetries + '/5)...')
+    setTimeout(initAdsgram, 1000)
+  } else {
+    console.warn('Adsgram failed to load after retries.')
+    if ($('script[src*="adsgram"]').length === 0) {
+      console.warn('Adsgram script tag missing from DOM')
+    } else {
+      console.warn('Adsgram script tag found but window.Adsgram is undefined')
+    }
+  }
+}
 
 $(document).ready(function () {
   if (window.location.search == '?debug') debugmode = true
@@ -50,12 +69,7 @@ $(document).ready(function () {
   showSplash()
 
   // Initialize Adsgram
-  if (window.Adsgram) {
-    console.log('Adsgram found, initializing...')
-    AdsgramController = window.Adsgram.init({ blockId: '20540' })
-  } else {
-    console.warn('Adsgram not found in window')
-  }
+  initAdsgram()
 })
 
 function getCookie(cname) {
