@@ -305,7 +305,7 @@ function screenClick() {
   } else if (currentstate == states.SplashScreen) {
     startGame() // Directly start the game without showing ads
   } else if (currentstate == states.ScoreScreen) {
-    $('#replay').click()
+    // Do nothing, user must click the replay button
   }
 }
 
