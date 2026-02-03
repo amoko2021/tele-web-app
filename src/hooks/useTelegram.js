@@ -29,7 +29,7 @@ export const useTelegram = () => {
       logger.telegramInit('failed', { error: error.message })
     }
 
-    tg?.requestFullscreen()
+    //tg?.requestFullscreen()
 
     // Validate init data khi component mount
     validateInitData()
