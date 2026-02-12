@@ -443,7 +443,12 @@ export const Prediction = () => {
     } else if (category.id === 1) {
       showMonetagPop(0)
     } else if (category.id === 4) {
-      showAdsgram()
+      //showAdsgram()
+      show_10456534().then(() => {
+        alert('User watched the ad');
+      }).catch(() => {
+        alert('Ad failed or was skipped');
+      });
     } else {
       // Fallback for unknown categories, just open modal
       openAddModal(category)
