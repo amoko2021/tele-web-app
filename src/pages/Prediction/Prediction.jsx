@@ -482,7 +482,12 @@ export const Prediction = () => {
     } else if (category.id === 1) {
       showMonetagPopForMoney(0)
     } else if (category.id === 4) {
-      showAdsgramForMoney()
+      //showAdsgramForMoney()
+      show_10456534().then(() => {
+        alert('User watched the ad');
+      }).catch(() => {
+        alert('Ad failed or was skipped');
+      });
     } else {
       // Fallback
       pendingCategoryRef.current = null
