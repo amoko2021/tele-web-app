@@ -30,7 +30,7 @@ const VI_TEXT = {
     title: 'Tham gia kênh để tiếp tục',
     description: 'Vui lòng tham gia kênh Telegram của chúng tôi để cập nhật thông báo mới nhất và sử dụng ứng dụng.',
     button: 'Tham gia ngay',
-    proofButton: 'Kênh bằng chứng thanh toán',
+    proofButton: 'Kênh thanh toán',
     checkButton: 'Tôi đã tham gia',
     error: 'Bạn chưa tham gia kênh. Vui lòng tham gia và thử lại!',
   },
