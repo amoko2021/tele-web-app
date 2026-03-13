@@ -4,6 +4,7 @@ import styles from './JoinChannelScreen.module.css'
 
 export const JoinChannelScreen = ({ onCheck }) => {
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const channelUrl = 'https://t.me/lamgiau_online' // Placeholder
 
   const handleJoin = () => {
@@ -15,7 +16,9 @@ export const JoinChannelScreen = ({ onCheck }) => {
   }
 
   const handleCheck = async () => {
+    if (isLoading) return
     setError('')
+    setIsLoading(true)
     try {
       const success = await onCheck()
       if (!success) {
@@ -23,6 +26,8 @@ export const JoinChannelScreen = ({ onCheck }) => {
       }
     } catch {
       setError(UI_TEXT.common.error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -40,7 +45,12 @@ export const JoinChannelScreen = ({ onCheck }) => {
         <button className={styles.joinButton} onClick={handleJoin}>
           {UI_TEXT.joinChannelScreen.button}
         </button>
-        <button className={styles.checkButton} onClick={handleCheck}>
+        <button 
+          className={styles.checkButton} 
+          onClick={handleCheck}
+          disabled={isLoading}
+        >
+          {isLoading && <span className={styles.spinner}></span>}
           {UI_TEXT.joinChannelScreen.checkButton}
         </button>
       </div>
