@@ -58,6 +58,24 @@
   opacity: 0.8;
 }
 
+.subButton {
+  background: linear-gradient(135deg, #34a853 0%, #2ecc71 100%);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  text-decoration: none;
+  display: block;
+}
+
+.subButton:active {
+  opacity: 0.8;
+}
+
 .checkButton {
   background: #f0f2f5;
   color: #1a1a1a;
