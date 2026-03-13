@@ -320,6 +320,29 @@ export const userApi = {
     }
   },
 
+  // Kiểm tra membership qua backend
+  checkMembership: async (userId) => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            is_joined: false, // Set to false for testing UI
+          })
+        }, 500)
+      })
+    }
+
+    try {
+      // Giả định endpoint backend sẽ là /check-membership/:userId
+      const response = await apiClient.get(`/check-membership/${userId}`)
+      return response
+    } catch (error) {
+      console.error('Error checking membership:', error)
+      throw error
+    }
+  },
+
   // Thêm ticket (chuyển đổi từ coins)
   addTicket: async (userId, ticketCount) => {
     if (USE_MOCK) {

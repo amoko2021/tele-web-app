@@ -25,6 +25,15 @@ const VI_TEXT = {
     history: 'Lịch sử',
   },
 
+  // Màn hình Yêu cầu tham gia kênh
+  joinChannelScreen: {
+    title: 'Tham gia kênh để tiếp tục',
+    description: 'Vui lòng tham gia kênh Telegram của chúng tôi để cập nhật thông báo mới nhất và sử dụng ứng dụng.',
+    button: 'Tham gia ngay',
+    checkButton: 'Tôi đã tham gia',
+    error: 'Bạn chưa tham gia kênh. Vui lòng tham gia và thử lại!',
+  },
+
   // Màn hình Trang chủ (Home)
   home: {
     title: 'Dự Đoán XSMB',
@@ -367,6 +376,15 @@ const EN_TEXT = {
     delete: 'Delete',
     today: 'Today',
     history: 'History',
+  },
+
+  // Join Channel Screen
+  joinChannelScreen: {
+    title: 'Join Channel to Continue',
+    description: 'Please join our Telegram channel to get the latest updates and use the application.',
+    button: 'Join Now',
+    checkButton: 'I have joined',
+    error: 'You have not joined the channel yet. Please join and try again!',
   },
 
   // Home Screen

@@ -106,7 +106,7 @@ export const useUserInfo = (userId) => {
   const fetchUserInfo = useCallback(async () => {
     if (!userId) {
       setData(null)
-      return
+      return null
     }
 
     setLoading(true)
@@ -114,8 +114,10 @@ export const useUserInfo = (userId) => {
     try {
       const result = await userApi.getUserInfo(userId)
       setData(result)
+      return result
     } catch (err) {
       setError(err.message)
+      return null
     } finally {
       setLoading(false)
     }
