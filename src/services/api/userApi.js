@@ -327,7 +327,12 @@ export const userApi = {
         setTimeout(() => {
           resolve({
             ok: true,
-            is_joined: false, // Set to false for testing UI
+            message: null,
+            data: {
+              user_id: userId,
+              is_joined: false, // Set to false for testing UI
+            },
+            total: null
           })
         }, 500)
       })

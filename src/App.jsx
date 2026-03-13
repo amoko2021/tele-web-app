@@ -45,7 +45,7 @@ function App() {
         setIsCheckingMembership(true)
         try {
           const result = await userApi.checkMembership(userId)
-          setIsJoined(!!result?.is_joined)
+          setIsJoined(!!result?.data?.is_joined)
         } catch (error) {
           console.error('Initial membership check failed:', error)
           // If API fails, we might want to default to false to be safe
@@ -61,7 +61,7 @@ function App() {
   const handleCheckJoin = async () => {
     try {
       const result = await userApi.checkMembership(userId)
-      const joined = !!result?.is_joined
+      const joined = !!result?.data?.is_joined
       setIsJoined(joined)
       return joined
     } catch (error) {
