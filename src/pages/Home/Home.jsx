@@ -306,11 +306,11 @@ export const Home = () => {
         isToday={isToday}
       />
 
-      {/* Countdown Timer */}
-      {isToday && <CountdownTimer />}
-
       {/* Buttons Container */}
       <div className="px-4 pt-2">
+        {/* Countdown Timer */}
+        {isToday && <CountdownTimer />}
+
         {/* Prediction Button */}
         {/* <PredictionButton
           onClick={handleFloatingButtonClick}

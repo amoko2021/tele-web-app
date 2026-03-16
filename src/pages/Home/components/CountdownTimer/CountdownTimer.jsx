@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { UI_TEXT } from '../../../../config/uiText'
-import styles from './CountdownTimer.module.css'
 
 export const CountdownTimer = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -14,11 +13,9 @@ export const CountdownTimer = () => {
       const now = new Date()
       
       // Target time: 18:30 in Asia/Ho_Chi_Minh
-      // We calculate the target date in the local timezone first, then adjust
       const target = new Date(now)
       target.setHours(18, 30, 0, 0)
 
-      // If it's already past 18:30, target is tomorrow
       if (now > target) {
         target.setDate(target.getDate() + 1)
       }
@@ -41,25 +38,27 @@ export const CountdownTimer = () => {
   }, [])
 
   const formatNumber = (num) => num.toString().padStart(2, '0')
+  const timerString = `${formatNumber(timeLeft.hours)}:${formatNumber(timeLeft.minutes)}:${formatNumber(timeLeft.seconds)}`
 
   return (
-    <div className={styles.container}>
-      <div className={styles.label}>{UI_TEXT.home.countdown.nextDraw}</div>
-      <div className={styles.timer}>
-        <div className={styles.timeUnit}>
-          <span className={styles.number}>{formatNumber(timeLeft.hours)}</span>
-          <span className={styles.unit}>{UI_TEXT.home.countdown.hours}</span>
+    <div className="flex items-center justify-between rounded-xl bg-white border border-primary/20 p-2 shadow-lg shadow-primary/10 transition-all mb-3">
+      <div className="flex items-center gap-2.5">
+        <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
+          <span className="material-symbols-outlined text-xl">
+            schedule
+          </span>
         </div>
-        <div className={styles.separator}>:</div>
-        <div className={styles.timeUnit}>
-          <span className={styles.number}>{formatNumber(timeLeft.minutes)}</span>
-          <span className={styles.unit}>{UI_TEXT.home.countdown.minutes}</span>
+        <div className="flex flex-col items-start min-w-0">
+          <span className="font-bold text-xs whitespace-nowrap text-slate-800">
+            {UI_TEXT.home.countdown.nextDraw}
+          </span>
+          <span className="text-[10px] text-slate-500 whitespace-nowrap">
+            18:30 (GMT+7)
+          </span>
         </div>
-        <div className={styles.separator}>:</div>
-        <div className={styles.timeUnit}>
-          <span className={styles.number}>{formatNumber(timeLeft.seconds)}</span>
-          <span className={styles.unit}>{UI_TEXT.home.countdown.seconds}</span>
-        </div>
+      </div>
+      <div className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 px-2.5 py-1 text-[13px] font-bold text-white whitespace-nowrap flex-shrink-0 font-mono">
+        <span>{timerString}</span>
       </div>
     </div>
   )
