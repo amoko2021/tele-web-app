@@ -12,7 +12,7 @@ import { useLotteryHistory } from '../../hooks/useLotteryHistory'
 import { DateNavigation } from './components/DateNavigation'
 import { SpecialPrize } from './components/SpecialPrize'
 import { ResultsTable } from './components/ResultsTable'
-import { CountdownTimer } from './components/CountdownTimer'
+import { PredictionCard } from './components/PredictionCard'
 // import { FloatingButton } from './components/FloatingButton'
 // import { PredictionModalContent } from './components/PredictionModalContent'
 // import { TimeUpModal } from './components/TimeUpModal'
@@ -318,26 +318,11 @@ export const Home = () => {
         isToday={isToday}
       />
 
-      {/* Countdown Timer */}
-      <div className="px-4 pt-4">
-        {isToday && !isDrawingTime() && <CountdownTimer />}
-      </div>
+      {/* Prediction Card (Combined Countdown & Task) */}
+      <PredictionCard isToday={isToday} isDrawingTime={isDrawingTime()} />
 
       {/* Buttons Container */}
       <div className="px-4 pt-2">
-        {/* Prediction Button */}
-        {/* <PredictionButton
-          onClick={handleFloatingButtonClick}
-          remainingPredictions={remainingPredictions}
-          maxPredictions={maxPredictions}
-          checkingPrediction={checkingPrediction}
-        /> */}
-        <TaskButton
-          onClick={() => navigate('prediction')}
-          text={UI_TEXT.home.prediction.title}
-          amount="+999,000 Coins"
-          gradientColors="from-blue-500 to-sky-600"
-        />
 
         {/* <TaskButton
           onClick={() => navigate('/gift-rain')}
