@@ -38,27 +38,47 @@ export const CountdownTimer = () => {
   }, [])
 
   const formatNumber = (num) => num.toString().padStart(2, '0')
-  const timerString = `${formatNumber(timeLeft.hours)}:${formatNumber(timeLeft.minutes)}:${formatNumber(timeLeft.seconds)}`
 
   return (
-    <div className="flex items-center justify-between rounded-xl bg-white border border-primary/20 p-2 shadow-lg shadow-primary/10 transition-all mb-3">
-      <div className="flex items-center gap-2.5">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
-          <span className="material-symbols-outlined text-xl">
-            schedule
-          </span>
-        </div>
-        <div className="flex flex-col items-start min-w-0">
-          <span className="font-bold text-xs whitespace-nowrap text-slate-800">
-            {UI_TEXT.home.countdown.nextDraw}
-          </span>
-          <span className="text-[10px] text-slate-500 whitespace-nowrap">
-            18:30 (GMT+7)
-          </span>
-        </div>
+    <div className="flex flex-col items-center justify-center rounded-xl bg-white border border-primary/20 p-4 shadow-lg shadow-primary/10 transition-all mb-4">
+      <div className="font-bold text-xs text-slate-800 uppercase tracking-wider mb-3">
+        {UI_TEXT.home.countdown.nextDraw}
       </div>
-      <div className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 px-2.5 py-1 text-[13px] font-bold text-white whitespace-nowrap flex-shrink-0 font-mono">
-        <span>{timerString}</span>
+      
+      <div className="flex items-center gap-4">
+        {/* Hours */}
+        <div className="flex flex-col items-center">
+          <div className="text-3xl font-black bg-gradient-to-br from-indigo-500 to-purple-600 bg-clip-text text-transparent font-mono leading-none">
+            {formatNumber(timeLeft.hours)}
+          </div>
+          <div className="text-[9px] font-bold text-slate-400 uppercase mt-1">
+            {UI_TEXT.home.countdown.hours}
+          </div>
+        </div>
+
+        <div className="text-xl font-bold text-slate-300 pb-4">:</div>
+
+        {/* Minutes */}
+        <div className="flex flex-col items-center">
+          <div className="text-3xl font-black bg-gradient-to-br from-indigo-500 to-purple-600 bg-clip-text text-transparent font-mono leading-none">
+            {formatNumber(timeLeft.minutes)}
+          </div>
+          <div className="text-[9px] font-bold text-slate-400 uppercase mt-1">
+            {UI_TEXT.home.countdown.minutes}
+          </div>
+        </div>
+
+        <div className="text-xl font-bold text-slate-300 pb-4">:</div>
+
+        {/* Seconds */}
+        <div className="flex flex-col items-center">
+          <div className="text-3xl font-black bg-gradient-to-br from-indigo-500 to-purple-600 bg-clip-text text-transparent font-mono leading-none">
+            {formatNumber(timeLeft.seconds)}
+          </div>
+          <div className="text-[9px] font-bold text-slate-400 uppercase mt-1">
+            {UI_TEXT.home.countdown.seconds}
+          </div>
+        </div>
       </div>
     </div>
   )

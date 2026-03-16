@@ -283,6 +283,18 @@ export const Home = () => {
   const displayData = isToday ? xsmbData : currentResult
   const displayDate = isToday ? xsmbData?.time : formatDate(currentDate)
 
+  // Kiểm tra xem có đang trong thời gian quay thưởng không (18:15 - 18:45)
+  const isDrawingTime = () => {
+    if (!isToday) return false
+    const now = new Date()
+    const nowVN = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }))
+    const hours = nowVN.getHours()
+    const minutes = nowVN.getMinutes()
+    const totalMinutes = hours * 60 + minutes
+    // 18:15 = 1095, 18:45 = 1125
+    return totalMinutes >= 1095 && totalMinutes <= 1125
+  }
+
   if (loading || historyLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-50">
@@ -306,11 +318,13 @@ export const Home = () => {
         isToday={isToday}
       />
 
+      {/* Countdown Timer */}
+      <div className="px-4 pt-4">
+        {isToday && !isDrawingTime() && <CountdownTimer />}
+      </div>
+
       {/* Buttons Container */}
       <div className="px-4 pt-2">
-        {/* Countdown Timer */}
-        {isToday && <CountdownTimer />}
-
         {/* Prediction Button */}
         {/* <PredictionButton
           onClick={handleFloatingButtonClick}
