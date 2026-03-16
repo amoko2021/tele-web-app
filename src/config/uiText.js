@@ -72,6 +72,12 @@ const VI_TEXT = {
       result: 'Kết quả',
       updating: 'Đang cập nhật',
     },
+    countdown: {
+      nextDraw: 'Kỳ quay tiếp theo',
+      hours: 'giờ',
+      minutes: 'phút',
+      seconds: 'giây',
+    },
     tasks: {
       title: 'Nhiệm vụ hàng ngày',
       checkIn: 'Điểm danh hàng ngày',
@@ -425,6 +431,12 @@ const EN_TEXT = {
       prize: 'Prize',
       result: 'Result',
       updating: 'Updating',
+    },
+    countdown: {
+      nextDraw: 'Next Draw',
+      hours: 'h',
+      minutes: 'm',
+      seconds: 's',
     },
     tasks: {
       title: 'Daily Tasks',

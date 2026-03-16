@@ -1,8 +1,7 @@
-import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TadsWidget } from 'react-tads-widget'
 import { useXSMB } from '../../hooks/useApi'
-import { useTelegram } from '../../hooks/useTelegram'
+// import { useTelegram } from '../../hooks/useTelegram'
 // import { useAdsgram } from '../../hooks/useAdsgram'
 // import { useSonarAds } from '../../hooks/useSonarAds'
 // import { useMonetag } from '../../hooks/useMonetag'
@@ -13,6 +12,7 @@ import { useLotteryHistory } from '../../hooks/useLotteryHistory'
 import { DateNavigation } from './components/DateNavigation'
 import { SpecialPrize } from './components/SpecialPrize'
 import { ResultsTable } from './components/ResultsTable'
+import { CountdownTimer } from './components/CountdownTimer'
 // import { FloatingButton } from './components/FloatingButton'
 // import { PredictionModalContent } from './components/PredictionModalContent'
 // import { TimeUpModal } from './components/TimeUpModal'
@@ -21,12 +21,11 @@ import { TaskButton } from './components/TaskButton'
 // import { PredictionButton } from './components/PredictionButton'
 // import { WatchAdsButton } from './components/WatchAdsButton'
 import { UI_TEXT } from '../../config/uiText'
-import { useUserInfo, useUpdateLanguage } from '../../hooks/useApi'
+// import { useUserInfo, useUpdateLanguage } from '../../hooks/useApi'
 
 export const Home = () => {
   const navigate = useNavigate()
   const { data: xsmbData, loading } = useXSMB()
-  const { validationData, user: telegramUser } = useTelegram()
   const {
     currentResult,
     currentDate,
@@ -39,35 +38,22 @@ export const Home = () => {
     isToday,
   } = useLotteryHistory()
 
-  // const [isModalOpen, setIsModalOpen] = useState(false)
-  // const [isTimeUpModalOpen, setIsTimeUpModalOpen] = useState(false)
-  // const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
-  // const [prizeType, setPrizeType] = useState('db')
-  // const [prediction, setPrediction] = useState('')
-  // const [submitting, setSubmitting] = useState(false)
-  // const [hasPredicted, setHasPredicted] = useState(false)
-  // const [todayPredictions, setTodayPredictions] = useState([])
-  // const [checkingPrediction, setCheckingPrediction] = useState(false)
-  // const [maxPredictions, setMaxPredictions] = useState(2)
-  // const [remainingPredictions, setRemainingPredictions] = useState(2)
-  // const [errorMessage, setErrorMessage] = useState('')
-  // const [pendingPrediction, setPendingPrediction] = useState(null)
-
   // Lấy userId từ Telegram
-  const userData = validationData?.data?.user || telegramUser
-  const userId = userData?.id
-  const language = userData?.language_code || 'en'
-  const { data: userInfo } = useUserInfo(userId)
-  const {
-    updateLanguage,
-    loading: updatingLanguage,
-    error: updateLanguageError,
-    success: updateLanguageSuccess,
-  } = useUpdateLanguage(userId, language)
+  // const { validationData, user: telegramUser } = useTelegram()
+  // const userData = validationData?.data?.user || telegramUser
+  // const userId = userData?.id
+  // const language = userData?.language_code || 'en'
+  // const { data: userInfo } = useUserInfo(userId)
+  // const {
+  //   updateLanguage,
+  //   loading: updatingLanguage,
+  //   error: updateLanguageError,
+  //   success: updateLanguageSuccess,
+  // } = useUpdateLanguage(userId, language)
 
-  const onAdsNotFound = useCallback(() => {
-    console.log('No widget ads found for this user')
-  }, [])
+  // const onAdsNotFound = useCallback(() => {
+  //   console.log('No widget ads found for this user')
+  // }, [])
 
   // Sonar Ads hook
   // const { handleWatchAds: handleSonarAds, watchingAds: watchingSonarAds } =
@@ -319,6 +305,9 @@ export const Home = () => {
         canGoPrevious={canGoPrevious}
         isToday={isToday}
       />
+
+      {/* Countdown Timer */}
+      {isToday && <CountdownTimer />}
 
       {/* Buttons Container */}
       <div className="px-4 pt-2">
