@@ -4,7 +4,7 @@ import { UI_TEXT } from '../../../../config/uiText'
 
 export const PredictionCard = ({ isToday, isDrawingTime }) => {
   const navigate = useNavigate()
-  const { hours, minutes, seconds } = useCountdown(18)
+  const { hours, minutes, seconds } = useCountdown(18,0)
 
   const formatNumber = (num) => num.toString().padStart(2, '0')
 
