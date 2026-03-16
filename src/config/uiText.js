@@ -430,7 +430,7 @@ const EN_TEXT = {
       updateTime: 'Results updated live at 11:15 UTC daily',
       prize: 'Prize',
       result: 'Result',
-      updating: 'Updating',
+      updating: 'Đang cập nhật',
     },
     countdown: {
       nextDraw: 'Next Draw',
