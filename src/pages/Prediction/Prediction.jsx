@@ -32,7 +32,7 @@ export const Prediction = () => {
   const [isConvertModalOpen, setIsConvertModalOpen] = useState(false)
   const [isConverting, setIsConverting] = useState(false)
 
-  const CONVERSION_RATE = 26000
+  const CONVERSION_RATE = 100000
 
   const handleConvert = async (ticketAmount) => {
     const totalCost = ticketAmount * CONVERSION_RATE

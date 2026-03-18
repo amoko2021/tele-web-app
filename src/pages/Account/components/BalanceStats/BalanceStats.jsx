@@ -10,7 +10,7 @@ export const BalanceStats = ({ balance = 0, coins = 0, points = 340, onUpdate })
   const [isConvertModalOpen, setIsConvertModalOpen] = useState(false)
   const [isConverting, setIsConverting] = useState(false)
   const { user } = useTelegram()
-  const CONVERSION_RATE = 26000
+  const CONVERSION_RATE = 100000
 
   const handleConvert = async (ticketAmount) => {
     const totalCost = ticketAmount * CONVERSION_RATE
