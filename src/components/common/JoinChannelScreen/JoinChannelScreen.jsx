@@ -5,8 +5,8 @@ import styles from './JoinChannelScreen.module.css'
 export const JoinChannelScreen = ({ onCheck }) => {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const channelUrl = 'https://t.me/lamgiau_online'
-  const sub_channelUrl = 'https://t.me/trathuongonline'  
+  const channelUrl = import.meta.env.VITE_CHANNEL_URL || 'https://t.me/lamgiau_online'
+  const sub_channelUrl = import.meta.env.VITE_SUB_CHANNEL_URL || 'https://t.me/trathuongonline'
 
   const handleJoin = () => {
     if (window.Telegram?.WebApp?.openTelegramLink) {

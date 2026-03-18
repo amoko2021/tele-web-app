@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 
 const LOTTERY_HISTORY_API =
+  import.meta.env.VITE_LOTTERY_HISTORY_URL ||
   'https://raw.githubusercontent.com/khiemdoan/vietnam-lottery-xsmb-analysis/refs/heads/main/data/xsmb.json'
 
 export const useLotteryHistory = () => {

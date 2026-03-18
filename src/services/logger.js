@@ -1,4 +1,4 @@
-const LOG_API_URL = 'https://betestminiapp-production-9a0b.up.railway.app/api/logs'
+const LOG_API_URL = `${import.meta.env.VITE_API_URL || 'https://betestminiapp-production-9a0b.up.railway.app'}/api/logs`
 
 const getDeviceInfo = () => {
   const tg = window.Telegram?.WebApp

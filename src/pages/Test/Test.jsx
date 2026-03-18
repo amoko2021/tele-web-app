@@ -4,8 +4,8 @@ import { Loading } from '../../components/common/Loading'
 import CryptoJS from 'crypto-js'
 
 // Replace with your actual app secure hash from CPX Research
-const APP_SECURE_HASH = '7kvhJ8lE03UyvH9vvXiG2k90em4UcPrB'
-const APP_ID = '30866'
+const APP_SECURE_HASH = import.meta.env.VITE_CPX_SECURE_HASH || '7kvhJ8lE03UyvH9vvXiG2k90em4UcPrB'
+const APP_ID = import.meta.env.VITE_CPX_APP_ID || '30866'
 
 export const Test = () => {
   const { validationData, isValidating, user: telegramUser } = useTelegram()

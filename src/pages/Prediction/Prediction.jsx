@@ -286,8 +286,8 @@ export const Prediction = () => {
 
   // 1. Adsgram Hook (for db_2, loto_2)
   const showAdsgram = useAdsgram({
-    blockId: '20539',
-    fallbackBlockId: '20540',
+    blockId: import.meta.env.VITE_ADSGRAM_BLOCK_ID || '20539',
+    fallbackBlockId: import.meta.env.VITE_ADSGRAM_FALLBACK_BLOCK_ID || '20540',
     onReward: handleAdSuccess,
     onError: handleAdError,
   })
@@ -303,7 +303,7 @@ export const Prediction = () => {
   const { handleWatchAds: showMonetag, isLoading: isMonetagLoading } =
     useMonetag({
       userId,
-      zoneId: '10456534',
+      zoneId: import.meta.env.VITE_MONETAG_ZONE_ID || '10456534',
       onReward: handleAdSuccess,
       onError: handleAdError,
       isPrediction: true,
@@ -313,7 +313,7 @@ export const Prediction = () => {
   const { handleWatchAds: showMonetagPop, isLoading: isMonetagPopLoading } =
     useMonetag({
       userId,
-      zoneId: '10456534',
+      zoneId: import.meta.env.VITE_MONETAG_ZONE_ID || '10456534',
       onReward: handleAdSuccess,
       onError: handleAdError,
       type: 'pop',
@@ -323,15 +323,15 @@ export const Prediction = () => {
   // 4. Tads Hook (for db_2)
   const { showFullScreen: showTads } = useTads({
     userId,
-    widgetId: '9228',
+    widgetId: import.meta.env.VITE_TADS_WIDGET_ID_1 || '9228',
     onReward: handleAdSuccess,
     onError: handleAdError,
   })
 
   // Ad hooks for time-up (earn money instead of opening modal)
   const showAdsgramForMoney = useAdsgram({
-    blockId: '20539',
-    fallbackBlockId: '20540',
+    blockId: import.meta.env.VITE_ADSGRAM_BLOCK_ID || '20539',
+    fallbackBlockId: import.meta.env.VITE_ADSGRAM_FALLBACK_BLOCK_ID || '20540',
     onReward: handleAdSuccessForMoney,
     onError: handleAdError,
   })
@@ -366,7 +366,7 @@ export const Prediction = () => {
   const { showFullScreen: showTadsForMoney } =
     useTads({
       userId,
-      widgetId: '9228',
+      widgetId: import.meta.env.VITE_TADS_WIDGET_ID_1 || '9228',
       onReward: handleAdSuccessForMoney,
       onError: handleAdError,
     })
@@ -482,14 +482,20 @@ export const Prediction = () => {
       showSonarForMoney(0)
     } else if (category.id === 1) {
       showMonetagPopForMoney(0)
-    } else if (category.id === 4) {
+    } else     if (category.id === 4) {
       //showAdsgramForMoney()
-      show_10456534().then(() => {
-        alert('User watched the ad');
-      }).catch(() => {
-        alert('Ad failed or was skipped');
-      });
+      const monetagSdkName = `show_${import.meta.env.VITE_MONETAG_ZONE_ID || '10456534'}`
+      if (typeof window[monetagSdkName] === 'function') {
+        window[monetagSdkName]().then(() => {
+          alert('User watched the ad');
+        }).catch(() => {
+          alert('Ad failed or was skipped');
+        });
+      } else {
+        console.warn(`Monetag SDK function ${monetagSdkName} not found`)
+      }
     } else {
+
       // Fallback
       pendingCategoryRef.current = null
     }
@@ -721,7 +727,7 @@ export const Prediction = () => {
                   {index === 1 && (
                     <div className="my-4 overflow-hidden rounded-xl bg-white shadow-sm border border-slate-100">
                       <TadsWidget
-                        id="9226"
+                        id={import.meta.env.VITE_TADS_WIDGET_ID_2 || '9226'}
                         type="static"
                         debug={false}
                         onAdsNotFound={onAdsNotFound}
@@ -733,7 +739,7 @@ export const Prediction = () => {
 
               <div className="mt-4 overflow-hidden rounded-xl bg-white shadow-sm border border-slate-100">
                 <TadsWidget
-                  id="9225"
+                  id={import.meta.env.VITE_TADS_WIDGET_ID_3 || '9225'}
                   type="static"
                   debug={false}
                   onAdsNotFound={onAdsNotFound}

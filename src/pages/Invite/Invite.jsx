@@ -18,7 +18,7 @@ export const Invite = () => {
   })
 
   const userId = user?.id || ''
-  const botUsername = 'ket_qua_xsmb_bot'
+  const botUsername = import.meta.env.VITE_BOT_USERNAME || 'ket_qua_xsmb_bot'
   const referralLink = `https://t.me/${botUsername}?start=${userId}`
 
   const fetchFriends = useCallback(async () => {

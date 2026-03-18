@@ -180,9 +180,9 @@ const VI_TEXT = {
       crypto: 'Crypto (USDT - TON Network)',
       copyId: 'Sao chép ID',
       idLabel: 'Nội dung chuyển khoản (ID)',
-      paypalEmail: 'tuananh260501@gmail.com',
+      paypalEmail: import.meta.env.VITE_PAYPAL_EMAIL || 'tuananh260501@gmail.com',
       cryptoWallet: 'Ví Crypto (TON)',
-      cryptoAddress: 'UQBquk4W9IKNUjF-8WSFarra_er2nfyuUnJ0qlj64WQAtRHf',
+      cryptoAddress: import.meta.env.VITE_CRYPTO_ADDRESS || 'UQBquk4W9IKNUjF-8WSFarra_er2nfyuUnJ0qlj64WQAtRHf',
       topUpButton: 'Nạp thêm',
       convertButton: 'Đổi vé',
       convertTitle: 'Đổi Coins lấy vé',
@@ -199,7 +199,7 @@ const VI_TEXT = {
     },
     messages: {
       featureDev: 'Tính năng nạp xu đang phát triển',
-      contactSupport: 'Liên hệ: @crush_xx',
+      contactSupport: `Liên hệ: ${import.meta.env.VITE_SUPPORT_CONTACT || '@crush_xx'}`,
       updateSuccess: 'Cập nhật thành công!',
     },
     settings: {
@@ -537,9 +537,9 @@ const EN_TEXT = {
       crypto: 'Crypto (USDT - TON Network)',
       copyId: 'Copy ID',
       idLabel: 'Transfer Content (ID)',
-      paypalEmail: 'tuananh260501@gmail.com',
+      paypalEmail: import.meta.env.VITE_PAYPAL_EMAIL || 'tuananh260501@gmail.com',
       cryptoWallet: 'Crypto Wallet (TON)',
-      cryptoAddress: 'UQBquk4W9IKNUjF-8WSFarra_er2nfyuUnJ0qlj64WQAtRHf',
+      cryptoAddress: import.meta.env.VITE_CRYPTO_ADDRESS || 'UQBquk4W9IKNUjF-8WSFarra_er2nfyuUnJ0qlj64WQAtRHf',
       topUpButton: 'Top up',
       convertButton: 'Convert',
       convertTitle: 'Convert Coins to Tickets',
@@ -556,7 +556,7 @@ const EN_TEXT = {
     },
     messages: {
       featureDev: 'Deposit feature is under development',
-      contactSupport: 'Contact: @crush_xx',
+      contactSupport: `Contact: ${import.meta.env.VITE_SUPPORT_CONTACT || '@crush_xx'}`,
       updateSuccess: 'Update successful!',
     },
     settings: {

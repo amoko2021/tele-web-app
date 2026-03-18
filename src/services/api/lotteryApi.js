@@ -3,7 +3,7 @@ import apiClient from './axios.config'
 import { generateRandomXSMB } from './mockData'
 
 // API URL cho bên thứ 3 cung cấp kết quả XSMB
-const XSMB_API_URL = 'https://api-xsmb-today.onrender.com/api/v1'
+const XSMB_API_URL = import.meta.env.VITE_LOTTERY_API_URL || 'https://api-xsmb-today.onrender.com/api/v1'
 
 // Flag để bật/tắt mock mode
 const USE_MOCK = false
