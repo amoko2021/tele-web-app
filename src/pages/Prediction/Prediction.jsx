@@ -113,20 +113,20 @@ export const Prediction = () => {
     }
   }, [adCooldown])
 
-  // Helper function to check if time is up (18:00 VN time)
+  // Helper function to check if time is up (18:00 - 19:00 VN time)
   const checkIsTimeUp = () => {
     const nowVN = new Date().toLocaleString('en-US', {
       timeZone: 'Asia/Ho_Chi_Minh',
     })
     const vnDate = new Date(nowVN)
     const currentHour = vnDate.getHours()
-    // Block from 18:00
-    return currentHour >= 18
+    // Block from 18:00 to 18:59
+    return currentHour === 18
   }
 
   const isTimeUp = checkIsTimeUp()
 
-  // Helper to check if current time is after 18:30 VN
+  // Helper to check if current time is after 18:30 VN (and before 19:00)
   const checkIsAfter1830 = () => {
     const nowVN = new Date().toLocaleString('en-US', {
       timeZone: 'Asia/Ho_Chi_Minh',
@@ -134,12 +134,13 @@ export const Prediction = () => {
     const vnDate = new Date(nowVN)
     const hours = vnDate.getHours()
     const minutes = vnDate.getMinutes()
-    return hours > 18 || (hours === 18 && minutes >= 30)
+    // True from 18:30 to 18:59
+    return hours === 18 && minutes >= 30
   }
 
   const isAfter1830 = checkIsAfter1830()
 
-  // Helper to check if current time is result time (18:45 - 24:00 VN)
+  // Helper to check if current time is result time (18:45 - 19:00 VN)
   const checkIsResultTime = () => {
     const nowVN = new Date().toLocaleString('en-US', {
       timeZone: 'Asia/Ho_Chi_Minh',
@@ -147,8 +148,8 @@ export const Prediction = () => {
     const vnDate = new Date(nowVN)
     const hours = vnDate.getHours()
     const minutes = vnDate.getMinutes()
-    // From 18:45 to 23:59
-    return hours > 18 || (hours === 18 && minutes >= 45)
+    // From 18:45 to 18:59
+    return hours === 18 && minutes >= 45
   }
 
   const isResultTime = checkIsResultTime()
@@ -852,7 +853,7 @@ export const Prediction = () => {
             </h4>
             <p>
               {UI_TEXT.home.rules.timeContent
-                .replace('{start}', '00:00')
+                .replace('{start}', '19:00')
                 .replace('{end}', '18:00')}
             </p>
           </div>

@@ -12,7 +12,17 @@ export const DateDisplay = () => {
       month: '2-digit',
       year: 'numeric',
     })
-    setDateStr(formatter.format(now))
+
+    // If it's after 19:00 VN time, show tomorrow's date
+    const vnDateStr = now.toLocaleString('en-US', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+    })
+    const vnDate = new Date(vnDateStr)
+    if (vnDate.getHours() >= 19) {
+      vnDate.setDate(vnDate.getDate() + 1)
+    }
+
+    setDateStr(formatter.format(vnDate))
   }, [])
 
   return (
