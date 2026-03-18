@@ -143,7 +143,7 @@ export function useMonetag({
 
         // 3. Success - Reward User
         try {
-          await userApi.updateBalance(userId, rewardAmount)
+          await userApi.updateCoins(userId, rewardAmount)
 
           if (isPrediction) {
             if (window.Telegram?.WebApp?.showAlert) {

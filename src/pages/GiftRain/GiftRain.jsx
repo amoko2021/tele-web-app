@@ -76,11 +76,11 @@ export const GiftRain = () => {
     
     setIsSubmitting(true)
     try {
-      // Update user balance with the score earned
-      // Using updateBalance which adds to existing balance
-      await userApi.updateBalance(userId, 0)
+      // Update user coins with the score earned
+      // Using updateCoins which adds to existing coins
+      await userApi.updateCoins(userId, score)
     } catch (error) {
-      console.error('Error updating balance:', error)
+      console.error('Error updating coins:', error)
     } finally {
       setIsSubmitting(false)
     }

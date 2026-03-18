@@ -19,6 +19,7 @@ export const mockUserInfo = {
   data: {
     user_id: 123456,
     balance: 1000.5,
+    coins: 5000,
     wallet: 'DUONG VAN DOAN - 0385901122 - VPBANK',
     join_date: '2026-01-04',
     language: 'vi',

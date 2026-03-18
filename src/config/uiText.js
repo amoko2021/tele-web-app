@@ -165,6 +165,7 @@ const VI_TEXT = {
       label: 'Số dư Xu',
       points: 'Vé',
       unit: 'Coins',
+      withdrawBalance: 'Số dư rút tiền',
     },
     actions: {
       withdraw: 'Rút tiền',

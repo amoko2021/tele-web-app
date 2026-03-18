@@ -5,7 +5,7 @@ import { TicketTopUpModal } from '../TicketTopUpModal'
 import { TicketConvertModal } from '../TicketConvertModal'
 import { userApi } from '../../../../services/api'
 
-export const BalanceStats = ({ balance = 0, points = 340, onUpdate }) => {
+export const BalanceStats = ({ balance = 0, coins = 0, points = 340, onUpdate }) => {
   const [isTopUpOpen, setIsTopUpOpen] = useState(false)
   const [isConvertModalOpen, setIsConvertModalOpen] = useState(false)
   const [isConverting, setIsConverting] = useState(false)
@@ -15,7 +15,7 @@ export const BalanceStats = ({ balance = 0, points = 340, onUpdate }) => {
   const handleConvert = async (ticketAmount) => {
     const totalCost = ticketAmount * CONVERSION_RATE
     
-    if (balance < totalCost) {
+    if (coins < totalCost) {
       alert(UI_TEXT.account.topUp.insufficientCoins.replace('{coins}', totalCost.toLocaleString()))
       return
     }
@@ -33,8 +33,8 @@ export const BalanceStats = ({ balance = 0, points = 340, onUpdate }) => {
       // 1. Add tickets
       await userApi.addTicket(user.id, ticketAmount)
       
-      // 2. Deduct coins (API updateBalance cộng thêm, nên truyền giá trị âm để trừ)
-      await userApi.updateBalance(user.id, -totalCost)
+      // 2. Deduct coins (API updateCoins cộng thêm, nên truyền giá trị âm để trừ)
+      await userApi.updateCoins(user.id, -totalCost)
       
       alert(UI_TEXT.account.topUp.convertSuccess)
       if (onUpdate) onUpdate()
@@ -49,7 +49,7 @@ export const BalanceStats = ({ balance = 0, points = 340, onUpdate }) => {
   return (
     <>
       <div className="grid grid-cols-2 gap-3">
-        {/* Coin Balance */}
+        {/* Coin Balance (Rewards) */}
         <div className="flex flex-col gap-1 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
@@ -69,11 +69,11 @@ export const BalanceStats = ({ balance = 0, points = 340, onUpdate }) => {
             </button>
           </div>
           <p className="text-slate-900 dark:text-white text-2xl font-bold tracking-tight">
-            {balance.toLocaleString()}
+            {coins.toLocaleString()}
           </p>
         </div>
 
-        {/* Reward Points */}
+        {/* Reward Points (Tickets) */}
         <div className="flex flex-col gap-1 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
@@ -97,6 +97,23 @@ export const BalanceStats = ({ balance = 0, points = 340, onUpdate }) => {
         </div>
       </div>
 
+      {/* Withdrawal Balance (Real Money) */}
+      <div className="mt-3 flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-100 dark:border-slate-700">
+        <div className="flex items-center gap-3">
+          <div className="size-10 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center text-emerald-500 shadow-sm">
+            <span className="material-symbols-outlined">account_balance_wallet</span>
+          </div>
+          <div>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+              {UI_TEXT.account.balance.withdrawBalance}
+            </p>
+            <p className="text-lg font-black text-slate-900 dark:text-white">
+              {balance.toLocaleString()} <span className="text-xs font-medium text-slate-400">đ</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
       <TicketTopUpModal 
         isOpen={isTopUpOpen} 
         onClose={() => setIsTopUpOpen(false)} 
@@ -107,7 +124,7 @@ export const BalanceStats = ({ balance = 0, points = 340, onUpdate }) => {
         isOpen={isConvertModalOpen}
         onClose={() => setIsConvertModalOpen(false)}
         onConvert={handleConvert}
-        balance={balance}
+        balance={coins}
         rate={CONVERSION_RATE}
       />
     </>

@@ -10,10 +10,10 @@ export function useSonarAds({ userId, onReward, onError }) {
       try {
         // const currentBalance = await userApi.getUserInfo(userId)
         // const newBalance = (currentBalance?.balance || 0) + reward
-        await userApi.updateBalance(userId, reward)
+        await userApi.updateCoins(userId, reward)
         alert(UI_TEXT.home.alerts.rewardFromAd.replace('{amount}', reward))
       } catch (error) {
-        console.error('Error updating balance:', error)
+        console.error('Error updating coins:', error)
         alert(UI_TEXT.home.alerts.rewardUpdateError.replace('{amount}', reward))
       }
     },

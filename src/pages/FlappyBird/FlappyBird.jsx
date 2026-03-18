@@ -28,12 +28,12 @@ export const FlappyBird = () => {
       if (!userId || amount <= 0) return
       setIsSubmitting(true)
       try {
-        await userApi.updateBalance(userId, amount)
+        await userApi.updateCoins(userId, amount)
         setEarnedCoins(amount)
         setShowRewardToast(true)
         setTimeout(() => setShowRewardToast(false), 3000)
       } catch (error) {
-        console.error('Error updating balance:', error)
+        console.error('Error updating coins:', error)
       } finally {
         setIsSubmitting(false)
       }

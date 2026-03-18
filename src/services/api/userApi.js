@@ -102,6 +102,33 @@ export const userApi = {
     }
   },
 
+  // Cập nhật Coins (Cộng thêm vào coins hiện tại)
+  updateCoins: async (userId, amount) => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            message: 'Coins updated successfully',
+            data: {
+              user_id: userId,
+              coins: amount,
+            },
+          })
+        }, 500)
+      })
+    }
+
+    try {
+      // API này thực chất là cộng thêm (increment) vào coins hiện tại
+      const response = await apiClient.put(`/coins/${userId}`, { amount })
+      return response
+    } catch (error) {
+      console.error('Error updating coins:', error)
+      throw error
+    }
+  },
+
   updateLanguage: async (userId, language) => {
     if (USE_MOCK) {
       return new Promise((resolve) => {

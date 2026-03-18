@@ -36,9 +36,9 @@ export const Prediction = () => {
 
   const handleConvert = async (ticketAmount) => {
     const totalCost = ticketAmount * CONVERSION_RATE
-    const balance = userInfo?.data?.balance || 0
+    const coins = userInfo?.data?.coins || 0
     
-    if (balance < totalCost) {
+    if (coins < totalCost) {
       if (window.Telegram?.WebApp?.showAlert) {
         window.Telegram.WebApp.showAlert(UI_TEXT.account.topUp.insufficientCoins.replace('{coins}', totalCost.toLocaleString()))
       }
@@ -56,8 +56,8 @@ export const Prediction = () => {
       setIsConvertModalOpen(false)
       
       await userApi.addTicket(userId, ticketAmount)
-      // API updateBalance cộng thêm, nên truyền giá trị âm để trừ
-      await userApi.updateBalance(userId, -totalCost)
+      // API updateCoins cộng thêm, nên truyền giá trị âm để trừ
+      await userApi.updateCoins(userId, -totalCost)
       
       if (window.Telegram?.WebApp?.showAlert) {
         window.Telegram.WebApp.showAlert(UI_TEXT.account.topUp.convertSuccess)
@@ -256,8 +256,8 @@ export const Prediction = () => {
       // const currentBalance = userInfo?.data?.balance || 0
       // const newBalance = currentBalance + randomAmount
 
-      // Update balance
-      await userApi.updateBalance(userId, randomAmount)
+      // Update coins
+      await userApi.updateCoins(userId, randomAmount)
 
       // Show success notification
       if (window.Telegram?.WebApp) {

@@ -35,12 +35,12 @@ export function useTads({ userId, widgetId, onReward, onError }) {
     async (amount) => {
       if (!userId) return
       try {
-        await userApi.updateBalance(userId, amount)
+        await userApi.updateCoins(userId, amount)
         // Use UI_TEXT for localized messages
         const message = UI_TEXT.home.alerts.rewardFromAd.replace('{amount}', amount)
         alert(message)
       } catch (error) {
-        logger.error('Error updating balance after Tads ad:', error)
+        logger.error('Error updating coins after Tads ad:', error)
         const errorMessage = UI_TEXT.home.alerts.rewardUpdateError.replace('{amount}', amount)
         alert(errorMessage)
       }
