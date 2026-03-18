@@ -155,7 +155,8 @@ const VI_TEXT = {
     ticketError: 'Lỗi khi sử dụng vé. Vui lòng thử lại.',
     freeTab: 'Dự đoán miễn phí',
     ticketTab: 'Dự đoán bằng vé',
-    totalPredictions: 'Dự đoán hôm nay: {total}'
+    totalPredictions: 'Dự đoán hôm nay: {total}',
+    historyLocked: 'Đã qua 19h - Lịch sử đã khóa'
   },
 
   // Màn hình Tài khoản (Account)

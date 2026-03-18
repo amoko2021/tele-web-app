@@ -154,6 +154,19 @@ export const Prediction = () => {
 
   const isResultTime = checkIsResultTime()
 
+  // Helper to check if current time is after 19:00 VN
+  const checkIsAfter19h = () => {
+    const nowVN = new Date().toLocaleString('en-US', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+    })
+    const vnDate = new Date(nowVN)
+    const hours = vnDate.getHours()
+    // True from 19:00 onwards
+    return hours >= 19
+  }
+
+  const isAfter19h = checkIsAfter19h()
+
   const getCategoryKey = (id) => {
     const map = {
       1: 'db_2',
@@ -400,8 +413,13 @@ export const Prediction = () => {
   }, [isResultTime, usingTicket])
 
   useEffect(() => {
+    // Don't auto-reload history after 19:00
+    if (isAfter19h) {
+      setLoading(false)
+      return
+    }
     fetchPredictions()
-  }, [fetchPredictions])
+  }, [fetchPredictions, isAfter19h])
 
   const handleManage = (id) => {
     console.log('Manage category:', id)
@@ -676,9 +694,11 @@ export const Prediction = () => {
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-lg">schedule</span>
               <span className="text-xs font-bold uppercase tracking-wider">
-                {isAfter1830
-                  ? UI_TEXT.prediction.timeOver
-                  : UI_TEXT.prediction.waitingResults}
+                {isAfter19h
+                  ? UI_TEXT.prediction?.historyLocked || 'Lịch sử đã khóa'
+                  : isAfter1830
+                    ? UI_TEXT.prediction.timeOver
+                    : UI_TEXT.prediction.waitingResults}
               </span>
             </div>
             {totalPredictions > 0 && (
