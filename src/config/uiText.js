@@ -156,7 +156,8 @@ const VI_TEXT = {
     freeTab: 'Dự đoán miễn phí',
     ticketTab: 'Dự đoán bằng vé',
     totalPredictions: 'Dự đoán hôm nay: {total}',
-    historyLocked: 'Đã qua 19h - Lịch sử đã khóa'
+    historyLocked: 'Đã qua 19h - Lịch sử đã khóa',
+    openForTomorrow: 'Đã mở dự đoán cho ngày mai'
   },
 
   // Màn hình Tài khoản (Account)
@@ -514,7 +515,8 @@ const EN_TEXT = {
     ticketError: 'Error using ticket. Please try again.',
     freeTab: 'Free Prediction',
     ticketTab: 'Ticket Prediction',
-    totalPredictions: 'Total predictions: {total}'
+    totalPredictions: 'Total predictions: {total}',
+    openForTomorrow: 'Open for tomorrow\'s prediction'
   },
 
   // Account Screen

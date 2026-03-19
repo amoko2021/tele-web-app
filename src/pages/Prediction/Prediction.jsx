@@ -334,7 +334,7 @@ export const Prediction = () => {
     })
 
   // 4. Tads Hook (for db_2)
-  const { showFullScreen: showTads } = useTads({
+  useTads({
     userId,
     widgetId: import.meta.env.VITE_TADS_WIDGET_ID_1 || '9228',
     onReward: handleAdSuccess,
@@ -342,7 +342,7 @@ export const Prediction = () => {
   })
 
   // Ad hooks for time-up (earn money instead of opening modal)
-  const showAdsgramForMoney = useAdsgram({
+  useAdsgram({
     blockId: import.meta.env.VITE_ADSGRAM_BLOCK_ID || '20539',
     fallbackBlockId: import.meta.env.VITE_ADSGRAM_FALLBACK_BLOCK_ID || '20540',
     onReward: handleAdSuccessForMoney,
@@ -376,13 +376,12 @@ export const Prediction = () => {
     type: 'pop',
   })
 
-  const { showFullScreen: showTadsForMoney } =
-    useTads({
-      userId,
-      widgetId: import.meta.env.VITE_TADS_WIDGET_ID_1 || '9228',
-      onReward: handleAdSuccessForMoney,
-      onError: handleAdError,
-    })
+  useTads({
+    userId,
+    widgetId: import.meta.env.VITE_TADS_WIDGET_ID_1 || '9228',
+    onReward: handleAdSuccessForMoney,
+    onError: handleAdError,
+  })
 
   // Fetch predictions
   const fetchPredictions = useCallback(async () => {
@@ -413,13 +412,8 @@ export const Prediction = () => {
   }, [isResultTime, usingTicket])
 
   useEffect(() => {
-    // Don't auto-reload history after 19:00
-    if (isAfter19h) {
-      setLoading(false)
-      return
-    }
     fetchPredictions()
-  }, [fetchPredictions, isAfter19h])
+  }, [fetchPredictions])
 
   const handleManage = (id) => {
     console.log('Manage category:', id)
@@ -695,7 +689,7 @@ export const Prediction = () => {
               <span className="material-symbols-outlined text-lg">schedule</span>
               <span className="text-xs font-bold uppercase tracking-wider">
                 {isAfter19h
-                  ? UI_TEXT.prediction?.historyLocked || 'Lịch sử đã khóa'
+                  ? UI_TEXT.prediction?.openForTomorrow || 'Đã mở dự đoán cho ngày mai'
                   : isAfter1830
                     ? UI_TEXT.prediction.timeOver
                     : UI_TEXT.prediction.waitingResults}
