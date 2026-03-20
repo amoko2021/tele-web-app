@@ -27,9 +27,18 @@ export const useTournament = () => {
       if (tournamentRes && tournamentRes.data) {
         const { minutes_remaining, is_result_phase, full_result, my_predictions } = tournamentRes.data
         
-        // Calculate target end time based on minutes_remaining from server
-        // This helps keep the countdown stable even if we re-fetch
-        const targetTime = Date.now() + (minutes_remaining * 60 * 1000)
+        // Calculate target end time locally based on the current hour
+        // Tournament ends at 45m of every hour
+        const now = new Date()
+        const target = new Date(now)
+        target.setMinutes(45, 0, 0)
+        
+        // If we are already past 45m, the next target is the 45m of the next hour
+        if (now.getMinutes() >= 45) {
+          target.setHours(target.getHours() + 1)
+        }
+        
+        const targetTime = target.getTime()
         
         setStatus((prev) => ({
           ...prev,
