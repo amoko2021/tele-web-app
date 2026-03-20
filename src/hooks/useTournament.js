@@ -34,8 +34,12 @@ export const useTournament = () => {
         target.setMinutes(45, 0, 0)
         target.setSeconds(0, 0)
         
+        // Determine if we are in the result phase (45m - 60m)
+        const currentMinutes = now.getMinutes()
+        const localIsResultPhase = currentMinutes >= 45
+        
         // If we are already past 45m, the next target is the 45m of the next hour
-        if (now.getMinutes() >= 45) {
+        if (currentMinutes >= 45) {
           target.setHours(target.getHours() + 1)
         }
         
@@ -44,10 +48,10 @@ export const useTournament = () => {
         setStatus((prev) => ({
           ...prev,
           // Only update minutes/seconds if not in result phase
-          minutesRemaining: is_result_phase ? 0 : minutes_remaining,
-          secondsRemaining: is_result_phase ? 0 : 0,
+          minutesRemaining: (is_result_phase || localIsResultPhase) ? 0 : minutes_remaining,
+          secondsRemaining: (is_result_phase || localIsResultPhase) ? 0 : 0,
           targetTime: targetTime,
-          isResultPhase: is_result_phase,
+          isResultPhase: is_result_phase || localIsResultPhase,
           fullResult: full_result,
           myPredictions: my_predictions,
           totalFree: total_predictions || 0,
