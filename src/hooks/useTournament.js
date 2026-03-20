@@ -26,16 +26,23 @@ export const useTournament = () => {
 
       if (tournamentRes && tournamentRes.data) {
         const { minutes_remaining, is_result_phase, full_result, my_predictions } = tournamentRes.data
+        
+        // Calculate target end time based on minutes_remaining from server
+        // This helps keep the countdown stable even if we re-fetch
+        const targetTime = Date.now() + (minutes_remaining * 60 * 1000)
+        
         setStatus((prev) => ({
           ...prev,
           minutesRemaining: minutes_remaining,
-          secondsRemaining: 0, // Reset seconds when fetching new minutes
+          secondsRemaining: 0,
+          targetTime: targetTime,
           isResultPhase: is_result_phase,
           fullResult: full_result,
           myPredictions: my_predictions,
           loading: false,
         }))
       }
+
 
       if (totalRes && totalRes.data) {
         setStatus((prev) => ({
@@ -59,28 +66,26 @@ export const useTournament = () => {
 
   // Local countdown for seconds
   useEffect(() => {
-    if (status.loading || status.isResultPhase) return
+    if (status.loading || status.isResultPhase || !status.targetTime) return
 
     const timer = setInterval(() => {
-      setStatus((prev) => {
-        if (prev.secondsRemaining > 0) {
-          return { ...prev, secondsRemaining: prev.secondsRemaining - 1 }
-        } else if (prev.minutesRemaining > 0) {
-          return {
-            ...prev,
-            minutesRemaining: prev.minutesRemaining - 1,
-            secondsRemaining: 59,
-          }
-        } else {
-          // Time's up, trigger a refresh to enter result phase
-          fetchStatus()
-          return prev
-        }
-      })
+      const now = Date.now()
+      const diff = status.targetTime - now
+
+      if (diff > 0) {
+        setStatus((prev) => ({
+          ...prev,
+          minutesRemaining: Math.floor((diff / 1000 / 60) % 60),
+          secondsRemaining: Math.floor((diff / 1000) % 60),
+        }))
+      } else {
+        // Time's up, trigger a refresh to enter result phase
+        fetchStatus()
+      }
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [status.loading, status.isResultPhase, fetchStatus])
+  }, [status.loading, status.isResultPhase, status.targetTime, fetchStatus])
 
   return {
     ...status,

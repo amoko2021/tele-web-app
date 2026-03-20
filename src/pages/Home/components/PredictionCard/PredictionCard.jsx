@@ -1,58 +1,86 @@
 import { useNavigate } from 'react-router-dom'
-import { useTournament } from '../../../../hooks'
+import { useTournament, useCountdown } from '../../../../hooks'
 import { UI_TEXT } from '../../../../config/uiText'
 
 export const PredictionCard = ({ isToday, isDrawingTime }) => {
   const navigate = useNavigate()
   const { minutesRemaining, secondsRemaining, isResultPhase } = useTournament()
+  const { hours: dailyHours, minutes: dailyMinutes, seconds: dailySeconds } = useCountdown(18, 30)
 
   const formatNumber = (num) => num.toString().padStart(2, '0')
 
   // Only show countdown if it's today and not during drawing time
-  const showCountdown = isToday && !isDrawingTime && !isResultPhase
+  const showTournamentCountdown = isToday && !isDrawingTime && !isResultPhase
+  const showDailyCountdown = isToday && !isDrawingTime
 
   return (
     <div className="px-4 pt-4">
       <div className="flex flex-col rounded-2xl bg-white border border-primary/15 shadow-xl shadow-primary/5 overflow-hidden">
-        {/* Top Section: Countdown (Only if applicable) */}
-        {showCountdown ? (
-          <div className="bg-slate-50/80 border-b border-slate-100 p-3 flex flex-col items-center justify-center">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
-              {UI_TEXT.home.countdown.nextDraw}
+        {/* Top Section: Countdowns */}
+        <div className="bg-slate-50/80 border-b border-slate-100 p-3 grid grid-cols-2 gap-4">
+          {/* Hourly Tournament Countdown */}
+          <div className="flex flex-col items-center justify-center border-r border-slate-200 pr-2">
+            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+              {UI_TEXT.prediction.freeTab}
             </span>
-            <div className="flex items-center gap-3">
-              <div className="flex flex-col items-center">
-                <span className="text-2xl font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
-                  00
-                </span>
-                <span className="text-[8px] font-bold text-slate-400 uppercase mt-1">{UI_TEXT.home.countdown.hours}</span>
+            {showTournamentCountdown ? (
+              <div className="flex items-center gap-1.5">
+                <div className="flex flex-col items-center">
+                  <span className="text-lg font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
+                    {formatNumber(minutesRemaining)}
+                  </span>
+                  <span className="text-[7px] font-bold text-slate-400 uppercase mt-0.5">{UI_TEXT.home.countdown.minutes}</span>
+                </div>
+                <span className="text-sm font-bold text-slate-300 pb-2">:</span>
+                <div className="flex flex-col items-center">
+                  <span className="text-lg font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
+                    {formatNumber(secondsRemaining)}
+                  </span>
+                  <span className="text-[7px] font-bold text-slate-400 uppercase mt-0.5">{UI_TEXT.home.countdown.seconds}</span>
+                </div>
               </div>
-              <span className="text-lg font-bold text-slate-300 pb-3">:</span>
-              <div className="flex flex-col items-center">
-                <span className="text-2xl font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
-                  {formatNumber(minutesRemaining)}
-                </span>
-                <span className="text-[8px] font-bold text-slate-400 uppercase mt-1">{UI_TEXT.home.countdown.minutes}</span>
-              </div>
-              <span className="text-lg font-bold text-slate-300 pb-3">:</span>
-              <div className="flex flex-col items-center">
-                <span className="text-2xl font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
-                  {formatNumber(secondsRemaining)}
-                </span>
-                <span className="text-[8px] font-bold text-slate-400 uppercase mt-1">{UI_TEXT.home.countdown.seconds}</span>
-              </div>
-            </div>
+            ) : isResultPhase ? (
+              <span className="text-[10px] font-bold text-amber-600 uppercase">
+                {UI_TEXT.prediction.waitingResults}
+              </span>
+            ) : (
+              <span className="text-[10px] font-bold text-slate-400 uppercase">--:--</span>
+            )}
           </div>
-        ) : isResultPhase ? (
-          <div className="bg-amber-50 border-b border-amber-100 p-3 flex flex-col items-center justify-center">
-            <span className="text-[10px] font-bold text-amber-600 uppercase tracking-wider mb-1">
-              {UI_TEXT.prediction.waitingResults}
+
+          {/* Daily XSMB Countdown */}
+          <div className="flex flex-col items-center justify-center">
+            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+              {UI_TEXT.prediction.ticketTab}
             </span>
-            <span className="text-sm font-bold text-amber-800">
-              {UI_TEXT.prediction.timeOver}
-            </span>
+            {showDailyCountdown ? (
+              <div className="flex items-center gap-1.5">
+                <div className="flex flex-col items-center">
+                  <span className="text-lg font-black bg-gradient-to-br from-blue-600 to-sky-700 bg-clip-text text-transparent font-mono leading-none">
+                    {formatNumber(dailyHours)}
+                  </span>
+                  <span className="text-[7px] font-bold text-slate-400 uppercase mt-0.5">{UI_TEXT.home.countdown.hours}</span>
+                </div>
+                <span className="text-sm font-bold text-slate-300 pb-2">:</span>
+                <div className="flex flex-col items-center">
+                  <span className="text-lg font-black bg-gradient-to-br from-blue-600 to-sky-700 bg-clip-text text-transparent font-mono leading-none">
+                    {formatNumber(dailyMinutes)}
+                  </span>
+                  <span className="text-[7px] font-bold text-slate-400 uppercase mt-0.5">{UI_TEXT.home.countdown.minutes}</span>
+                </div>
+                <span className="text-sm font-bold text-slate-300 pb-2">:</span>
+                <div className="flex flex-col items-center">
+                  <span className="text-lg font-black bg-gradient-to-br from-blue-600 to-sky-700 bg-clip-text text-transparent font-mono leading-none">
+                    {formatNumber(dailySeconds)}
+                  </span>
+                  <span className="text-[7px] font-bold text-slate-400 uppercase mt-0.5">{UI_TEXT.home.countdown.seconds}</span>
+                </div>
+              </div>
+            ) : (
+              <span className="text-[10px] font-bold text-slate-400 uppercase">--:--:--</span>
+            )}
           </div>
-        ) : null}
+        </div>
 
         {/* Bottom Section: Task Info & Action */}
         <div className="p-3 flex items-center justify-between gap-3">
