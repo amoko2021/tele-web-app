@@ -1,4 +1,4 @@
-export { useApi } from './useApi'
+export { useXSMB, useUserInfo, useUpdateLanguage } from './useApi'
 export { useTelegram } from './useTelegram'
 export { useAdsgram } from './useAdsgram'
 export { useSonarAds } from './useSonarAds'
