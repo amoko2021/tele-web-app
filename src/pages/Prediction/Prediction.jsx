@@ -24,7 +24,7 @@ export const Prediction = () => {
   const userId = user?.id
 
   const { data: userInfo, refetch: refetchUserInfo } = useUserInfo(userId)
-  const { isResultPhase, fullResult, totalFree, totalTicket } = useTournament()
+  const { isResultPhase, fullResult, myPredictions, totalFree, totalTicket } = useTournament()
 
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
@@ -395,10 +395,17 @@ export const Prediction = () => {
 
   // Fetch predictions
   const fetchPredictions = useCallback(async () => {
+    // If using Free mode, use data from useTournament hook
+    if (!usingTicket && myPredictions) {
+      setCategories(myPredictions)
+      setLoading(false)
+      return
+    }
+
     try {
       setLoading(true)
       
-      // Fetch categories and total predictions in parallel
+      // Fetch categories for Ticket mode
       const response = await (isResultTime 
           ? lotteryApi.getMyPredictionResults(usingTicket)
           : lotteryApi.getMyPredictions(usingTicket))
@@ -412,7 +419,7 @@ export const Prediction = () => {
     } finally {
       setLoading(false)
     }
-  }, [isResultTime, usingTicket])
+  }, [isResultTime, usingTicket, myPredictions])
 
   useEffect(() => {
     fetchPredictions()

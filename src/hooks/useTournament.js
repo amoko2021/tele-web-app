@@ -25,7 +25,7 @@ export const useTournament = () => {
       ])
 
       if (tournamentRes && tournamentRes.data) {
-        const { minutes_remaining, is_result_phase, full_result, my_predictions } = tournamentRes.data
+        const { minutes_remaining, is_result_phase, full_result, my_predictions, total_predictions } = tournamentRes.data
         
         // Calculate target end time locally based on the current hour
         // Tournament ends at 45m of every hour
@@ -48,6 +48,7 @@ export const useTournament = () => {
           isResultPhase: is_result_phase,
           fullResult: full_result,
           myPredictions: my_predictions,
+          totalFree: total_predictions || 0,
           loading: false,
         }))
       }
