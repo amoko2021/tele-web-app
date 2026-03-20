@@ -24,7 +24,7 @@ export const Prediction = () => {
   const userId = user?.id
 
   const { data: userInfo, refetch: refetchUserInfo } = useUserInfo(userId)
-  const { isResultPhase, fullResult, myPredictions, totalFree, totalTicket } = useTournament()
+  const { isResultPhase, fullResult, myPredictions, totalFree, totalTicket, refresh: refreshTournament } = useTournament()
 
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
@@ -566,10 +566,16 @@ export const Prediction = () => {
       }
 
       await lotteryApi.addPrediction(addModal.categoryKey, inputNumber, usingTicket)
+      
+      // Refresh tournament status if in Free mode to get updated predictions
+      if (!usingTicket) {
+        await refreshTournament()
+      }
 
       // Success
       setAddModal((prev) => ({ ...prev, isOpen: false }))
       fetchPredictions() // Refresh list
+
     } catch (err) {
       // Handle 409 and 400
       if (err.response) {
@@ -614,6 +620,12 @@ export const Prediction = () => {
     try {
       setIsSubmitting(true)
       await lotteryApi.deletePrediction(deleteModal.predictionId)
+      
+      // Refresh tournament status if in Free mode to get updated predictions
+      if (!usingTicket) {
+        await refreshTournament()
+      }
+
       setDeleteModal((prev) => ({ ...prev, isOpen: false }))
       fetchPredictions()
     } catch (err) {
