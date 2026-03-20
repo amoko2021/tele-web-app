@@ -739,8 +739,19 @@ export const Prediction = () => {
                 <p className="text-center text-sm font-bold text-amber-600 uppercase tracking-wider mb-2">
                   {UI_TEXT.prediction.waitingResults}
                 </p>
-                <SpecialPrize number={fullResult?.results?.ĐB?.[0] || fullResult?.special} />
-                <ResultsTable results={fullResult?.results || fullResult} />
+                {fullResult ? (
+                  <>
+                    <SpecialPrize number={fullResult?.results?.ĐB?.[0] || fullResult?.special} />
+                    <ResultsTable results={fullResult?.results || fullResult} />
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-10 gap-3">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
+                    <p className="text-xs text-amber-600 font-medium italic">
+                      {UI_TEXT.home.results.updating}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           ) : (

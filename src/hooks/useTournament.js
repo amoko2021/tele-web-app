@@ -32,6 +32,7 @@ export const useTournament = () => {
         const now = new Date()
         const target = new Date(now)
         target.setMinutes(45, 0, 0)
+        target.setSeconds(0, 0)
         
         // If we are already past 45m, the next target is the 45m of the next hour
         if (now.getMinutes() >= 45) {
@@ -42,8 +43,9 @@ export const useTournament = () => {
         
         setStatus((prev) => ({
           ...prev,
-          minutesRemaining: minutes_remaining,
-          secondsRemaining: 0,
+          // Only update minutes/seconds if not in result phase
+          minutesRemaining: is_result_phase ? 0 : minutes_remaining,
+          secondsRemaining: is_result_phase ? 0 : 0,
           targetTime: targetTime,
           isResultPhase: is_result_phase,
           fullResult: full_result,
@@ -78,6 +80,7 @@ export const useTournament = () => {
   useEffect(() => {
     if (status.loading || status.isResultPhase || !status.targetTime) return
 
+    let isRefreshing = false
     const timer = setInterval(() => {
       const now = Date.now()
       const diff = status.targetTime - now
@@ -88,9 +91,12 @@ export const useTournament = () => {
           minutesRemaining: Math.floor((diff / 1000 / 60) % 60),
           secondsRemaining: Math.floor((diff / 1000) % 60),
         }))
-      } else {
+      } else if (!isRefreshing) {
         // Time's up, trigger a refresh to enter result phase
-        fetchStatus()
+        isRefreshing = true
+        fetchStatus().finally(() => {
+          isRefreshing = false
+        })
       }
     }, 1000)
 
