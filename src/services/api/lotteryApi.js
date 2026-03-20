@@ -523,26 +523,48 @@ export const lotteryApi = {
     if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
+          const now = new Date()
+          const minutes = now.getMinutes()
+          const isResultPhase = minutes >= 45
+          
+          // Generate a mock result if in result phase
+          const mockFullResult = isResultPhase ? {
+            time: `${now.getHours()}:45`,
+            results: {
+              ĐB: [Math.floor(Math.random() * 100000).toString().padStart(5, '0')],
+              G1: [Math.floor(Math.random() * 100000).toString().padStart(5, '0')],
+              G2: [
+                Math.floor(Math.random() * 100000).toString().padStart(5, '0'),
+                Math.floor(Math.random() * 100000).toString().padStart(5, '0')
+              ],
+              G3: Array.from({ length: 6 }, () => Math.floor(Math.random() * 100000).toString().padStart(5, '0')),
+              G4: Array.from({ length: 4 }, () => Math.floor(Math.random() * 10000).toString().padStart(4, '0')),
+              G5: Array.from({ length: 6 }, () => Math.floor(Math.random() * 10000).toString().padStart(4, '0')),
+              G6: Array.from({ length: 3 }, () => Math.floor(Math.random() * 1000).toString().padStart(3, '0')),
+              G7: Array.from({ length: 4 }, () => Math.floor(Math.random() * 100).toString().padStart(2, '0')),
+            }
+          } : null
+
           resolve({
             ok: true,
             data: {
               id: 5,
               start_time: '2026-03-20T08:00:00Z',
               end_time: '2026-03-20T09:00:00Z',
-              status: 'open',
-              full_result: null,
+              status: isResultPhase ? 'closed' : 'open',
+              full_result: mockFullResult,
               my_predictions: [
                 {
                   id: 1,
                   title: 'Giải ĐB 2 số',
                   subtitle: 'Tối đa 10 lượt dự đoán',
-                  count: 0,
+                  count: 2,
                   max_count: 10,
                   color: 'red',
                   icon: 'stars',
-                  numbers: [],
-                  is_win: [],
-                  prediction_ids: [],
+                  numbers: ['89', '23'],
+                  is_win: isResultPhase ? [false, true] : [],
+                  prediction_ids: [1, 2],
                   update_time: '10:31',
                 },
                 {
@@ -562,13 +584,13 @@ export const lotteryApi = {
                   id: 3,
                   title: 'Đặc Biệt 3 số',
                   subtitle: 'Tối đa 10 lượt dự đoán',
-                  count: 0,
+                  count: 1,
                   max_count: 10,
                   color: 'orange',
                   icon: 'workspace_premium',
-                  numbers: [],
-                  is_win: [],
-                  prediction_ids: [],
+                  numbers: ['489'],
+                  is_win: isResultPhase ? [false] : [],
+                  prediction_ids: [3],
                   update_time: '15:15',
                 },
                 {
@@ -585,9 +607,9 @@ export const lotteryApi = {
                   update_time: '15:31',
                 },
               ],
-              total_predictions: 0,
-              is_result_phase: false,
-              minutes_remaining: 40,
+              total_predictions: 150,
+              is_result_phase: isResultPhase,
+              minutes_remaining: isResultPhase ? 0 : (45 - minutes),
             },
           })
         }, 300)
