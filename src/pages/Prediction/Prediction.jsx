@@ -2,9 +2,11 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { TadsWidget } from 'react-tads-widget'
 import { DateDisplay } from './components/DateDisplay'
 import { PredictionCategoryCard } from './components/PredictionCategoryCard'
+import { ResultsTable } from '../Home/components/ResultsTable'
+import { SpecialPrize } from '../Home/components/SpecialPrize'
 import lotteryApi from '../../services/api/lotteryApi'
 import userApi from '../../services/api/userApi'
-import { useUserInfo } from '../../hooks/useApi'
+import { useUserInfo, useTournament } from '../../hooks'
 import { Modal } from '../../components/common/Modal/Modal'
 import { useTelegram } from '../../hooks/useTelegram'
 import { useAdsgram } from '../../hooks/useAdsgram'
@@ -22,9 +24,9 @@ export const Prediction = () => {
   const userId = user?.id
 
   const { data: userInfo, refetch: refetchUserInfo } = useUserInfo(userId)
+  const { isResultPhase, fullResult, totalFree, totalTicket } = useTournament()
 
   const [categories, setCategories] = useState([])
-  const [totalPredictions, setTotalPredictions] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [usingTicket, setUsingTicket] = useState(false)
@@ -115,13 +117,19 @@ export const Prediction = () => {
 
   // Helper function to check if time is up (18:00 - 19:00 VN time)
   const checkIsTimeUp = () => {
+    // Use isResultPhase from useTournament for Free mode
+    if (!usingTicket) return isResultPhase
+
+    // For Ticket mode, it's still based on XSMB time (18:30)
     const nowVN = new Date().toLocaleString('en-US', {
       timeZone: 'Asia/Ho_Chi_Minh',
     })
     const vnDate = new Date(nowVN)
     const currentHour = vnDate.getHours()
-    // Block from 18:00 to 18:59
-    return currentHour === 18
+    const currentMinute = vnDate.getMinutes()
+    const totalMinutes = currentHour * 60 + currentMinute
+    // Block from 18:30 to 18:59
+    return totalMinutes >= 1110 && totalMinutes < 1140
   }
 
   const isTimeUp = checkIsTimeUp()
@@ -142,6 +150,8 @@ export const Prediction = () => {
 
   // Helper to check if current time is result time (18:45 - 19:00 VN)
   const checkIsResultTime = () => {
+    if (!usingTicket) return isResultPhase
+
     const nowVN = new Date().toLocaleString('en-US', {
       timeZone: 'Asia/Ho_Chi_Minh',
     })
@@ -389,19 +399,12 @@ export const Prediction = () => {
       setLoading(true)
       
       // Fetch categories and total predictions in parallel
-      const [response, totalRes] = await Promise.all([
-        isResultTime 
+      const response = await (isResultTime 
           ? lotteryApi.getMyPredictionResults(usingTicket)
-          : lotteryApi.getMyPredictions(usingTicket),
-        lotteryApi.getTotalPredictions()
-      ])
+          : lotteryApi.getMyPredictions(usingTicket))
 
       if (response && response.data && response.data.categories) {
         setCategories(response.data.categories)
-      }
-      
-      if (totalRes && totalRes.data && typeof totalRes.data.total === 'number') {
-        setTotalPredictions(totalRes.data.total)
       }
     } catch (err) {
       console.error('Failed to fetch predictions', err)
@@ -695,11 +698,11 @@ export const Prediction = () => {
                     : UI_TEXT.prediction.waitingResults}
               </span>
             </div>
-            {totalPredictions > 0 && (
+            {(usingTicket ? totalTicket : totalFree) > 0 && (
               <div className="flex items-center gap-1 bg-amber-100/50 px-2 py-0.5 rounded-md">
                 <span className="material-symbols-outlined text-sm">groups</span>
                 <span className="text-[10px] font-bold">
-                  {UI_TEXT.prediction.totalPredictions.replace('{total}', totalPredictions.toLocaleString())}
+                  {UI_TEXT.prediction.totalPredictions.replace('{total}', (usingTicket ? totalTicket : totalFree).toLocaleString())}
                 </span>
               </div>
             )}
@@ -711,6 +714,16 @@ export const Prediction = () => {
             </div>
           ) : error ? (
             <div className="text-center text-red-500 py-10">{error}</div>
+          ) : isResultPhase && !usingTicket ? (
+            <div className="space-y-4">
+              <div className="bg-white rounded-xl p-4 shadow-sm border border-amber-100">
+                <p className="text-center text-sm font-bold text-amber-600 uppercase tracking-wider mb-2">
+                  {UI_TEXT.prediction.waitingResults}
+                </p>
+                <SpecialPrize number={fullResult?.results?.ĐB?.[0] || fullResult?.special} />
+                <ResultsTable results={fullResult?.results || fullResult} />
+              </div>
+            </div>
           ) : (
             <>
               {categories.map((category, index) => (
@@ -872,9 +885,11 @@ export const Prediction = () => {
               {UI_TEXT.home.rules.timeTitle}
             </h4>
             <p>
-              {UI_TEXT.home.rules.timeContent
-                .replace('{start}', '19:00')
-                .replace('{end}', '18:00')}
+              {usingTicket 
+                ? UI_TEXT.home.rules.timeContent
+                  .replace('{start}', '19:00')
+                  .replace('{end}', '18:30')
+                : 'Giải đấu miễn phí diễn ra mỗi giờ. Dự đoán từ phút 0 đến phút 45. Kết quả công bố từ phút 45 đến phút 60.'}
             </p>
           </div>
 

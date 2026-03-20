@@ -7,6 +7,7 @@ import { Test } from '../pages/Test'
 import { Prediction } from '../pages/Prediction'
 import { GiftRain } from '../pages/GiftRain'
 import { FlappyBird } from '../pages/FlappyBird'
+import { TournamentHistory } from '../pages/TournamentHistory/TournamentHistory'
 
 export const AppRoutes = () => {
   return (
@@ -18,6 +19,7 @@ export const AppRoutes = () => {
       <Route path="/prediction" element={<Prediction />} />
       <Route path="/gift-rain" element={<GiftRain />} />
       <Route path="/flappy-bird" element={<FlappyBird />} />
+      <Route path="/tournament-history" element={<TournamentHistory />} />
       <Route path="/test" element={<Test />} />
     </Routes>
   )

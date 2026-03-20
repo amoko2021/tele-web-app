@@ -1,21 +1,21 @@
 import { useNavigate } from 'react-router-dom'
-import { useCountdown } from '../../../../hooks'
+import { useTournament } from '../../../../hooks'
 import { UI_TEXT } from '../../../../config/uiText'
 
 export const PredictionCard = ({ isToday, isDrawingTime }) => {
   const navigate = useNavigate()
-  const { hours, minutes, seconds } = useCountdown(18,0)
+  const { minutesRemaining, secondsRemaining, isResultPhase } = useTournament()
 
   const formatNumber = (num) => num.toString().padStart(2, '0')
 
   // Only show countdown if it's today and not during drawing time
-  const showCountdown = isToday && !isDrawingTime
+  const showCountdown = isToday && !isDrawingTime && !isResultPhase
 
   return (
     <div className="px-4 pt-4">
       <div className="flex flex-col rounded-2xl bg-white border border-primary/15 shadow-xl shadow-primary/5 overflow-hidden">
         {/* Top Section: Countdown (Only if applicable) */}
-        {showCountdown && (
+        {showCountdown ? (
           <div className="bg-slate-50/80 border-b border-slate-100 p-3 flex flex-col items-center justify-center">
             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
               {UI_TEXT.home.countdown.nextDraw}
@@ -23,27 +23,36 @@ export const PredictionCard = ({ isToday, isDrawingTime }) => {
             <div className="flex items-center gap-3">
               <div className="flex flex-col items-center">
                 <span className="text-2xl font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
-                  {formatNumber(hours)}
+                  00
                 </span>
                 <span className="text-[8px] font-bold text-slate-400 uppercase mt-1">{UI_TEXT.home.countdown.hours}</span>
               </div>
               <span className="text-lg font-bold text-slate-300 pb-3">:</span>
               <div className="flex flex-col items-center">
                 <span className="text-2xl font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
-                  {formatNumber(minutes)}
+                  {formatNumber(minutesRemaining)}
                 </span>
                 <span className="text-[8px] font-bold text-slate-400 uppercase mt-1">{UI_TEXT.home.countdown.minutes}</span>
               </div>
               <span className="text-lg font-bold text-slate-300 pb-3">:</span>
               <div className="flex flex-col items-center">
                 <span className="text-2xl font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
-                  {formatNumber(seconds)}
+                  {formatNumber(secondsRemaining)}
                 </span>
                 <span className="text-[8px] font-bold text-slate-400 uppercase mt-1">{UI_TEXT.home.countdown.seconds}</span>
               </div>
             </div>
           </div>
-        )}
+        ) : isResultPhase ? (
+          <div className="bg-amber-50 border-b border-amber-100 p-3 flex flex-col items-center justify-center">
+            <span className="text-[10px] font-bold text-amber-600 uppercase tracking-wider mb-1">
+              {UI_TEXT.prediction.waitingResults}
+            </span>
+            <span className="text-sm font-bold text-amber-800">
+              {UI_TEXT.prediction.timeOver}
+            </span>
+          </div>
+        ) : null}
 
         {/* Bottom Section: Task Info & Action */}
         <div className="p-3 flex items-center justify-between gap-3">

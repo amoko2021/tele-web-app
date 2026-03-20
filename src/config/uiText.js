@@ -157,7 +157,15 @@ const VI_TEXT = {
     ticketTab: 'Dự đoán bằng vé',
     totalPredictions: 'Dự đoán hôm nay: {total}',
     historyLocked: 'Đã qua 19h - Lịch sử đã khóa',
-    openForTomorrow: 'Đã mở dự đoán cho ngày mai'
+    openForTomorrow: 'Đã mở dự đoán cho ngày mai',
+    tournamentHistory: {
+      title: 'Lịch sử Giải đấu',
+      empty: 'Chưa có lịch sử giải đấu nào.',
+      hour: 'Giải {hour}h',
+      win: 'Thắng',
+      lose: 'Không trúng',
+      reward: 'Thưởng: {amount} Coins',
+    }
   },
 
   // Màn hình Tài khoản (Account)

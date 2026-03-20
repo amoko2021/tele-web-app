@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router-dom'
 import { TadsWidget } from 'react-tads-widget'
-import { useXSMB } from '../../hooks/useApi'
+import { useXSMB, useTournament } from '../../hooks'
 import { useLotteryHistory } from '../../hooks/useLotteryHistory'
 import { DateNavigation } from './components/DateNavigation'
 import { SpecialPrize } from './components/SpecialPrize'
@@ -10,7 +9,6 @@ import { TaskButton } from './components/TaskButton'
 import { UI_TEXT } from '../../config/uiText'
 
 export const Home = () => {
-  const navigate = useNavigate()
   const { data: xsmbData, loading } = useXSMB()
   const {
     currentResult,

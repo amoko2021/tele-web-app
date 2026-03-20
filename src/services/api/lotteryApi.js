@@ -500,6 +500,8 @@ export const lotteryApi = {
             message: null,
             data: {
               total: 281,
+              total_free: 150,
+              total_ticket: 131,
             },
             total: null,
           })
@@ -512,6 +514,64 @@ export const lotteryApi = {
       return response
     } catch (error) {
       console.error('Error fetching total predictions:', error)
+      throw error
+    }
+  },
+
+  // Lấy trạng thái tournament hiện tại
+  getTournamentStatus: async () => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            data: {
+              minutes_remaining: 25,
+              is_result_phase: false,
+              full_result: null,
+              my_predictions: null,
+            },
+          })
+        }, 300)
+      })
+    }
+
+    try {
+      const response = await apiClient.get('/tournaments/current')
+      return response
+    } catch (error) {
+      console.error('Error fetching tournament status:', error)
+      throw error
+    }
+  },
+
+  // Lấy lịch sử tournament của tôi
+  getTournamentHistory: async () => {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            data: [
+              {
+                id: 1,
+                hour: 10,
+                date: '2024-03-20',
+                winning_numbers: { ĐB: ['12345'] },
+                reward_status: 'won',
+                reward_amount: 10000,
+              },
+            ],
+          })
+        }, 300)
+      })
+    }
+
+    try {
+      const response = await apiClient.get('/tournaments/my-history')
+      return response
+    } catch (error) {
+      console.error('Error fetching tournament history:', error)
       throw error
     }
   },
