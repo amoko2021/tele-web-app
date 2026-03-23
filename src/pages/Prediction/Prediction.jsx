@@ -741,8 +741,8 @@ export const Prediction = () => {
                 </p>
                 {fullResult ? (
                   <>
-                    <SpecialPrize number={fullResult?.ĐB?.[0] || fullResult?.results?.ĐB?.[0] || fullResult?.special} />
-                    <ResultsTable results={fullResult?.results || fullResult} />
+                    <SpecialPrize number={fullResult?.ĐB?.[0] || fullResult?.results?.ĐB?.[0] || fullResult?.special} myPredictions={myPredictions} />
+                    <ResultsTable results={fullResult?.results || fullResult} myPredictions={myPredictions} />
                   </>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-10 gap-3">

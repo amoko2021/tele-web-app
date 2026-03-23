@@ -70,10 +70,14 @@ export const Home = () => {
         {/* Special Prize */}
         <SpecialPrize
           number={displayData?.ĐB?.[0] || displayData?.results?.ĐB?.[0] || displayData?.special}
+          myPredictions={displayData?.my_predictions}
         />
 
         {/* Results Table */}
-        <ResultsTable results={displayData?.results || displayData} />
+        <ResultsTable 
+          results={displayData?.results || displayData} 
+          myPredictions={displayData?.my_predictions}
+        />
       </main>
     </div>
   )

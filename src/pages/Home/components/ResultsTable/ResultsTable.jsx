@@ -47,11 +47,67 @@ const transformHistoryData = (historyData) => {
   }
 }
 
-export const ResultsTable = ({ results }) => {
+export const ResultsTable = ({ results, myPredictions }) => {
   if (!results) return null
 
   // Transform data if it's from history API
   const displayResults = transformHistoryData(results)
+
+  // Extract winning predictions
+  const winningPredictions = {
+    db2: [],
+    loto2: [],
+    db3: [],
+    loto3: []
+  }
+
+  if (myPredictions) {
+    myPredictions.forEach(cat => {
+      if (cat.numbers && cat.is_win) {
+        cat.numbers.forEach((num, idx) => {
+          if (cat.is_win[idx]) {
+            if (cat.id === 1) winningPredictions.db2.push(num)
+            if (cat.id === 2) winningPredictions.loto2.push(num)
+            if (cat.id === 3) winningPredictions.db3.push(num)
+            if (cat.id === 4) winningPredictions.loto3.push(num)
+          }
+        })
+      }
+    })
+  }
+
+  const renderNumber = (num, isDB = false) => {
+    if (isLoading(num)) return <SkeletonNumber width="w-14" />
+    
+    let highlightLength = 0;
+    
+    if (isDB) {
+      const last3 = num.slice(-3);
+      const last2 = num.slice(-2);
+      if (winningPredictions.db3.includes(last3)) highlightLength = 3;
+      else if (winningPredictions.db2.includes(last2)) highlightLength = 2;
+    }
+    
+    if (highlightLength === 0) {
+      const last3 = num.slice(-3);
+      const last2 = num.slice(-2);
+      if (winningPredictions.loto3.includes(last3)) highlightLength = 3;
+      else if (winningPredictions.loto2.includes(last2)) highlightLength = 2;
+    }
+    
+    if (highlightLength > 0) {
+      const normalPart = num.slice(0, num.length - highlightLength);
+      const highlightPart = num.slice(-highlightLength);
+      return (
+        <span className="relative">
+          {normalPart}
+          <span className="text-green-600 font-black bg-green-100 px-0.5 rounded">{highlightPart}</span>
+        </span>
+      );
+    }
+    
+    return <span>{num}</span>;
+  }
 
   return (
     <div className="px-4 py-2">
@@ -71,10 +127,12 @@ export const ResultsTable = ({ results }) => {
             G1
           </div>
           <div className="flex flex-1 justify-center text-center text-lg font-bold tracking-wider text-slate-800">
-            {isLoading(displayResults.G1?.[0]) ? (
+            {!displayResults.G1 ||
+            displayResults.G1.length === 0 ||
+            isLoading(displayResults.G1[0]) ? (
               <SkeletonNumber width="w-16" />
             ) : (
-              displayResults.G1[0]
+              renderNumber(displayResults.G1[0])
             )}
           </div>
         </div>
@@ -93,7 +151,7 @@ export const ResultsTable = ({ results }) => {
                 <SkeletonNumber width="w-14" />
               </>
             ) : (
-              displayResults.G2.map((num, idx) => <span key={idx}>{num}</span>)
+              displayResults.G2.map((num, idx) => <span key={idx}>{renderNumber(num)}</span>)
             )}
           </div>
         </div>
@@ -116,7 +174,7 @@ export const ResultsTable = ({ results }) => {
                 <SkeletonNumber width="w-14" />
               </>
             ) : (
-              displayResults.G3.map((num, idx) => <span key={idx}>{num}</span>)
+              displayResults.G3.map((num, idx) => <span key={idx}>{renderNumber(num)}</span>)
             )}
           </div>
         </div>
@@ -137,7 +195,7 @@ export const ResultsTable = ({ results }) => {
                 <SkeletonNumber width="w-12" />
               </>
             ) : (
-              displayResults.G4.map((num, idx) => <span key={idx}>{num}</span>)
+              displayResults.G4.map((num, idx) => <span key={idx}>{renderNumber(num)}</span>)
             )}
           </div>
         </div>
@@ -160,7 +218,7 @@ export const ResultsTable = ({ results }) => {
                 <SkeletonNumber width="w-10" />
               </>
             ) : (
-              displayResults.G5.map((num, idx) => <span key={idx}>{num}</span>)
+              displayResults.G5.map((num, idx) => <span key={idx}>{renderNumber(num)}</span>)
             )}
           </div>
         </div>
@@ -180,7 +238,7 @@ export const ResultsTable = ({ results }) => {
                 <SkeletonNumber width="w-10" />
               </>
             ) : (
-              displayResults.G6.map((num, idx) => <span key={idx}>{num}</span>)
+              displayResults.G6.map((num, idx) => <span key={idx}>{renderNumber(num)}</span>)
             )}
           </div>
         </div>
@@ -203,7 +261,7 @@ export const ResultsTable = ({ results }) => {
             ) : (
               displayResults.G7.map((num, idx) => (
                 <span key={idx} className="text-primary">
-                  {num}
+                  {renderNumber(num)}
                 </span>
               ))
             )}
