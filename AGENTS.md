@@ -1,32 +1,32 @@
 # AGENTS.md - Agent Guidelines for tele-web-app
 
-## Build & Validation Commands
+## Build, Lint & Test Commands
 
-- `pnpm install`     - Install dependencies
-- `pnpm run dev`     - Start development server (Vite + HMR)
-- `pnpm run build`   - Build production bundle to `dist/`
-- `pnpm run lint`    - Run ESLint validation
-- `pnpm run preview` - Preview production build locally
+- **Install Dependencies**: `pnpm install`
+- **Start Dev Server**: `pnpm run dev` (Vite + HMR)
+- **Build Production**: `pnpm run build` (Outputs to `dist/`)
+- **Preview Production**: `pnpm run preview` (Preview production build locally)
+- **Lint Code**: `pnpm run lint` (Runs ESLint validation)
 
-**Testing Note**: 
-- No test framework (Vitest/Jest) is currently configured.
-- **Do not** attempt to run tests.
-- If implementing tests, use Vitest compatible with Vite.
-- For manual validation, ensure the app loads in Telegram WebApp context or mock it.
+**Testing Note**:
+- The project currently lacks a configured test suite. If tests are added, use **Vitest** (Vite-compatible).
+- **Run all tests**: `pnpm test`
+- **Run a single test**: `pnpm test -t "Test Name"` or `pnpm test path/to/file.test.js`
+- **Run tests in watch mode**: `pnpm test:watch`
+- **Run tests with coverage**: `pnpm test --coverage`
 
 ## Code Style Guidelines
 
 ### Tech Stack
 - **Framework**: React 19.2.0 + Vite 7.2.4
-- **Language**: JavaScript (ESModules)
+- **Language**: JavaScript (ESModules). No TypeScript.
 - **Routing**: react-router-dom 7.11.0
 - **State**: React Hooks (`useState`, `useContext`) + Custom Hooks
 - **Styling**: **CSS Modules** (`*.module.css`) + Global CSS. **NO Tailwind**.
-- **HTTP**: Axios with interceptors
-- **Platform**: Telegram Mini App (TMA) specific features
+- **Platform**: Telegram Mini App (TMA)
 
 ### File Structure
-```
+```text
 src/
 ├── components/
 │   ├── common/         # Shared UI (Modal, Button, ErrorBoundary)
@@ -37,21 +37,18 @@ src/
 │       ├── [Page].jsx  # Main view component
 │       └── index.js    # Barrel export
 ├── hooks/              # Shared logic (useApi, useTelegram)
-├── services/           # External integration
-│   ├── api/            # API endpoints & config
-│   ├── telegram/       # TMA integration
-│   └── logger.js       # Centralized logging service
+├── services/           # External integration (api, telegram, logger)
 ├── styles/             # Global variables & themes
 └── utils/              # Helpers & constants
 ```
 
-### Component Conventions
-- **Exports**: Use named exports: `export const MyComponent = () => {}`
-- **Naming**: PascalCase for components (`UserProfile.jsx`), camelCase for helpers (`formatDate.js`).
+### Component & Naming Conventions
+- **Exports**: Use named exports: `export const MyComponent = () => {}`.
+- **Naming**: `PascalCase` for components (`UserProfile.jsx`), `camelCase` for helpers/hooks (`formatDate.js`, `useApi.js`).
 - **Barrels**: Always use `index.js` for clean imports from directories.
 - **Functional**: All components must be functional components with Hooks.
-- **Props**: Destructure props immediately in function signature.
-- **Booleans**: Prefix boolean props with `is`, `has`, or `should` (e.g., `isLoading`, `hasError`).
+- **Props**: Destructure props immediately in the function signature.
+- **Booleans**: Prefix boolean props/variables with `is`, `has`, or `should` (e.g., `isLoading`, `hasError`).
 - **UI Text**: **MANDATORY**. All user-facing text must be imported from `src/config/uiText.js`. Never hardcode strings in components.
   - Usage: `import { UI_TEXT } from '@/config/uiText'` -> `<span>{UI_TEXT.common.loading}</span>`.
 
@@ -63,14 +60,11 @@ src/
 4. Components (`../components/common/Button`)
 5. Styles (`./Component.module.css`)
 
-**Example**:
-```javascript
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { logger } from '../../services/logger'
-import { Button } from '../../components/common/Button'
-import styles from './styles.module.css'
-```
+### Formatting & Types
+- **Quotes**: Use single quotes for JavaScript strings, double quotes for JSX attributes.
+- **Semicolons**: Use semicolons at the end of statements.
+- **Indentation**: 2 spaces for indentation.
+- **Types**: Use JSDoc if complex logic requires type hinting (project is JS-only).
 
 ### Styling Guidelines
 **Critical**: This project uses **CSS Modules**, not Tailwind.
@@ -85,22 +79,22 @@ import styles from './styles.module.css'
 - **API State**: Use the `useApi` hook or `useEffect` + `axios`.
 - **Async Pattern**:
   ```javascript
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await api.getData()
-        setData(result)
+        const result = await api.getData();
+        setData(result);
       } catch (err) {
-        logger.apiError(null, err) // Pass request context if available
+        logger.apiError(null, err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    fetchData()
-  }, [])
+    };
+    fetchData();
+  }, []);
   ```
 
 ### API Layer Pattern
@@ -117,47 +111,24 @@ import styles from './styles.module.css'
 - **Boundaries**: Wrap feature roots in `ErrorBoundary` if they are critical.
 - **User Feedback**: Show user-friendly toasts/alerts, do not fail silently.
 
-### Telegram Integration
+### Telegram & Ad Integration
 - **Global Object**: Access via `window.Telegram.WebApp`.
 - **Validation**: Ensure `initData` exists before making auth-dependent calls.
-- **Theme**: Respect Telegram theme params (`tg.themeParams`) where possible.
 - **Mocking**: Use `USE_MOCK` flags or mock `window.Telegram.WebApp` for local dev outside Telegram.
-
-### Ad Integration
-- **Primary Provider**: Monetag (via `useMonetag`).
-- **Fallback Provider**: Sonar Ads (via `useSonarAds`).
-- **Strategy**: `useMonetag` automatically falls back to `useSonarAds` if the Monetag SDK is missing or if an ad fails to load/show.
-- **Reward Logic**: Both providers trigger the same `onReward` callback and balance update logic.
+- **Ads**: Primary provider is Monetag (`useMonetag`), fallback is Sonar Ads (`useSonarAds`). Both trigger the same `onReward` callback.
 
 ### Git Workflow
 - **Branches**: Use `feature/name`, `fix/issue`, `chore/task`.
 - **Commits**: Follow Conventional Commits (`feat:`, `fix:`, `chore:`, `refactor:`).
 - **PRs**: Keep PRs small and focused on a single responsibility.
 
-### Performance & Security
+### Performance, Security & Quality
 - **Memoization**: Use `useMemo` and `useCallback` for expensive calculations or stable references.
-- **Secrets**: NEVER commit `.env` files or hardcode API keys.
+- **Secrets**: NEVER commit `.env` files or hardcode API keys. Use `import.meta.env.VITE_VAR_NAME`.
 - **Validation**: Validate all inputs, especially those from URL params or external sources.
-- **Dependencies**: Audit `package.json` regularly; use `pnpm` for lockfile consistency.
-
-### Linting & Quality
-- **Strictness**: No unused variables. `console.log` is allowed for debugging but prefer `logger`.
-- **Types**: Use JSDoc if complex logic requires type hinting (project is JS-only).
-- **HMR**: Fast Refresh is enabled; avoid side-effects outside `useEffect`.
-
-### Development Rules
-1. **Mock Data**: Respect `USE_MOCK` flags in services for offline dev.
-2. **Environment**: Use `import.meta.env.VITE_VAR_NAME` for config.
-3. **Dependencies**: Use `pnpm add` (not npm/yarn).
-4. **Clean Code**: Remove commented-out code before committing.
-
-### Deployment
-- **Target**: `dist/` folder via `pnpm build`.
-- **Preview**: Always run `pnpm run preview` to verify production build before deploy.
-- **Env**: Production uses `VITE_API_URL` from environment variables.
+- **Linting**: No unused variables. `console.log` is allowed for debugging but prefer `logger`.
 
 ### Agent Behavior
 - **Proactive Fixes**: If you see a logical error, fix it, but ask before large refactors.
-- **Safety**: Never commit secrets or `.env` files.
-- **Context**: Read `src/routes/AppRoutes.jsx` to understand navigation flow before adding pages.
 - **Discovery**: Always explore related files before making changes to ensure consistency.
+- **Context**: Read `src/routes/AppRoutes.jsx` to understand navigation flow before adding pages.
