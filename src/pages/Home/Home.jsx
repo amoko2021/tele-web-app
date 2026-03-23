@@ -69,7 +69,7 @@ export const Home = () => {
       <main className="flex-1 overflow-y-auto bg-slate-50 pb-6">
         {/* Special Prize */}
         <SpecialPrize
-          number={displayData?.results?.ĐB?.[0] || displayData?.special}
+          number={displayData?.ĐB?.[0] || displayData?.results?.ĐB?.[0] || displayData?.special}
         />
 
         {/* Results Table */}
