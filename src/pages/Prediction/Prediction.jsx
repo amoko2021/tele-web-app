@@ -24,7 +24,7 @@ export const Prediction = () => {
   const userId = user?.id
 
   const { data: userInfo, refetch: refetchUserInfo } = useUserInfo(userId)
-  const { isResultPhase, fullResult, myPredictions, totalFree, totalTicket, refresh: refreshTournament } = useTournament()
+  const { isResultPhase, fullResult, myPredictions, totalFree, totalTicket, id: tournamentId, minutesRemaining, secondsRemaining, refresh: refreshTournament } = useTournament()
 
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
@@ -708,20 +708,42 @@ export const Prediction = () => {
 
           <div className="flex items-center justify-between gap-2 rounded-lg bg-amber-50 px-3 py-2 text-amber-700 border border-amber-100">
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-lg">schedule</span>
+              <span className="material-symbols-outlined text-lg">
+                {!usingTicket ? 'trophy' : 'schedule'}
+              </span>
               <span className="text-xs font-bold uppercase tracking-wider">
-                {isAfter19h
-                  ? UI_TEXT.prediction?.openForTomorrow || 'Đã mở dự đoán cho ngày mai'
-                  : isAfter1830
-                    ? UI_TEXT.prediction.timeOver
-                    : UI_TEXT.prediction.waitingResults}
+                {!usingTicket ? (
+                  <>
+                    Tournament #{tournamentId}
+                    {minutesRemaining > 0 || secondsRemaining > 0 ? (
+                      <span className="ml-2 text-amber-600 font-black">
+                        {String(minutesRemaining).padStart(2, '0')}:
+                        {String(secondsRemaining).padStart(2, '0')}
+                      </span>
+                    ) : (
+                      <span className="ml-2 text-amber-600 font-black italic">
+                        {UI_TEXT.prediction.waitingResults}
+                      </span>
+                    )}
+                  </>
+                ) : isAfter19h ? (
+                  UI_TEXT.prediction?.openForTomorrow ||
+                  'Đã mở dự đoán cho ngày mai'
+                ) : isAfter1830 ? (
+                  UI_TEXT.prediction.timeOver
+                ) : (
+                  UI_TEXT.prediction.waitingResults
+                )}
               </span>
             </div>
             {(usingTicket ? totalTicket : totalFree) > 0 && (
               <div className="flex items-center gap-1 bg-amber-100/50 px-2 py-0.5 rounded-md">
                 <span className="material-symbols-outlined text-sm">groups</span>
                 <span className="text-[10px] font-bold">
-                  {UI_TEXT.prediction.totalPredictions.replace('{total}', (usingTicket ? totalTicket : totalFree).toLocaleString())}
+                  {UI_TEXT.prediction.totalPredictions.replace(
+                    '{total}',
+                    (usingTicket ? totalTicket : totalFree).toLocaleString(),
+                  )}
                 </span>
               </div>
             )}
@@ -737,7 +759,7 @@ export const Prediction = () => {
             <div className="space-y-4">
               <div className="bg-white rounded-xl p-4 shadow-sm border border-amber-100">
                 <p className="text-center text-sm font-bold text-amber-600 uppercase tracking-wider mb-2">
-                  {UI_TEXT.prediction.waitingResults}
+                  Tournament #{tournamentId} - {UI_TEXT.prediction.waitingResults}
                 </p>
                 {fullResult ? (
                   <>

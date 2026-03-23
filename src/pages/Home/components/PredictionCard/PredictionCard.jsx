@@ -4,7 +4,7 @@ import { UI_TEXT } from '../../../../config/uiText'
 
 export const PredictionCard = ({ isToday, isDrawingTime }) => {
   const navigate = useNavigate()
-  const { minutesRemaining, secondsRemaining, isResultPhase } = useTournament()
+  const { minutesRemaining, secondsRemaining, isResultPhase, id: tournamentId } = useTournament()
   const { hours: dailyHours, minutes: dailyMinutes, seconds: dailySeconds } = useCountdown(18, 30)
 
   const formatNumber = (num) => num.toString().padStart(2, '0')
@@ -21,7 +21,7 @@ export const PredictionCard = ({ isToday, isDrawingTime }) => {
           {/* Hourly Tournament Countdown */}
           <div className="flex flex-col items-center justify-center border-r border-slate-200 pr-2">
             <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-              {UI_TEXT.prediction.freeTab}
+              {UI_TEXT.prediction.freeTab} {tournamentId && `#${tournamentId}`}
             </span>
             {showTournamentCountdown && (minutesRemaining > 0 || secondsRemaining > 0) ? (
               <div className="flex items-center gap-1.5">
