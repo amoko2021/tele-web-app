@@ -145,16 +145,16 @@ export const Account = () => {
 
         {/* Stats / Balance */}
         <div className="px-4 mb-6">
-          <BalanceStats 
-            balance={userInfo?.data?.balance || 0} 
+          <BalanceStats
+            balance={userInfo?.data?.balance || 0}
             coins={userInfo?.data?.coins || 0}
-            points={userInfo?.data?.ticket || 0} 
+            points={userInfo?.data?.ticket || 0}
             onUpdate={refetch}
           />
 
           {/* Primary Actions */}
           <ActionButtons
-            onDeposit={handleDeposit}
+            onDeposit={null} // Disable deposit for now
             onWithdraw={handleWithdraw}
             onHistory={handleHistory}
           />
@@ -195,4 +195,3 @@ export const Account = () => {
     </div>
   )
 }
-
