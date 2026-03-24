@@ -40,9 +40,13 @@ export const PredictionCard = ({ isToday, isDrawingTime }) => {
                  </div>
                </div>
              ) : isResultPhase || (minutesRemaining === 0 && secondsRemaining === 0) ? (
-               <span className="text-[10px] font-bold text-amber-600 uppercase">
-                 {UI_TEXT.home.results.result}
-               </span>
+               <button
+                 onClick={() => navigate('prediction')}
+                 className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-sky-600 px-2 py-1 text-xs font-bold text-white shadow-md shadow-blue-100 active:scale-95 transition-all"
+               >
+                 <span>{UI_TEXT.home.results.result}</span>
+                 <span className="material-symbols-outlined text-xs">arrow_forward</span>
+               </button>
              ) : (
                <span className="text-[10px] font-bold text-slate-400 uppercase">--:--</span>
              )}
