@@ -23,29 +23,29 @@ export const PredictionCard = ({ isToday, isDrawingTime }) => {
             <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
               {UI_TEXT.prediction.freeTab} {tournamentId && `#${tournamentId}`}
             </span>
-            {showTournamentCountdown && (minutesRemaining > 0 || secondsRemaining > 0) ? (
-              <div className="flex items-center gap-1.5">
-                <div className="flex flex-col items-center">
-                  <span className="text-lg font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
-                    {formatNumber(minutesRemaining)}
-                  </span>
-                  <span className="text-[7px] font-bold text-slate-400 uppercase mt-0.5">{UI_TEXT.home.countdown.minutes}</span>
-                </div>
-                <span className="text-sm font-bold text-slate-300 pb-2">:</span>
-                <div className="flex flex-col items-center">
-                  <span className="text-lg font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
-                    {formatNumber(secondsRemaining)}
-                  </span>
-                  <span className="text-[7px] font-bold text-slate-400 uppercase mt-0.5">{UI_TEXT.home.countdown.seconds}</span>
-                </div>
-              </div>
-            ) : isResultPhase || (minutesRemaining === 0 && secondsRemaining === 0) ? (
-              <span className="text-[10px] font-bold text-amber-600 uppercase">
-                {UI_TEXT.prediction.waitingResults}
-              </span>
-            ) : (
-              <span className="text-[10px] font-bold text-slate-400 uppercase">--:--</span>
-            )}
+{showTournamentCountdown && (minutesRemaining > 0 || secondsRemaining > 0) ? (
+               <div className="flex items-center gap-1.5">
+                 <div className="flex flex-col items-center">
+                   <span className="text-lg font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
+                     {formatNumber(minutesRemaining)}
+                   </span>
+                   <span className="text-[7px] font-bold text-slate-400 uppercase mt-0.5">{UI_TEXT.home.countdown.minutes}</span>
+                 </div>
+                 <span className="text-sm font-bold text-slate-300 pb-2">:</span>
+                 <div className="flex flex-col items-center">
+                   <span className="text-lg font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
+                     {formatNumber(secondsRemaining)}
+                   </span>
+                   <span className="text-[7px] font-bold text-slate-400 uppercase mt-0.5">{UI_TEXT.home.countdown.seconds}</span>
+                 </div>
+               </div>
+             ) : isResultPhase || (minutesRemaining === 0 && secondsRemaining === 0) ? (
+               <span className="text-[10px] font-bold text-amber-600 uppercase">
+                 {UI_TEXT.home.results.result}
+               </span>
+             ) : (
+               <span className="text-[10px] font-bold text-slate-400 uppercase">--:--</span>
+             )}
           </div>
 
           {/* Daily XSMB Countdown */}
