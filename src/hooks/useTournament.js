@@ -1,6 +1,14 @@
 import { useState, useEffect, useCallback } from 'react'
 import lotteryApi from '../services/api/lotteryApi'
 
+const getWsUrl = () => {
+  const baseUrl = import.meta.env.VITE_API_URL || 'https://betestminiapp-production-9a0b.up.railway.app'
+  if (baseUrl.startsWith('https://')) {
+    return baseUrl.replace('https://', 'wss://') + '/tournaments/ws/tournaments'
+  }
+  return baseUrl.replace('http://', 'ws://') + '/tournaments/ws/tournaments'
+}
+
 /**
  * Hook to manage hourly tournament state and countdown
  */
@@ -80,6 +88,60 @@ export const useTournament = () => {
     // Refresh status every minute to stay in sync with backend
     const statusInterval = setInterval(fetchStatus, 60000)
     return () => clearInterval(statusInterval)
+  }, [fetchStatus])
+
+  // WebSocket for real-time tournament updates
+  useEffect(() => {
+    let ws = null
+    let reconnectTimeout = null
+
+    const connectWs = () => {
+      ws = new WebSocket(getWsUrl())
+      
+      ws.onopen = () => {
+        console.log('Connected to tournament WebSocket')
+      }
+      
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data)
+          if (data.type === 'tournament_closed') {
+            setStatus(prev => ({
+              ...prev,
+              id: data.tournament_id,
+              fullResult: data.full_result,
+              isResultPhase: true,
+              minutesRemaining: 0,
+              secondsRemaining: 0
+            }))
+            // Fetch status again to make sure everything is in sync
+            fetchStatus()
+          }
+        } catch (err) {
+          console.error('Failed to parse WebSocket message:', err)
+        }
+      }
+      
+      ws.onclose = () => {
+        console.log('Tournament WebSocket closed, reconnecting...')
+        reconnectTimeout = setTimeout(connectWs, 3000)
+      }
+      
+      ws.onerror = (err) => {
+        console.error('Tournament WebSocket error:', err)
+        ws.close()
+      }
+    }
+    
+    connectWs()
+    
+    return () => {
+      if (reconnectTimeout) clearTimeout(reconnectTimeout)
+      if (ws) {
+        ws.onclose = null // Prevent reconnect on component unmount
+        ws.close()
+      }
+    }
   }, [fetchStatus])
 
   // Local countdown for seconds
