@@ -9,8 +9,8 @@ export const PredictionCard = ({ isToday, isDrawingTime }) => {
 
   const formatNumber = (num) => num.toString().padStart(2, '0')
 
-  // Only show countdown if it's today and not during drawing time
   const showTournamentCountdown = isToday && !isDrawingTime && !isResultPhase
+  const showDailyCountdown = isToday && !isDrawingTime
 
   return (
     <div className="px-4 pt-4">
