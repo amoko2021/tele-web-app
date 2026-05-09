@@ -12,11 +12,27 @@ const getWsUrl = () => {
 /**
  * Hook to manage hourly tournament state and countdown
  */
-export const useTournament = () => {
-  const [status, setStatus] = useState({
-    minutesRemaining: 0,
-    secondsRemaining: 0,
-    isResultPhase: false,
+const calculateInitialStatus = () => {
+  const now = new Date()
+  const target = new Date(now)
+  target.setMinutes(45, 0, 0)
+  target.setSeconds(0, 0)
+  
+  const currentMinutes = now.getMinutes()
+  const localIsResultPhase = currentMinutes >= 45
+  
+  if (currentMinutes >= 45) {
+    target.setHours(target.getHours() + 1)
+  }
+  
+  const targetTime = target.getTime()
+  const diff = targetTime - now.getTime()
+  
+  return {
+    minutesRemaining: localIsResultPhase ? 0 : Math.floor((diff / 1000 / 60) % 60),
+    secondsRemaining: localIsResultPhase ? 0 : Math.floor((diff / 1000) % 60),
+    isResultPhase: localIsResultPhase,
+    targetTime: targetTime,
     id: null,
     fullResult: null,
     myPredictions: null,
@@ -24,7 +40,14 @@ export const useTournament = () => {
     totalTicket: 0,
     loading: true,
     error: null,
-  })
+  }
+}
+
+/**
+ * Hook to manage hourly tournament state and countdown
+ */
+export const useTournament = () => {
+  const [status, setStatus] = useState(calculateInitialStatus)
 
   const fetchStatus = useCallback(async () => {
     try {
@@ -149,7 +172,7 @@ export const useTournament = () => {
 
   // Local countdown for seconds
   useEffect(() => {
-    if (status.loading || status.isResultPhase || !status.targetTime) return
+    if (status.isResultPhase || !status.targetTime) return
 
     let isRefreshing = false
     const timer = setInterval(() => {
@@ -172,7 +195,7 @@ export const useTournament = () => {
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [status.loading, status.isResultPhase, status.targetTime, fetchStatus])
+  }, [status.isResultPhase, status.targetTime, fetchStatus])
 
   return {
     ...status,

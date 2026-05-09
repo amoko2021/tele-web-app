@@ -22,7 +22,7 @@ export const PredictionCard = ({ isToday, isDrawingTime }) => {
             <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
               {UI_TEXT.prediction.freeTab} {tournamentId && `#${tournamentId}`}
             </span>
-            {!loading && showTournamentCountdown && (minutesRemaining > 0 || secondsRemaining > 0) ? (
+            {showTournamentCountdown && (minutesRemaining > 0 || secondsRemaining > 0) ? (
                <div className="flex items-center gap-1.5">
                  <div className="flex flex-col items-center">
                    <span className="text-lg font-black bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent font-mono leading-none">
@@ -38,7 +38,7 @@ export const PredictionCard = ({ isToday, isDrawingTime }) => {
                    <span className="text-[7px] font-bold text-slate-400 uppercase mt-0.5">{UI_TEXT.home.countdown.seconds}</span>
                  </div>
                </div>
-             ) : !loading && (isResultPhase || (minutesRemaining === 0 && secondsRemaining === 0)) ? (
+             ) : isResultPhase || (minutesRemaining === 0 && secondsRemaining === 0) ? (
                <button
                  onClick={() => navigate('prediction')}
                  className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-sky-600 px-2 py-1 text-xs font-bold text-white shadow-md shadow-blue-100 active:scale-95 transition-all"
