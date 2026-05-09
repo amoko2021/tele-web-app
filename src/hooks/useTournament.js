@@ -54,11 +54,14 @@ export const useTournament = () => {
         
         const targetTime = target.getTime()
         
+        const diff = targetTime - now.getTime()
+        const initialMinutes = (is_result_phase || localIsResultPhase) ? 0 : Math.floor((diff / 1000 / 60) % 60)
+        const initialSeconds = (is_result_phase || localIsResultPhase) ? 0 : Math.floor((diff / 1000) % 60)
+        
         setStatus((prev) => ({
           ...prev,
-          // Only update minutes/seconds if not in result phase
-          minutesRemaining: (is_result_phase || localIsResultPhase) ? 0 : minutes_remaining,
-          secondsRemaining: (is_result_phase || localIsResultPhase) ? 0 : 0,
+          minutesRemaining: initialMinutes,
+          secondsRemaining: initialSeconds,
           targetTime: targetTime,
           isResultPhase: is_result_phase || localIsResultPhase,
           id: id,
